@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class bargainProduct extends Model {
+  class bargain_product extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -15,14 +15,14 @@ module.exports = (sequelize, DataTypes) => {
       this.hasOne(models.produk, {foreignKey: "product_id", as: "produk"})
     }
   }
-  bargainProduct.init({
+  bargain_product.init({
     user_id: DataTypes.INTEGER,
     product_id: DataTypes.INTEGER,
     bargain_price: DataTypes.INTEGER,
     status: DataTypes.STRING
   }, {
     sequelize,
-    modelName: 'bargainProduct',
+    modelName: 'bargain_product',
   });
-  return bargainProduct;
+  return bargain_product;
 };
