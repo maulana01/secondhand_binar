@@ -1,7 +1,7 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+/** @format */
+
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class user extends Model {
     /**
@@ -11,26 +11,41 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.role, { foreignKey: "role_id" , as: "role"});
-      this.belongsTo(models.wishlist, {foreignKey: "user_id", as: "wishlist"})
-      this.belongsTo(models.bargainProduct, {foreignKey: "user_id", as: "bargainProduct"})
-      this.belongsTo(models.produk, {foreignKey: "user_id", as: "produk"})
-      this.belongsTo(models.transaksi, {foreignKey: "user_id", as: "transaksi"})
+      this.belongsTo(models.role, { foreignKey: "role_id", as: "role" });
+      this.hasMany(models.wishlist, {
+        foreignKey: "user_id",
+        as: "wishlist_user",
+      });
+      this.hasMany(models.bargain_product, {
+        foreignKey: "user_id",
+        as: "bargain_product_user",
+      });
+      this.hasMany(models.product, {
+        foreignKey: "user_id",
+        as: "product_user",
+      });
+      this.hasMany(models.order_transaction, {
+        foreignKey: "user_id",
+        as: "order_transaction_user",
+      });
     }
   }
-  user.init({
-    username: DataTypes.STRING,
-    email: DataTypes.STRING,
-    password: DataTypes.STRING,
-    name: DataTypes.STRING,
-    gender: DataTypes.STRING,
-    address: DataTypes.STRING,
-    profile_picture: DataTypes.STRING,
-    phone_number: DataTypes.STRING,
-    role_id: DataTypes.INTEGER
-  }, {
-    sequelize,
-    modelName: 'user',
-  });
+  user.init(
+    {
+      username: DataTypes.STRING,
+      email: DataTypes.STRING,
+      password: DataTypes.STRING,
+      name: DataTypes.STRING,
+      gender: DataTypes.STRING,
+      address: DataTypes.STRING,
+      profile_picture: DataTypes.STRING,
+      phone_number: DataTypes.STRING,
+      role_id: DataTypes.INTEGER,
+    },
+    {
+      sequelize,
+      modelName: "user",
+    }
+  );
   return user;
 };
