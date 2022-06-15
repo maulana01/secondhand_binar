@@ -20,6 +20,9 @@ module.exports = {
       product_images: {
         type: Sequelize.STRING
       },
+      slug: {
+        type: Sequelize.TEXT
+      },
       user_id: {
         type: Sequelize.INTEGER,
         references: {

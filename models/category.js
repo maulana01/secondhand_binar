@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       category_name: DataTypes.STRING,
       category_desc: DataTypes.STRING,
+      slug: DataTypes.TEXT,
     },
     {
       sequelize,
