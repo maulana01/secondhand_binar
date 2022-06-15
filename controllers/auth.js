@@ -6,6 +6,7 @@ const moment = require("moment");
 exports.signup = async (req, res, next) => {
   const { name, email, password, role } = req.body;
   const hashedPassword = await bcrypt.hash(password, 12);
+  const username = name.trim().replace(/\s+/g, "-").toLowerCase();
 
   if (!name || !email || !password) {
     return res.status(401).json({
@@ -21,6 +22,7 @@ exports.signup = async (req, res, next) => {
     } else {
       User.create({
         name,
+        username,
         email,
         password: hashedPassword,
         role_id: role,
@@ -49,13 +51,14 @@ exports.login = async (req, res, next) => {
     });
   }
   const user = await User.findOne({ where: { email } });
-  const isPasswordValid = await bcrypt.compare(password, user.password);
 
-  if (!user.email) {
+  if (!user) {
     return res.status(401).json({
-      message: "Email not found.",
+      message: "User not found.",
     });
   }
+
+  const isPasswordValid = await bcrypt.compare(password, user.password);
 
   if (!isPasswordValid) {
     return res.status(401).json({

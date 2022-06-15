@@ -1,8 +1,8 @@
 const router = require("express").Router();
 const AuthCtl = require("../controllers/Auth");
-const base_url = "/api/v1/auth";
+const auth_path = "/api/v1/auth";
 
-router.post(`${base_url}/signup`, AuthCtl.signup);
-router.post(`${base_url}/login`, AuthCtl.login);
+router.post(`${auth_path}/signup`, AuthCtl.signup);
+router.post(`${auth_path}/login`, AuthCtl.login);
 
 module.exports = router;

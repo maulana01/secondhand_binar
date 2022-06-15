@@ -1,57 +1,66 @@
-'use strict';
+"use strict";
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('users', {
+    await queryInterface.createTable("users", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       username: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       email: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       password: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       name: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       gender: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       address: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       profile_picture: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       phone_number: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       role_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'roles',
-          key: 'id',
+          model: "roles",
+          key: "id",
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL',
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL",
+      },
+      city_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: "cities",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL",
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('users');
-  }
+    await queryInterface.dropTable("users");
+  },
 };

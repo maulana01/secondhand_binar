@@ -1,4 +1,6 @@
 const { user: User } = require("../models");
+const path = require("path");
+const fs = require("fs");
 const bcrypt = require("bcryptjs");
 
 exports.getAll = (req, res, next) => {
@@ -28,10 +30,12 @@ exports.getById = (req, res, next) => {
             name: user.name,
             email: user.email,
             username: user.username,
+            role_id: user.role_id,
+            city_id: user.city_id,
           },
         });
       } else {
-        return res.status(200).json({
+        return res.status(404).json({
           message: "User not found",
         });
       }
@@ -42,6 +46,7 @@ exports.getById = (req, res, next) => {
 exports.create = async (req, res, next) => {
   const { name, email, password, role } = req.body;
   const hashedPassword = await bcrypt.hash(password, 12);
+  const username = name.trim().replace(/\s+/g, "-").toLowerCase();
   if (!name || !email || !password) {
     return res.status(401).json({
       message: "Please provide name, email and password.",
@@ -49,15 +54,16 @@ exports.create = async (req, res, next) => {
   }
 
   const user = await User.findOne({ where: { email } });
+
   if (user?.email === email) {
     return res.status(401).json({
       message: "User already exists.",
     });
   }
 
-  console.log(user);
   return await User.create({
     name,
+    username,
     email,
     password: hashedPassword,
     role_id: role,
@@ -79,14 +85,15 @@ exports.create = async (req, res, next) => {
 exports.update = async (req, res, next) => {
   const id = req.params.id || req.body.id;
   const data = {
-    username: req?.body?.username || null,
-    name: req?.body?.name || null,
-    email: req?.body?.email || null,
-    password: req?.body?.password || null,
-    gender: req?.body?.gender || null,
-    address: req?.body?.address || null,
-    profile_picture: req?.body?.profile_picture || null,
-    phone_number: req?.body?.phone_number || null,
+    username: req.body.username || null,
+    name: req.body.name || null,
+    email: req.body.email || null,
+    password: req.body.password || null,
+    gender: req.body.gender || null,
+    address: req.body.address || null,
+    profile_picture: req.file.filename || null,
+    phone_number: req.body.phone_number || null,
+    role_id: req.body.role_id || null,
   };
 
   const user = await User.findByPk(id);
@@ -106,10 +113,19 @@ exports.update = async (req, res, next) => {
     .catch((error) => res.status(402).json({ message: "failed", error }));
 };
 
-exports.delete = (req, res, next) => {
-  User.destroy({
+exports.delete = async (req, res, next) => {
+  const id = req.params.id || req.body.id;
+  const user = await User.findByPk(id);
+
+  if (!user) {
+    return res.status(404).json({
+      message: "User not found",
+    });
+  }
+
+  return User.destroy({
     where: {
-      id: req.params.id,
+      id,
     },
   })
     .then((user) => {
@@ -120,4 +136,44 @@ exports.delete = (req, res, next) => {
       }
     })
     .catch((error) => res.status(402).json({ message: "failed", error }));
+};
+
+exports.uploadAvatar = async (req, res, next) => {
+  const id = req.params.id || req.body.id;
+
+  const imageUrl = req.file.filename;
+
+  if (!imageUrl) {
+    const error = new Error("No image provided.");
+    error.statusCode = 422;
+    throw error;
+  }
+
+  const user = await User.findByPk(id);
+
+  if (user.profile_picture) {
+    clearImage(user.profile_picture);
+  }
+
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  return await User.update(
+    {
+      profile_picture: imageUrl,
+    },
+    {
+      where: {
+        id,
+      },
+    }
+  )
+    .then((user) => res.status(201).json({ message: "success", user }))
+    .catch((error) => res.status(402).json({ message: "failed", error }));
+};
+
+const clearImage = (image) => {
+  filePath = path.join(__dirname, "../images/avatar", image);
+  fs.unlink(filePath, (err) => console.log(err));
 };

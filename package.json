@@ -19,13 +19,15 @@
   },
   "homepage": "https://github.com/maulana01/secondhand_binar#readme",
   "dependencies": {
-    "pg": "^8.7.3",
-    "sequelize": "^6.20.1",
     "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.0",
     "express": "~4.16.1",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.3",
     "morgan": "~1.9.1",
-    "nodemon": "^2.0.16"
+    "multer": "^1.4.5-lts.1",
+    "nodemon": "^2.0.16",
+    "pg": "^8.7.3",
+    "sequelize": "^6.20.1"
   }
 }
