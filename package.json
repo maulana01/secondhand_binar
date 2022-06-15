@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app"
   },
   "repository": {
     "type": "git",
@@ -18,6 +19,10 @@
   },
   "homepage": "https://github.com/maulana01/secondhand_binar#readme",
   "dependencies": {
+    "express": "^4.18.1",
+    "moment": "^2.29.3",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.16",
     "pg": "^8.7.3",
     "sequelize": "^6.20.1"
   }
