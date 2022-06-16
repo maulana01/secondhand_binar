@@ -26,7 +26,9 @@
     "moment": "^2.29.3",
     "morgan": "~1.9.1",
     "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.7.5",
     "nodemon": "^2.0.16",
+    "otp-generator": "^4.0.0",
     "pg": "^8.7.3",
     "sequelize": "^6.20.1"
   }

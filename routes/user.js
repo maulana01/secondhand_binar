@@ -15,5 +15,8 @@ router.put(
   upload().single("avatar"),
   UserCtl.uploadAvatar
 );
+router.post(`${user_path}/password/forgot`, UserCtl.forgotPassword);
+router.post(`${user_path}/password/reset/:id`, UserCtl.resetPassword);
+router.post(`${user_path}/otp/verify`, UserCtl.verifyOtp);
 
 module.exports = router;

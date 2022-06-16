@@ -3,7 +3,7 @@ const multer = require("multer");
 
 exports.uploadAvatar = () => {
   const storageImage = multer.diskStorage({
-    destination: "images/avatar",
+    destination: "public/images/avatar",
     filename: function (req, file, cb) {
       cb(null, Date.now() + "-" + file.originalname);
     },

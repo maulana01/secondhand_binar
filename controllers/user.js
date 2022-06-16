@@ -1,9 +1,28 @@
 const { user: User } = require("../models");
+const nodemailer = require("nodemailer");
 const path = require("path");
 const fs = require("fs");
 const bcrypt = require("bcryptjs");
+const otpGenerator = require("otp-generator");
+const emailTemplate = require("../utils/email-template");
+
+const otp = otpGenerator.generate(6, {
+  lowerCaseAlphabets: false,
+  upperCaseAlphabets: false,
+  specialChars: false,
+  digits: true,
+});
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "secondhandoffc@gmail.com",
+    pass: "ebzpltzyfembpnzo",
+  },
+});
 
 exports.getAll = (req, res, next) => {
+  console.log({ data: req.userLoggedin });
   User.findAll()
     .then((users) => {
       res.status(200).json({
@@ -173,7 +192,76 @@ exports.uploadAvatar = async (req, res, next) => {
     .catch((error) => res.status(402).json({ message: "failed", error }));
 };
 
+exports.resetPassword = async (req, res, next) => {
+  const id = req.params.id || req.body.id;
+  const { password } = req.body;
+
+  const user = await User.findByPk(id);
+  if (!user) {
+    return res.status(500).json({
+      message: "User not found",
+    });
+  }
+
+  return User.update(
+    { password },
+    {
+      where: { id },
+    }
+  )
+    .then((user) =>
+      res.status(201).json({
+        message: "Password changed successfully",
+        data: { userId: id },
+      })
+    )
+    .catch((error) => res.status(402).json({ message: "failed", error }));
+};
+
+exports.forgotPassword = async (req, res, next) => {
+  const { email } = req.body;
+  const user = await User.findOne({ where: { email } });
+  if (!user) {
+    return res.status(404).json({
+      message: "User not found",
+    });
+  }
+
+  let htmlEmailTemplate = emailTemplate(user.name, otp);
+
+  return transporter
+    .sendMail({
+      from: "SecondHand Official <secondhandoffc@gmail.com>",
+      to: email,
+      subject: "Reset Password",
+      html: htmlEmailTemplate,
+    })
+    .then((result) => {
+      res.status(200).json({
+        message: "Reset password link has been sent to your email.",
+        data: {
+          sendTo: email,
+          messageId: result.messageId,
+          userId: user.id,
+          otp,
+        },
+      });
+    });
+};
+
+exports.verifyOtp = async (req, res, next) => {
+  if (otp !== req.body.otp) {
+    return res.status(404).json({
+      message: "Invalid OTP",
+    });
+  }
+
+  return res.status(200).json({
+    message: "OTP verified",
+  });
+};
+
 const clearImage = (image) => {
-  filePath = path.join(__dirname, "../images/avatar", image);
+  filePath = path.join(__dirname, "../public/images/avatar", image);
   fs.unlink(filePath, (err) => console.log(err));
 };

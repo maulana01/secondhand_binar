@@ -69,6 +69,7 @@ exports.login = async (req, res, next) => {
   const token = jwt.sign(
     {
       email: user.email,
+      username: user.username,
       userId: user.id,
     },
     "supersecret",
@@ -81,6 +82,7 @@ exports.login = async (req, res, next) => {
     message: "Login successful.",
     data: {
       token,
+      userId: user.id,
       expired_at: moment().add(1, "h").format("YYYY-MM-DD HH:mm:ss"),
     },
   });
