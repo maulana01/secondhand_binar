@@ -1,9 +1,13 @@
+/** @format */
+
 const express = require("express");
 const path = require("path");
 const logger = require("morgan");
 const bodyParser = require("body-parser");
 const usersRouter = require("./routes/user");
 const authRouter = require("./routes/auth");
+const categoriesRouter = require('./routes/category');
+const productsRouter = require('./routes/product');
 
 const app = express();
 
@@ -24,6 +28,8 @@ app.use("/images", express.static(path.join(__dirname, "images")));
 
 app.use(usersRouter);
 app.use(authRouter);
+app.use(categoriesRouter);
+app.use(productsRouter);
 
 app.use((error, req, res, next) => {
   console.log(error);
