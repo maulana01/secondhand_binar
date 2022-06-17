@@ -5,6 +5,7 @@ const path = require('path');
 const logger = require('morgan');
 
 const categoriesRouter = require('./routes/category');
+const productsRouter = require('./routes/product');
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use(categoriesRouter);
+app.use(productsRouter);
 
 app.use((error, req, res, next) => {
   console.log(error);
