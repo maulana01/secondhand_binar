@@ -14,6 +14,9 @@ module.exports = {
       category_desc: {
         type: Sequelize.STRING
       },
+      slug: {
+        type: Sequelize.TEXT
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
