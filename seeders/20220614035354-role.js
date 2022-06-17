@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  async up (queryInterface, Sequelize) {
     /**
      * Add seed commands here.
      *
@@ -10,33 +10,28 @@ module.exports = {
      *   name: 'John Doe',
      *   isBetaMember: false
      * }], {});
-     */
-    await queryInterface.bulkInsert(
-      "roles",
-      [
-        {
-          role_name: "Seller",
-          role_desc: "Penjual Barang",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          role_name: "Buyer",
-          role_desc: "Pembeli barang",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-      ],
-      {}
-    );
+    */
+     await queryInterface.bulkInsert('roles', [{
+      role_name: 'Seller',
+      role_desc: 'Penjual Barang',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+     role_name: 'Buyer',
+     role_desc: 'Pembeli barang',
+     createdAt: new Date(),
+     updatedAt: new Date(),
+    }
+   ], {});
   },
 
-  async down(queryInterface, Sequelize) {
+  async down (queryInterface, Sequelize) {
     /**
      * Add commands to revert seed here.
      *
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-  },
+  }
 };

@@ -1,7 +1,7 @@
 /** @format */
 
-"use strict";
-const { Model } = require("sequelize");
+'use strict';
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class user extends Model {
     /**
@@ -11,23 +11,20 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.role, { foreignKey: "role_id", as: "role" });
-      this.belongsTo(models.city, { foreignKey: "city_id", as: "city_user" });
+      this.belongsTo(models.role, { foreignKey: 'role_id', as: 'role' });
+      this.belongsTo(models.city, { foreignKey: 'city_id', as: 'city_user' });
       this.hasMany(models.wishlist, {
-        foreignKey: "user_id",
-        as: "wishlist_user",
+        foreignKey: 'user_id',
+        as: 'wishlist_user',
       });
       this.hasMany(models.bargain_product, {
-        foreignKey: "user_id",
-        as: "bargain_product_user",
+        foreignKey: 'user_id',
+        as: 'bargain_product_user',
       });
-      this.hasMany(models.product, {
-        foreignKey: "user_id",
-        as: "product_user",
-      });
+      this.hasMany(models.product, { foreignKey: 'user_id', as: 'product_user' });
       this.hasMany(models.order_transaction, {
-        foreignKey: "user_id",
-        as: "order_transaction_user",
+        foreignKey: 'user_id',
+        as: 'order_transaction_user',
       });
     }
   }
@@ -46,7 +43,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "user",
+      modelName: 'user',
     }
   );
   return user;
