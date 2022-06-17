@@ -251,7 +251,7 @@ exports.createProducts = async (req, res, next) => {
         product_name,
         product_desc,
         product_price,
-        user_id: 3,
+        user_id: req.userLoggedIn.userId,
         slug: product_name.trim().replace(/\s+/g, '-').toLowerCase(),
         category_id,
       })
