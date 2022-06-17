@@ -1,3 +1,5 @@
+/** @format */
+
 'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -6,19 +8,19 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       product_name: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       product_desc: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT,
       },
       product_price: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       slug: {
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT,
       },
       user_id: {
         type: Sequelize.INTEGER,
@@ -40,15 +42,15 @@ module.exports = {
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('products');
-  }
+  },
 };
