@@ -49,7 +49,6 @@ exports.getById = (req, res, next) => {
             name: user.name,
             email: user.email,
             username: user.username,
-            role_id: user.role_id,
             city_id: user.city_id,
           },
         });
@@ -63,7 +62,7 @@ exports.getById = (req, res, next) => {
 };
 
 exports.create = async (req, res, next) => {
-  const { name, email, password, role } = req.body;
+  const { name, email, password } = req.body;
   const hashedPassword = await bcrypt.hash(password, 12);
   const username = name.trim().replace(/\s+/g, "-").toLowerCase();
   if (!name || !email || !password) {
@@ -85,7 +84,6 @@ exports.create = async (req, res, next) => {
     username,
     email,
     password: hashedPassword,
-    role_id: role,
   })
     .then((user) => {
       res.status(201).json({
@@ -112,7 +110,6 @@ exports.update = async (req, res, next) => {
     address: req.body.address || null,
     profile_picture: req.file.filename || null,
     phone_number: req.body.phone_number || null,
-    role_id: req.body.role_id || null,
   };
 
   const user = await User.findByPk(id);

@@ -233,7 +233,7 @@ exports.getProductDetailBySlug = (req, res, next) => {
         error: err.message,
       });
     });
-};
+}; 
 
 exports.createProducts = async (req, res, next) => {
   const { product_name, product_desc, product_price, category_id } = req.body;
@@ -246,12 +246,12 @@ exports.createProducts = async (req, res, next) => {
       res.status(400).json({
         message: 'Please upload at least one image',
       });
-    } else {
+    } else { 
       await Product.create({
         product_name,
         product_desc,
         product_price,
-        user_id: req.userLoggedIn.userId,
+        user_id: '1',
         slug: product_name.trim().replace(/\s+/g, '-').toLowerCase(),
         category_id,
       })

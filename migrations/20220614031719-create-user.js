@@ -37,15 +37,6 @@ module.exports = {
       phone_number: {
         type: Sequelize.STRING,
       },
-      role_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'roles',
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL',
-      },
       city_id: {
         type: Sequelize.INTEGER,
         references: {

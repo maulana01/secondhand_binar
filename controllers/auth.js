@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const moment = require("moment");
 
 exports.signup = async (req, res, next) => {
-  const { name, email, password, role } = req.body;
+  const { name, email, password } = req.body;
   const hashedPassword = await bcrypt.hash(password, 12);
   const username = name.trim().replace(/\s+/g, "-").toLowerCase();
 
@@ -25,7 +25,6 @@ exports.signup = async (req, res, next) => {
         username,
         email,
         password: hashedPassword,
-        role_id: role,
       })
         .then((user) =>
           res.status(201).json({
