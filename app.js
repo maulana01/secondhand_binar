@@ -9,6 +9,8 @@ const authRouter = require('./routes/auth');
 const categoriesRouter = require('./routes/category');
 const productsRouter = require('./routes/product');
 const bargainProductsRouter = require('./routes/bargain_product');
+const wishlistRouter = require('./routes/wishlist');
+const transactionRotuer = require("./routes/transaction");
 
 const app = express();
 
@@ -29,6 +31,8 @@ app.use(authRouter);
 app.use(categoriesRouter);
 app.use(productsRouter);
 app.use(bargainProductsRouter);
+app.use(wishlistRouter);
+app.use(transactionRotuer);
 
 app.use((error, req, res, next) => {
   console.log(error);
