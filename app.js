@@ -8,6 +8,7 @@ const usersRouter = require("./routes/user");
 const authRouter = require("./routes/auth");
 const categoriesRouter = require('./routes/category');
 const productsRouter = require('./routes/product');
+const wishlistRouter = require('./routes/wishlist');
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use(usersRouter);
 app.use(authRouter);
 app.use(categoriesRouter);
 app.use(productsRouter);
+app.use(wishlistRouter);
 
 app.use((error, req, res, next) => {
   console.log(error);
