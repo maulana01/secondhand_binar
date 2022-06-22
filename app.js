@@ -48,7 +48,7 @@ app.use((error, req, res, next) => {
   res.status(status).json({ message: message, data: data });
 });
 
-app.all('*', (req, res) => {
+app.get('/', (req, res) => {
   res.redirect('/docs');
 });
 
