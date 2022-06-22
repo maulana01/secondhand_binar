@@ -3,7 +3,7 @@
 'use strict';
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class bargain_product extends Model {
+  class discount_product_offer extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,21 +11,21 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.user, { foreignKey: 'user_id', as: 'bargain_product_user' });
-      this.belongsTo(models.product, { foreignKey: 'product_id', as: 'bargain_product_producttable' });
+      this.belongsTo(models.user, { foreignKey: 'user_id', as: 'discount_product_offer_user' });
+      this.belongsTo(models.product, { foreignKey: 'product_id', as: 'discount_product_offer_producttable' });
     }
   }
-  bargain_product.init(
+  discount_product_offer.init(
     {
       user_id: DataTypes.INTEGER,
       product_id: DataTypes.INTEGER,
-      bargain_price: DataTypes.INTEGER,
+      cut_price: DataTypes.INTEGER,
       status: DataTypes.STRING,
     },
     {
       sequelize,
-      modelName: 'bargain_product',
+      modelName: 'discount_product_offer',
     }
   );
-  return bargain_product;
+  return discount_product_offer;
 };

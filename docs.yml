@@ -1,0 +1,509 @@
+# @format
+
+openapi: '3.0.2'
+info:
+  title: SecondHand API
+  version: '1.0'
+servers:
+  - url: http://localhost:3000/api/v1
+    description: Local Server SecondHand
+  - url: https://api.server.test/v1
+    description: Production Server SecondHand
+tags:
+  - name: 'Auth'
+    description: 'User Authentication'
+  - name: 'User'
+    description: 'User API'
+  - name: 'Category'
+    description: 'Category API'
+  - name: 'City'
+    description: 'City API'
+  - name: 'Product'
+    description: 'Product API'
+paths:
+  /auth/signup:
+    post:
+      tags:
+        - 'Auth'
+      summary: 'Signup new user'
+      description: ''
+      operationId: 'signUp'
+      requestBody:
+        description: 'Signup object that needs to be added to the database'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Signup'
+        required: true
+      responses:
+        '200':
+          description: When User successfully signup
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccessSignup'
+        '401':
+          description: When there's an error due to some condition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed401Signup'
+        '500':
+          description: When there's an error from the servers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500Signup'
+  /auth/login:
+    post:
+      tags:
+        - 'Auth'
+      summary: 'Login user'
+      description: ''
+      operationId: 'logIn'
+      requestBody:
+        description: 'Signup object that needs to be added to the database'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+        required: true
+      responses:
+        '200':
+          description: When User successfully Login
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccessLogin'
+        '401':
+          description: When there's an error due to some condition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed401Login'
+  /user/my-profile:
+    get:
+      tags:
+        - User
+      summary: Check your own profile
+      description: ''
+      operationId: 'myProfile'
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: Success Get Your Own Profile
+        '500':
+          description: Failed due to expired token
+  /user/{slug}:
+    get:
+      tags:
+        - 'User'
+      summary: Check Sellers profile
+      description: ''
+      operationId: 'sellerProfile'
+      parameters:
+        - name: slug
+          in: path
+          description: Slug of seller to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success Get Seller Profile
+        '500':
+          description: Failed due to expired token or not found seller
+  /user/update:
+    put:
+      tags:
+        - User
+      summary: Update User profile
+      description: ''
+      operationId: 'updateProfile'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                address:
+                  type: string
+                profile_picture:
+                  type: string
+                  format: binary
+                phone_number:
+                  type: string
+                city_id:
+                  type: integer
+                  format: int32
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: Success Update User Profile
+        '500':
+          description: Failed due to expired token or another Failed condition
+  /user/password/forgot:
+    put:
+      tags:
+        - User
+      summary: Send Email Forgot Password
+      description: ''
+      operationId: 'forgotPassword'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+      responses:
+        '200':
+          description: Success Send Email Forgot Password
+        '500':
+          description: Failed Send Email due to some failed condition
+  /user/otp/verify:
+    put:
+      tags:
+        - User
+      summary: Verify OTP
+      description: ''
+      operationId: 'verifyOTP'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                otp:
+                  type: string
+      responses:
+        '200':
+          description: Success Verify OTP
+        '500':
+          description: Failed Verify OTP due to some failed condition
+  /user/password/reset/{id}:
+    put:
+      tags:
+        - User
+      summary: Reset User Password
+      description: ''
+      operationId: 'resetUserPassword'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Success Reset User Password
+        '500':
+          description: Failed Reset Password due to some failed condition
+  /category:
+    get:
+      tags:
+        - Category
+      summary: Get All Category
+      description: ''
+      operationId: 'getAllCategory'
+      responses:
+        '200':
+          description: Success Get All Category
+        '500':
+          description: Failed due to no category exists
+  /category/{slug}:
+    get:
+      tags:
+        - Category
+      summary: Get Category By Slug
+      description: ''
+      operationId: 'getCategoryBySlug'
+      responses:
+        '200':
+          description: Success Get Category By Slug
+        '500':
+          description: Failed due to no category exists
+  /city:
+    get:
+      tags:
+        - City
+      summary: Get All City
+      description: ''
+      operationId: 'getAllCity'
+      responses:
+        '200':
+          description: Success Get All City
+        '500':
+          description: Failed due to no city exists
+  /city/{id}:
+    get:
+      tags:
+        - City
+      summary: Get City By ID
+      description: ''
+      operationId: 'getCityById'
+      parameters:
+        - name: id
+          in: path
+          description: ID of city to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success Get City By ID
+        '500':
+          description: Failed due to no city exists
+  /product:
+    get:
+      tags:
+        - Product
+      summary: Get All Product
+      description: ''
+      operationId: 'getAllProduct'
+      parameters:
+        - name: filter
+          in: query
+          description: Filter values that need to be considered for filter
+          style: form
+          explode: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success Get All Product
+        '500':
+          description: Failed due to no product exists
+    post:
+      tags:
+        - Product
+      summary: Post Product
+      description: ''
+      operationId: 'postProduct'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                product_name:
+                  type: string
+                product_desc:
+                  type: string
+                product_price:
+                  type: integer
+                  format: int32
+                category_id:
+                  type: string
+                product_images_name:
+                  type: string
+                  format: binary
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: Success Post Product
+        '500':
+          description: Failed post product due to some error condition
+  /product/{slug}:
+    get:
+      tags:
+        - Product
+      summary: Get Product By Slug
+      description: ''
+      operationId: 'getProductBySlug'
+      parameters:
+        - name: slug
+          in: path
+          description: Slug of product to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success Get Product By Slug
+        '500':
+          description: Failed due to no product exists
+    put:
+      tags:
+        - Product
+      summary: Update Product By Slug
+      description: ''
+      operationId: 'putProductBySlug'
+      parameters:
+        - name: slug
+          in: path
+          description: Slug of product to return
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                product_name:
+                  type: string
+                product_desc:
+                  type: string
+                product_price:
+                  type: integer
+                  format: int32
+                category_id:
+                  type: string
+                product_images_name:
+                  type: string
+                  format: binary
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: Success Put Product By Slug
+        '500':
+          description: Failed due to no product exists or error due to some error condition
+    delete:
+      tags:
+        - Product
+      summary: Delete Product By Slug
+      description: ''
+      operationId: 'deleteProductBySlug'
+      parameters:
+        - name: slug
+          in: path
+          description: Slug of product to return
+          required: true
+          schema:
+            type: string
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: Success Put Product By Slug
+        '500':
+          description: Failed due to no product exists or error due to some error condition
+  /product/category/{slug}:
+    get:
+      tags:
+        - Product
+      summary: Get Product By Category
+      description: ''
+      operationId: 'getAllProductByCategory'
+      parameters:
+        - name: slug
+          in: path
+          description: Slug Category of product to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success Get Product By Slug Category
+        '500':
+          description: Failed due to no product
+  /product/user/{slug}:
+    get:
+      tags:
+        - Product
+      summary: Get Product By Seller
+      description: ''
+      operationId: 'getAllProductBySeller'
+      parameters:
+        - name: slug
+          in: path
+          description: Slug Seller of product to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success Get Product By Slug Seller
+        '500':
+          description: Failed due to no product
+components:
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+  schemas:
+    Signup:
+      type: object
+      properties:
+        name:
+          type: string
+          default: Maulana Imam Malik
+        email:
+          type: string
+          default: maulanaimammalik4@gmail.com
+        password:
+          type: string
+          default: malik12345
+    ResponseSuccessSignup:
+      type: object
+      properties:
+        message:
+          type: string
+          default: User created successfully
+        userId:
+          type: string
+          default: 1
+    ResponseFailed401Signup:
+      type: object
+      properties:
+        message:
+          type: string
+          default: Please provide a valid email.
+    ResponseFailed500Signup:
+      type: object
+      properties:
+        message:
+          type: string
+          default: Failed to create account.
+        error:
+          type: string
+          default: error message
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+          default: maulanaimammalik4@gmail.com
+        password:
+          type: string
+          default: malik12345
+    ResponseSuccessLogin:
+      type: object
+      properties:
+        message:
+          type: string
+          default: Login successful.
+        data:
+          type: object
+          properties:
+            token:
+              type: string
+              default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+            userId:
+              type: integer
+              format: int32
+              default: 1
+            expired_at:
+              type: string
+              default: 2022-06-22 12:59:35
+    ResponseFailed401Login:
+      type: object
+      properties:
+        message:
+          type: string
+          default: Invalid Password

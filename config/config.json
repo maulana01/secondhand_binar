@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "postgres",
-    "password": "passw0rd",
+    "password": "admin",
     "database": "db_secondhand",
     "host": "127.0.0.1",
     "dialect": "postgres"
@@ -14,10 +14,18 @@
     "dialect": "postgres"
   },
   "production": {
-    "username": "root",
-    "password": null,
-    "database": "database_production",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
+    "url": "postgres://gpgkdqycnnrmzq:7375354021b56b6d53a1ef500214afef8fa1cb7738804e8b194d2e8e2bc288bd@ec2-18-204-142-254.compute-1.amazonaws.com:5432/dum9hs5kilg88",
+    "username": "gpgkdqycnnrmzq",
+    "password": "7375354021b56b6d53a1ef500214afef8fa1cb7738804e8b194d2e8e2bc288bd",
+    "database": "dum9hs5kilg88",
+    "host": "ec2-18-204-142-254.compute-1.amazonaws.com",
+    "port": 5432,
+    "dialect": "postgres",
+    "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": false
+      }
+    }
   }
 }

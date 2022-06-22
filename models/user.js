@@ -16,9 +16,9 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'user_id',
         as: 'wishlist_user',
       });
-      this.hasMany(models.bargain_product, {
+      this.hasMany(models.discount_product_offer, {
         foreignKey: 'user_id',
-        as: 'bargain_product_user',
+        as: 'discount_product_offer_user',
       });
       this.hasMany(models.product, { foreignKey: 'user_id', as: 'product_user' });
       this.hasMany(models.order_transaction, {
@@ -29,11 +29,10 @@ module.exports = (sequelize, DataTypes) => {
   }
   user.init(
     {
-      username: DataTypes.STRING,
+      name: DataTypes.STRING,
       email: DataTypes.STRING,
       password: DataTypes.STRING,
-      name: DataTypes.STRING,
-      gender: DataTypes.STRING,
+      slug: DataTypes.STRING,
       address: DataTypes.STRING,
       profile_picture: DataTypes.STRING,
       phone_number: DataTypes.STRING,

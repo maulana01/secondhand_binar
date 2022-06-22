@@ -20,9 +20,9 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'product_id',
         as: 'order_transaction_product',
       });
-      this.hasMany(models.bargain_product, {
+      this.hasMany(models.discount_product_offer, {
         foreignKey: 'product_id',
-        as: 'bargain_product_producttable',
+        as: 'discount_product_offer_producttable',
       });
       this.hasMany(models.wishlist, {
         foreignKey: 'product_id',
@@ -42,6 +42,7 @@ module.exports = (sequelize, DataTypes) => {
       slug: DataTypes.TEXT,
       user_id: DataTypes.INTEGER,
       category_id: DataTypes.INTEGER,
+      status: DataTypes.STRING,
     },
     {
       sequelize,

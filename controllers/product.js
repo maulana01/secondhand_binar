@@ -1,6 +1,13 @@
 /** @format */
 
-const { product: Product, Sequelize, product_images: Product_Images, category: Category, user: User } = require('../models');
+const {
+  product: Product,
+  Sequelize,
+  product_images: Product_Images,
+  category: Category,
+  user: User,
+  order_transaction: Transaction,
+} = require('../models');
 const fs = require('fs');
 const path = require('path');
 const { Op } = Sequelize;
@@ -13,8 +20,9 @@ exports.getAllWithPaginationSortingFiltering = (req, res, next) => {
         limit: parseInt(limit, 10) || 10,
         where: {
           product_name: {
-            [Op.like]: `%${filter}%`,
+            [Op.iLike]: `%${filter}%`,
           },
+          status: 'unsold',
         },
         include: [
           {
@@ -28,7 +36,7 @@ exports.getAllWithPaginationSortingFiltering = (req, res, next) => {
           {
             model: User,
             as: 'product_user',
-            attributes: ['username', 'email', 'name', 'gender', 'address', 'profile_picture', 'phone_number'],
+            attributes: ['email', 'name', 'slug', 'address', 'profile_picture', 'phone_number'],
           },
         ],
         distinct: true,
@@ -36,6 +44,9 @@ exports.getAllWithPaginationSortingFiltering = (req, res, next) => {
     : {
         offset: (page - 1) * limit || 0,
         limit: parseInt(limit, 10) || 10,
+        where: {
+          status: 'unsold',
+        },
         include: [
           {
             model: Category,
@@ -48,7 +59,7 @@ exports.getAllWithPaginationSortingFiltering = (req, res, next) => {
           {
             model: User,
             as: 'product_user',
-            attributes: ['username', 'email', 'name', 'gender', 'address', 'profile_picture', 'phone_number'],
+            attributes: ['email', 'name', 'slug', 'address', 'profile_picture', 'phone_number'],
           },
         ],
         distinct: true,
@@ -91,6 +102,7 @@ exports.getAllByCategory = async (req, res, next) => {
       limit: parseInt(limit, 10) || 10,
       where: {
         category_id: getCategory.id,
+        status: 'unsold',
       },
       include: [
         {
@@ -133,11 +145,11 @@ exports.getAllByCategory = async (req, res, next) => {
 };
 
 exports.getAllBySeller = async (req, res, next) => {
-  const { username } = req.params;
+  const { slug } = req.params;
   const { page, limit } = req.query;
   const getUser = await User.findOne({
     where: {
-      username: username,
+      slug: slug,
     },
   });
   if (getUser) {
@@ -159,7 +171,7 @@ exports.getAllBySeller = async (req, res, next) => {
         {
           model: User,
           as: 'product_user',
-          attributes: ['username', 'email', 'name', 'gender', 'address', 'profile_picture', 'phone_number'],
+          attributes: ['email', 'name', 'slug', 'address', 'profile_picture', 'phone_number'],
         },
       ],
       distinct: true,
@@ -210,7 +222,7 @@ exports.getProductDetailBySlug = (req, res, next) => {
       {
         model: User,
         as: 'product_user',
-        attributes: ['username', 'email', 'name', 'gender', 'address', 'profile_picture', 'phone_number'],
+        attributes: ['email', 'name', 'slug', 'address', 'profile_picture', 'phone_number'],
       },
     ],
     distinct: true,
@@ -233,47 +245,97 @@ exports.getProductDetailBySlug = (req, res, next) => {
         error: err.message,
       });
     });
-}; 
+};
 
 exports.createProducts = async (req, res, next) => {
   const { product_name, product_desc, product_price, category_id } = req.body;
+  const countUnsoldSellerProductPost = await Product.count({
+    where: {
+      user_id: req.userLoggedin.userId,
+      status: 'unsold',
+    },
+  });
+  // const unsoldSellerProduct = await Transaction.findAll({
+  //   where: {
+  //     user_id: req.userLoggedIn.userId,
+  //     status: 'unsold',
+  //   }
+  // })
+
   if (!product_name || !product_desc || !product_price) {
     res.status(400).json({
       message: 'Please fill all required fields',
     });
   } else {
+    // if (countUnsoldSellerProductPost > 4) {
+    //   res.status(400).json({
+    //     message: 'You can only sell 4 products',
+    //   });
+    //   req.files.map((file) => {
+    //     const _path = path.join(__dirname, '../public/images/products/', file.filename);
+    //     fs.unlink(_path, (err) => {
+    //       if (err) console.log(err);
+    //     });
+    //   });
+    // } else {
     if (req.files.length === 0) {
       res.status(400).json({
         message: 'Please upload at least one image',
       });
-    } else { 
-      await Product.create({
-        product_name,
-        product_desc,
-        product_price,
-        user_id: '1',
-        slug: product_name.trim().replace(/\s+/g, '-').toLowerCase(),
-        category_id,
-      })
-        .then((product) => {
-          req.files.map((file) => {
-            Product_Images.create({
-              product_images_name: file.filename,
-              product_id: product.id,
-            });
-          });
-          res.status(201).json({
-            message: 'success',
-            product,
-            product_images: req.files,
-          });
-        })
-        .catch((err) => {
-          res.status(500).json({
-            message: 'error',
-            error: err.message,
+    } else {
+      if (req.files.length > 4) {
+        res.status(400).json({
+          message: 'You can only upload up to 4 images',
+        });
+        req.files.map((file) => {
+          const _path = path.join(__dirname, '../public/images/products/', file.filename);
+          fs.unlink(_path, (err) => {
+            if (err) console.log(err);
           });
         });
+      } else {
+        console.log('ini total product', countUnsoldSellerProductPost);
+        if (countUnsoldSellerProductPost >= 4) {
+          res.status(400).json({
+            message: 'You can only sell 4 products',
+          });
+          req.files.map((file) => {
+            const _path = path.join(__dirname, '../public/images/products/', file.filename);
+            fs.unlink(_path, (err) => {
+              if (err) console.log(err);
+            });
+          });
+        } else {
+          await Product.create({
+            product_name,
+            product_desc,
+            product_price,
+            user_id: req.userLoggedin.userId,
+            status: 'unsold',
+            slug: product_name.trim().replace(/\s+/g, '-').toLowerCase(),
+            category_id,
+          })
+            .then((product) => {
+              req.files.map((file) => {
+                Product_Images.create({
+                  product_images_name: file.filename,
+                  product_id: product.id,
+                });
+              });
+              res.status(201).json({
+                message: 'success',
+                product,
+                product_images: req.files,
+              });
+            })
+            .catch((err) => {
+              res.status(500).json({
+                message: 'error',
+                error: err.message,
+              });
+            });
+        }
+      }
     }
   }
 };
