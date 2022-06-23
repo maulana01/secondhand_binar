@@ -6,7 +6,7 @@ const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
 const swaggerDocument = YAML.load('docs.yml');
 const path = require('path');
-const logger = require('morgan');
+// const logger = require('morgan');
 const bodyParser = require('body-parser');
 const cityRouter = require('./routes/city');
 const usersRouter = require('./routes/user');
@@ -19,14 +19,14 @@ const transactionRotuer = require('./routes/transaction');
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST, PUT, PATCH, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  next();
-});
+// app.use((req, res, next) => {
+//   res.setHeader('Access-Control-Allow-Origin', '*');
+//   res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST, PUT, PATCH, DELETE');
+//   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+//   next();
+// });
 
-app.use(logger('dev'));
+// app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/images', express.static(path.join(__dirname, 'images')));
@@ -40,13 +40,13 @@ app.use(discProductsOfferRouter);
 app.use(wishlistRouter);
 app.use(transactionRotuer);
 
-app.use((error, req, res, next) => {
-  console.log(error);
-  const status = error.statusCode || 500;
-  const message = error.message;
-  const data = error.data;
-  res.status(status).json({ message: message, data: data });
-});
+// app.use((error, req, res, next) => {
+//   console.log(error);
+//   const status = error.statusCode || 500;
+//   const message = error.message;
+//   const data = error.data;
+//   res.status(status).json({ message: message, data: data });
+// });
 
 app.get('/', (req, res) => {
   res.redirect('/docs');
