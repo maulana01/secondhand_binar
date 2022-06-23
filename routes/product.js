@@ -13,7 +13,16 @@ router.get(`${product_path}/category/:slug`, ProductCtl.getAllByCategory);
 router.get(`${product_path}/user/:slug`, ProductCtl.getAllBySeller);
 
 // ini create
-router.post(`${product_path}`, IsAuth, IsProfileFilled, UploadUtil.uploadImage.array('product_images_name', 4), ProductCtl.createProducts);
+router.post(
+  `${product_path}`,
+  IsAuth,
+  IsProfileFilled,
+  UploadUtil.uploadImage.array('product_images_name', 4),
+  ProductCtl.createProducts,
+  (error, req, res, next) => {
+    res.status(415).json({ message: 'Jumlah File Upload melewati batas' });
+  }
+);
 
 router.put(
   `${product_path}/:slug`,
