@@ -11,6 +11,8 @@ router.get(`${product_path}`, ProductCtl.getAllWithPaginationSortingFiltering);
 router.get(`${product_path}/:slug`, ProductCtl.getProductDetailBySlug);
 router.get(`${product_path}/category/:slug`, ProductCtl.getAllByCategory);
 router.get(`${product_path}/user/:slug`, ProductCtl.getAllBySeller);
+
+// ini create
 router.post(
   `${product_path}`,
   IsAuth,
@@ -21,6 +23,7 @@ router.post(
     res.status(415).json({ message: 'Jumlah File Upload melewati batas' });
   }
 );
+
 router.put(
   `${product_path}/:slug`,
   IsAuth,
