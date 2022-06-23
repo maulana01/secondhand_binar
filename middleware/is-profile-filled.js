@@ -11,7 +11,7 @@ module.exports = async (req, res, next) => {
     //   message: 'Please complete your profile first!',
     // });
     const error = new Error('Please complete your profile first!');
-    error.statusCode = 400;
+    error.statusCode = 402;
     throw error;
   } else {
     next();
