@@ -141,10 +141,6 @@ paths:
               properties:
                 name:
                   type: string
-                email:
-                  type: string
-                password:
-                  type: string
                 address:
                   type: string
                 profile_picture:

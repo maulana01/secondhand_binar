@@ -162,7 +162,7 @@ exports.update = async (req, res, next) => {
   const data = {
     slug: slug,
     name: name ? name : user.name,
-    password: password ? hashedPassword : user.password,
+    // password: password ? hashedPassword : user.password,
     address: address,
     profile_picture: req.file ? req.file.filename : null,
     phone_number: phone_number,
