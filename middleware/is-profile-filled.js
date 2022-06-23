@@ -12,7 +12,7 @@ module.exports = async (req, res, next) => {
     });
     // console.log('ini hasil user', user);
     // console.log('ini address', user.dataValues.address);
-    if (user.address == null || user.phone_number == null || user.city_id == null || user.profile_picture == null) {
+    if (!user.address || !user.phone_number || !user.city_id || !user.profile_picture) {
       return res.status(400).json({
         message: 'Please complete your profile first!',
       });
