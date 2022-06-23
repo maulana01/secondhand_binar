@@ -325,7 +325,7 @@ exports.createProducts = async (req, res, next) => {
               res.status(201).json({
                 message: 'success',
                 product,
-                // product_images: req.files,
+                product_images: req.files,
               });
             })
             .catch((err) => {
