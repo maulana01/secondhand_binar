@@ -7,6 +7,7 @@ module.exports = async (req, res, next) => {
   const user = await User.findByPk(userId);
   console.log('ini hasil user', user);
   console.log('ini address', user.dataValues.address);
+  console.log('ini address dalem', user.user.dataValues.address);
   if (
     user.dataValues.address == null ||
     user.dataValues.phone_number == null ||
