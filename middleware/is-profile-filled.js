@@ -2,28 +2,15 @@
 
 const { user: User } = require('../models');
 
-module.exports = (req, res, next) => {
+module.exports = async (req, res, next) => {
   const { userId } = req.userLoggedin;
-  User.findOne({
-    where: {
-      id: userId,
-    },
-  })
-    .then((user) => {
-      if (user.address == null || user.phone_number == null || user.city_id == null || user.profile_picture == null) {
-        res.status(400).json({
-          error: 'Please complete your profile first!',
-        });
-        // const error = new Error('Please complete your profile first!');
-        // error.statusCode = 500;
-        // throw error;
-      }
-      next();
-    })
-    .catch((error) => {
-      res.status(500).json({
-        message: 'Failed',
-        error: error.message,
-      });
+  const user = await User.findByPk(userId);
+  // console.log('ini hasil user', user);
+  if (user.address === null || user.phone_number === null || user.city_id === null || user.profile_picture === null) {
+    res.status(400).json({
+      message: 'Please complete your profile first!',
     });
+  } else {
+    next();
+  }
 };
