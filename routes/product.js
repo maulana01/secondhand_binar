@@ -14,21 +14,14 @@ router.get(`${product_path}/user/:slug`, ProductCtl.getAllBySeller);
 router.post(
   `${product_path}`,
   IsAuth,
-  IsProfileFilled,
   UploadUtil.uploadImage.array('product_images_name', 4),
   ProductCtl.createProducts,
   (error, req, res, next) => {
     res.status(415).json({ message: 'Jumlah File Upload melewati batas' });
   }
 );
-router.put(
-  `${product_path}/:slug`,
-  IsAuth,
-  IsProfileFilled,
-  UploadUtil.uploadImage.array('product_images_name', 4),
-  ProductCtl.updateProducts
-);
-router.delete(`${product_path}/:slug`, IsAuth, IsProfileFilled, ProductCtl.deleteProduct);
-router.delete(`${product_path}/image/:product_images_name`, IsAuth, IsProfileFilled, ProductCtl.deleteProductImages);
+router.put(`${product_path}/:slug`, IsAuth, UploadUtil.uploadImage.array('product_images_name', 4), ProductCtl.updateProducts);
+router.delete(`${product_path}/:slug`, IsAuth, ProductCtl.deleteProduct);
+router.delete(`${product_path}/image/:product_images_name`, IsAuth, ProductCtl.deleteProductImages);
 
 module.exports = router;
