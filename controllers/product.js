@@ -325,13 +325,7 @@ exports.createProducts = async (req, res, next) => {
               res.status(201).json({
                 message: 'success',
                 product,
-                product_images: {
-                  originalname: req.files.originalname,
-                  mimetype: req.files.mimetype,
-                  filename: req.files.filename,
-                  destination: req.files.destination,
-                  size: req.files.size,
-                },
+                // product_images: req.files,
               });
             })
             .catch((err) => {
