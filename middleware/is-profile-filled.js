@@ -5,11 +5,7 @@ const { user: User } = require('../models');
 module.exports = async (req, res, next) => {
   if (req.userLoggedin) {
     const { product_name, product_desc, product_price, category_id, product_images_name } = req.body;
-    console.log('ini hasil product_name', product_name);
-    console.log('ini hasil product_desc', product_desc);
-    console.log('ini hasil product_price', product_price);
-    console.log('ini hasil category_id', category_id);
-    console.log('ini hasil product_images_name', product_images_name);
+    console.log('ini hasil body', req.body);
     const { userId } = req.userLoggedin;
     const user = await User.findOne({
       where: {
