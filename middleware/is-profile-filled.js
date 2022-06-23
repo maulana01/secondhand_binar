@@ -4,7 +4,11 @@ const { user: User } = require('../models');
 
 module.exports = (req, res, next) => {
   const { userId } = req.userLoggedin;
-  User.findByPk(userId)
+  User.findOne({
+    where: {
+      id: userId,
+    },
+  })
     .then((user) => {
       if (user.address == null || user.phone_number == null || user.city_id == null || user.profile_picture == null) {
         res.status(400).json({
