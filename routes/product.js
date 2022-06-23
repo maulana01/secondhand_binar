@@ -7,7 +7,7 @@ const IsAuth = require('../middleware/is-auth');
 const IsProfileFilled = require('../middleware/is-profile-filled');
 const UploadUtil = require('../utils/uploadProducts');
 
-router.get(`${product_path}`, IsAuth, ProductCtl.getAllWithPaginationSortingFiltering);
+router.get(`${product_path}`, ProductCtl.getAllWithPaginationSortingFiltering);
 router.get(`${product_path}/:slug`, ProductCtl.getProductDetailBySlug);
 router.get(`${product_path}/category/:slug`, ProductCtl.getAllByCategory);
 router.get(`${product_path}/user/:slug`, ProductCtl.getAllBySeller);
@@ -16,6 +16,7 @@ router.get(`${product_path}/user/:slug`, ProductCtl.getAllBySeller);
 router.post(
   `${product_path}`,
   IsAuth,
+  IsProfileFilled,
   UploadUtil.uploadImage.array('product_images_name', 4),
   ProductCtl.createProducts,
   (error, req, res, next) => {

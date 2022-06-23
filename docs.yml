@@ -288,8 +288,6 @@ paths:
           explode: true
           schema:
             type: string
-      security:
-        - Bearer: []
       responses:
         '200':
           description: Success Get All Product
