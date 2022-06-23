@@ -6,7 +6,7 @@ const IsAuth = require('../middleware/is-auth');
 const { uploadAvatar: upload } = require('../utils/upload-files');
 const user_path = '/api/v1/user';
 
-router.get(`${user_path}/all`, IsAuth, UserCtl.getAll);
+router.get(`${user_path}/all`, UserCtl.getAll);
 router.get(`${user_path}/my-profile`, IsAuth, UserCtl.getMyProfile);
 router.get(`${user_path}/:slug`, UserCtl.getBySlug);
 router.post(`${user_path}/create`, IsAuth, UserCtl.create);

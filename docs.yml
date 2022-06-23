@@ -81,6 +81,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseFailed401Login'
+  /user/all:
+    get:
+      tags:
+        - User
+      summary: Get All Users
+      description: ''
+      operationId: 'getAllUsers'
+      responses:
+        '200':
+          description: Success Get Your Own Profile
+        '500':
+          description: Failed due to expired token
   /user/my-profile:
     get:
       tags:

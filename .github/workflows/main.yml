@@ -17,14 +17,14 @@ jobs:
           node-version: '14.x'
       - name: Install dependencies
         run: npm install
-      - name: Install Sequelize-Cli
-        run: npm install sequelize-cli
-      - name: Run Sequelize-Cli Migrate Undo All
-        run: npx sequelize db:migrate:undo:all --env production
-      - name: Run Sequelize-Cli Migrate
-        run: npx sequelize db:migrate --env production
-      - name: Run Sequelize-Cli Seed
-        run: npx sequelize db:seed:all --env production
+      # - name: Install Sequelize-Cli
+      #   run: npm install sequelize-cli
+      # - name: Run Sequelize-Cli Migrate Undo All
+      #   run: npx sequelize db:migrate:undo:all --env production
+      # - name: Run Sequelize-Cli Migrate
+      #   run: npx sequelize db:migrate --env production
+      # - name: Run Sequelize-Cli Seed
+      #   run: npx sequelize db:seed:all --env production
       # - name: Run tests
       #   run: npm test
 
