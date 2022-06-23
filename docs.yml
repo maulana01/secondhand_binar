@@ -319,8 +319,10 @@ paths:
                 category_id:
                   type: string
                 product_images_name:
-                  type: string
-                  format: binary
+                  type: array
+                  items:
+                    type: string
+                    format: binary
       security:
         - Bearer: []
       responses:
