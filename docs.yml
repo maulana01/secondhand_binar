@@ -159,7 +159,7 @@ paths:
         '500':
           description: Failed due to expired token or another Failed condition
   /user/password/forgot:
-    put:
+    post:
       tags:
         - User
       summary: Send Email Forgot Password
@@ -179,7 +179,7 @@ paths:
         '500':
           description: Failed Send Email due to some failed condition
   /user/otp/verify:
-    put:
+    post:
       tags:
         - User
       summary: Verify OTP
@@ -199,7 +199,7 @@ paths:
         '500':
           description: Failed Verify OTP due to some failed condition
   /user/password/reset/{id}:
-    put:
+    post:
       tags:
         - User
       summary: Reset User Password
