@@ -16,6 +16,7 @@ router.get(`${product_path}/user/:slug`, ProductCtl.getAllBySeller);
 router.post(
   `${product_path}`,
   IsAuth,
+  IsProfileFilled,
   UploadUtil.uploadImage.array('product_images_name', 4),
   ProductCtl.createProducts,
   (error, req, res, next) => {

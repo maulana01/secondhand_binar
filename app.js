@@ -17,9 +17,6 @@ const discProductsOfferRouter = require('./routes/discount_product_offer');
 const wishlistRouter = require('./routes/wishlist');
 const transactionRotuer = require('./routes/transaction');
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use((req, res, next) => {
@@ -30,6 +27,8 @@ app.use((req, res, next) => {
 });
 
 // app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use(cityRouter);
