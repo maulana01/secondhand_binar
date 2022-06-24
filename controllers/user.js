@@ -155,15 +155,14 @@ exports.create = async (req, res, next) => {
 
 exports.update = async (req, res, next) => {
   const { userId, userSlug } = req.userLoggedin;
-  const { name, email, password, address, phone_number, city_id } = req.body;
+  const { name, email, address, phone_number, city_id } = req.body;
   const user = await User.findByPk(userId);
-  const hashedPassword = bcrypt.hash(password, 12);
+  // const hashedPassword = bcrypt.hash(password, 12);
   const slug = name ? name.trim().replace(/\s+/g, '-').toLowerCase() : userSlug;
   const data = {
     slug: slug,
     name: name ? name : user.name,
-    // password: password ? hashedPassword : user.password,
-    address: address,
+    address: address || null,
     profile_picture: req.file ? req.file.filename : null,
     phone_number: phone_number,
     city_id: city_id || null,
