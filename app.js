@@ -18,7 +18,7 @@ const wishlistRouter = require('./routes/wishlist');
 const transactionRotuer = require('./routes/transaction');
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
