@@ -164,7 +164,7 @@ exports.update = async (req, res, next) => {
     name: name ? name : user.name,
     address: address || null,
     profile_picture: req.file ? req.file.filename : null,
-    phone_number: phone_number,
+    phone_number: phone_number || null,
     city_id: city_id || null,
   };
 
