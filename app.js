@@ -30,6 +30,7 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(__dirname + 'public'));
+app.use('/public/images/products', express.static('public/images/products'));
 
 app.use(cityRouter);
 app.use(usersRouter);
