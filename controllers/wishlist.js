@@ -29,7 +29,7 @@ module.exports = {
       .then((wishlists) => {
         console.log(
           'ini wishlist produk',
-          wishlists.map((wishlist) => wishlist.wishlist_product)
+          wishlists.map((wishlist) => wishlist.product_id)
         );
         Product_Images.findAll({
           where: {
