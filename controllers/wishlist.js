@@ -9,12 +9,12 @@ module.exports = {
         {
           model: Product,
           as: 'wishlist_product',
-          include: [
-            {
-              model: Product_Images,
-              as: 'product_images',
-            },
-          ],
+          // include: [
+          //   {
+          //     model: Product_Images,
+          //     as: 'product_images',
+          //   },
+          // ],
         },
         {
           model: User,
