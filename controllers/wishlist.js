@@ -9,6 +9,12 @@ module.exports = {
         {
           model: Product,
           as: 'wishlist_product',
+          include: [
+            {
+              model: Product_Images,
+              as: 'product_images',
+            },
+          ],
         },
         {
           model: User,
@@ -16,6 +22,9 @@ module.exports = {
           attributes: ['username', 'name'],
         },
       ],
+      where: {
+        user_id: req.userLoggedin.userId,
+      },
     })
       .then((wishlists) => {
         Product_Images.findAll({

@@ -20,6 +20,8 @@ tags:
     description: 'City API'
   - name: 'Product'
     description: 'Product API'
+  - name: 'Wishlist'
+    description: 'Wishlist API'
 paths:
   /auth/signup:
     post:
@@ -451,6 +453,58 @@ paths:
           description: Success Get Product By Slug Seller
         '500':
           description: Failed due to no product
+  /wishlist:
+    get:
+      tags:
+        - Wishlist
+      summary: Get All Wishlist
+      description: ''
+      operationId: 'getAllWishlist'
+      responses:
+        '200':
+          description: Success Get All Wishlist
+        '500':
+          description: Failed due to no wishlist exists
+    post:
+      tags:
+        - Wishlist
+      summary: Post Wishlist
+      description: ''
+      operationId: 'postWishlist'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product_id:
+                  type: string
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: Success Post wishlist
+  /wishlist/{id}:
+    delete:
+      tags:
+        - Wishlist
+      summary: Delete Wishlist By ID
+      description: ''
+      operationId: 'deleteWishlistById'
+      parameters:
+        - name: id
+          in: path
+          description: ID of wishlist to return
+          required: true
+          schema:
+            type: string
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: Success Delete Wishlist By ID
+        '500':
+          description: Failed due to no wishlist exists
 components:
   securitySchemes:
     Bearer:
