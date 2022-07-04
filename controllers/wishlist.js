@@ -19,7 +19,7 @@ module.exports = {
         {
           model: User,
           as: 'wishlist_user',
-          attributes: ['username', 'name'],
+          attributes: ['slug', 'name'],
         },
       ],
       where: {
