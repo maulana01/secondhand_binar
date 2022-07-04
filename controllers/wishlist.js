@@ -33,7 +33,7 @@ module.exports = {
         );
         Product_Images.findAll({
           where: {
-            product_id: wishlists.dataValues.product_id,
+            product_id: wishlists.map((wishlist) => wishlist.product_id),
           },
         }).then((product_image) => {
           res.status(200).json({
