@@ -9,12 +9,12 @@ module.exports = {
         {
           model: Product,
           as: 'wishlist_product',
-          // include: [
-          //   {
-          //     model: Product_Images,
-          //     as: 'product_images',
-          //   },
-          // ],
+          include: [
+            {
+              model: Product_Images,
+              as: 'product_images',
+            },
+          ],
         },
         {
           model: User,
@@ -27,20 +27,20 @@ module.exports = {
       },
     })
       .then((wishlists) => {
-        console.log(
-          'ini wishlist produk',
-          wishlists.map((wishlist) => wishlist.product_id)
-        );
-        Product_Images.findAll({
-          where: {
-            product_id: wishlists.map((wishlist) => wishlist.product_id),
-          },
-        }).then((product_image) => {
-          res.status(200).json({
-            message: 'success',
-            wishlists,
-            product_image,
-          });
+        // console.log(
+        //   'ini wishlist produk',
+        //   wishlists.map((wishlist) => wishlist.product_id)
+        // );
+        // Product_Images.findAll({
+        //   where: {
+        //     product_id: wishlists.map((wishlist) => wishlist.product_id),
+        //   },
+        // }).then((product_image) => {
+        // });
+        res.status(200).json({
+          message: 'success',
+          wishlists,
+          product_image,
         });
       })
       .catch((err) => {
