@@ -30,7 +30,7 @@ module.exports = {
         console.log('ini wishlist produk', wishlists);
         Product_Images.findAll({
           where: {
-            product_id: wishlists.wishlist_product.id,
+            product_id: wishlists.product_id,
           },
         }).then((product_image) => {
           res.status(200).json({
