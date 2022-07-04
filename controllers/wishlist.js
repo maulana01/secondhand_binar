@@ -27,7 +27,10 @@ module.exports = {
       },
     })
       .then((wishlists) => {
-        console.log('ini wishlist produk', wishlists.dataValues);
+        console.log(
+          'ini wishlist produk',
+          wishlists.map((wishlist) => wishlist.wishlist_product)
+        );
         Product_Images.findAll({
           where: {
             product_id: wishlists.dataValues.product_id,
