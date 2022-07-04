@@ -460,6 +460,8 @@ paths:
       summary: Get All Wishlist
       description: ''
       operationId: 'getAllWishlist'
+      security:
+        - Bearer: []
       responses:
         '200':
           description: Success Get All Wishlist
@@ -478,7 +480,9 @@ paths:
               type: object
               properties:
                 product_id:
-                  type: string
+                  type: integer
+                  format: int32
+                  default: 1
       security:
         - Bearer: []
       responses:
