@@ -1,0 +1,284 @@
+{
+	"info": {
+		"_postman_id": "51fe10a5-1c44-4f41-a50c-5a2c71c0a623",
+		"name": "SecondHand Product",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12537853"
+	},
+	"item": [
+		{
+			"name": "Get All Product",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/product",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"product"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Product By Category",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/product/category/elektronik",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"product",
+						"category",
+						"elektronik"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Product By Seller",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/product/user/diahnas",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"product",
+						"user",
+						"diahnas"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Product By Slug",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/product/betadine",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"product",
+						"betadine"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Product",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiTWF1bGFuYSBJbWFtIE1hbGlrIiwiZW1haWwiOiJtYXVsYW5haW1hbW1hbGlrNEBnbWFpbC5jb20iLCJ1c2VyU2x1ZyI6Im1hdWxhbmEtaW1hbS1tYWxpayIsInVzZXJJZCI6MywiaWF0IjoxNjU1OTA2NTM2LCJleHAiOjE2NTU5MTAxMzZ9.D-mPMNnmcZ-QBU_Vvl184rP45GyZPNomaVDVW3chcOg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "product_name",
+							"value": "Betadine Mematikan",
+							"type": "text"
+						},
+						{
+							"key": "product_desc",
+							"value": "Betadine 6 pcs",
+							"type": "text"
+						},
+						{
+							"key": "product_price",
+							"value": "25000",
+							"type": "text"
+						},
+						{
+							"key": "category_id",
+							"value": "5",
+							"type": "text"
+						},
+						{
+							"key": "product_images_name",
+							"type": "file",
+							"src": [
+								"/C:/Users/MIM/Downloads/screencapture-github-maulana01-secondhandbe-pull-3-2022-06-20-16_58_33.png",
+								"/C:/Users/MIM/Downloads/render.png"
+							]
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/product",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"product"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Image Product",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/product/image/1655475028410-betadine-carbon.png",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"product",
+						"image",
+						"1655475028410-betadine-carbon.png"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Product",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiTWF1bGFuYSBJbWFtIE1hbGlrIiwiZW1haWwiOiJtYXVsYW5haW1hbW1hbGlrNEBnbWFpbC5jb20iLCJ1c2VySWQiOjMsImlhdCI6MTY1NTgxMzgzMiwiZXhwIjoxNjU1ODE3NDMyfQ.T6tOWXLOf9B8AidUWdD6VIV3ZS_P0DyKBMT4aAxJZQk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/product/betadine-kimia-farma",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"product",
+						"betadine-kimia-farma"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Product",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiTWF1bGFuYSBJbWFtIE1hbGlrIiwiZW1haWwiOiJtYXVsYW5haW1hbW1hbGlrNEBnbWFpbC5jb20iLCJ1c2VySWQiOjMsImlhdCI6MTY1NTgxMzgzMiwiZXhwIjoxNjU1ODE3NDMyfQ.T6tOWXLOf9B8AidUWdD6VIV3ZS_P0DyKBMT4aAxJZQk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "product_name",
+							"value": "Mobil Mercedes Seri X",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "product_desc",
+							"value": "Mobil Mercedes Terbaru Seri X",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "product_price",
+							"value": "21000",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "product_images_name",
+							"type": "file",
+							"src": "/C:/Users/MIM/Downloads/carbon.png",
+							"disabled": true
+						},
+						{
+							"key": "status",
+							"value": "sold",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/product/betadine-kimia-farma",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"product",
+						"betadine-kimia-farma"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
