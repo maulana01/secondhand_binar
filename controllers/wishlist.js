@@ -40,7 +40,7 @@ module.exports = {
         res.status(200).json({
           message: 'success',
           wishlists,
-          product_image,
+          // product_image,
         });
       })
       .catch((err) => {
