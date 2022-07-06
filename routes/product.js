@@ -31,6 +31,7 @@ router.put(
   IsProfileFilled,
   ProductCtl.updateProducts
 );
+// router.put(`${product_path}/status/sold/:id`, IsAuth, ProductCtl.updateStatus);
 router.delete(`${product_path}/:slug`, IsAuth, IsProfileFilled, ProductCtl.deleteProduct);
 router.delete(`${product_path}/image/:product_images_name`, IsAuth, IsProfileFilled, ProductCtl.deleteProductImages);
 

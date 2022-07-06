@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.user, { foreignKey: 'user_id', as: 'product_user' });
+      this.belongsTo(models.user, { foreignKey: 'user_id', as: 'seller' });
       this.belongsTo(models.category, {
         foreignKey: 'category_id',
         as: 'category_product',
@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       });
       this.hasMany(models.discount_product_offer, {
         foreignKey: 'product_id',
-        as: 'discount_product_offer_producttable',
+        as: 'product_offered',
       });
       this.hasMany(models.wishlist, {
         foreignKey: 'product_id',

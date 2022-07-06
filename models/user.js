@@ -18,11 +18,11 @@ module.exports = (sequelize, DataTypes) => {
       });
       this.hasMany(models.discount_product_offer, {
         foreignKey: 'user_id',
-        as: 'discount_product_offer_user',
+        as: 'bidder',
       });
       this.hasMany(models.product, {
         foreignKey: 'user_id',
-        as: 'product_user',
+        as: 'seller',
       });
       this.hasMany(models.order_transaction, {
         foreignKey: 'user_id',
@@ -31,6 +31,10 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.notification, {
         foreignKey: 'user_id',
         as: 'user_notification',
+      });
+      this.hasMany(models.discount_product_offer, {
+        foreignKey: 'seller_id',
+        as: 'seller_product_offer',
       });
     }
   }
@@ -42,6 +46,7 @@ module.exports = (sequelize, DataTypes) => {
       slug: DataTypes.STRING,
       address: DataTypes.STRING,
       profile_picture: DataTypes.STRING,
+      profile_picture_path: DataTypes.STRING,
       phone_number: DataTypes.STRING,
       city_id: DataTypes.INTEGER,
     },

@@ -85,7 +85,7 @@ exports.login = async (req, res, next) => {
       },
       'supersecret',
       {
-        expiresIn: '1h',
+        expiresIn: '1d',
       }
     );
 

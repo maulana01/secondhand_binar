@@ -1,7 +1,7 @@
 /** @format */
 
 'use strict';
-
+const bcrypt = require('bcryptjs');
 module.exports = {
   async up(queryInterface, Sequelize) {
     /**
@@ -18,7 +18,7 @@ module.exports = {
       [
         {
           email: 'rodiah.akhfani@gmail.com',
-          password: 'inipassword',
+          password: await bcrypt.hash('inipassword', 12),
           name: 'Rodiah Akhfani Nasution',
           address: 'Gg Mawar 3 Dsn 1 Galang Suka',
           profile_picture: '',
@@ -30,7 +30,7 @@ module.exports = {
         },
         {
           email: 'raraarara@gmail.com',
-          password: 'inipassword',
+          password: await bcrypt.hash('inipassword', 12),
           name: 'Rara Arara',
           address: 'Gg Mawar 5 Dsn 5 Galang Suka',
           profile_picture: '',

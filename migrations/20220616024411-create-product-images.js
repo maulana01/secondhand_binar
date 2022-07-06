@@ -13,6 +13,9 @@ module.exports = {
       product_images_name: {
         type: Sequelize.STRING,
       },
+      product_images_path: {
+        type: Sequelize.STRING,
+      },
       product_id: {
         type: Sequelize.INTEGER,
         references: {

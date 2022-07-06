@@ -1,12 +1,18 @@
 /** @format */
 
-const { user: User } = require("../models");
-const nodemailer = require("nodemailer");
-const path = require("path");
-const fs = require("fs");
-const bcrypt = require("bcryptjs");
-const otpGenerator = require("otp-generator");
-const emailTemplate = require("../utils/email-template");
+const { user: User } = require('../models');
+const nodemailer = require('nodemailer');
+const path = require('path');
+const fs = require('fs');
+const bcrypt = require('bcryptjs');
+const otpGenerator = require('otp-generator');
+const emailTemplate = require('../utils/email-template');
+const cloudinary = require('cloudinary').v2;
+cloudinary.config({
+  cloud_name: 'dcdu2v41u',
+  api_key: '189369424679696',
+  api_secret: 'xO_NsHIMoLR3yqPLraq0I0yKbC0',
+});
 
 const otp = otpGenerator.generate(6, {
   lowerCaseAlphabets: false,
@@ -16,10 +22,10 @@ const otp = otpGenerator.generate(6, {
 });
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  service: 'gmail',
   auth: {
-    user: "secondhandoffc@gmail.com",
-    pass: "ebzpltzyfembpnzo",
+    user: 'secondhandoffc@gmail.com',
+    pass: 'ebzpltzyfembpnzo',
   },
 });
 
@@ -28,13 +34,13 @@ exports.getAll = (req, res, next) => {
   User.findAll()
     .then((users) => {
       res.status(200).json({
-        message: "success",
+        message: 'success',
         users,
       });
     })
     .catch((error) => {
       res.status(500).json({
-        message: "failed",
+        message: 'failed',
         error,
       });
     });
@@ -45,7 +51,7 @@ exports.getById = (req, res, next) => {
     .then((user) => {
       if (user) {
         return res.status(200).json({
-          message: "success",
+          message: 'success',
           data: {
             id: user.id,
             name: user.name,
@@ -56,11 +62,11 @@ exports.getById = (req, res, next) => {
         });
       } else {
         return res.status(404).json({
-          message: "User not found",
+          message: 'User not found',
         });
       }
     })
-    .catch((error) => res.status(404).json({ message: "failed", error }));
+    .catch((error) => res.status(404).json({ message: 'failed', error }));
 };
 
 exports.getBySlug = async (req, res, next) => {
@@ -71,7 +77,7 @@ exports.getBySlug = async (req, res, next) => {
   });
   if (user) {
     return res.status(200).json({
-      message: "success",
+      message: 'success',
       data: {
         id: user.id,
         name: user.name,
@@ -86,7 +92,7 @@ exports.getBySlug = async (req, res, next) => {
     });
   } else {
     return res.status(404).json({
-      message: "User not found",
+      message: 'User not found',
     });
   }
 };
@@ -96,7 +102,7 @@ exports.getMyProfile = (req, res, next) => {
   User.findByPk(userId)
     .then((user) => {
       return res.status(200).json({
-        message: "success",
+        message: 'success',
         data: {
           id: user.id,
           name: user.name,
@@ -111,18 +117,18 @@ exports.getMyProfile = (req, res, next) => {
       });
     })
     .catch((err) => {
-      res.status(404).json({ message: "failed", error: err.message });
+      res.status(404).json({ message: 'failed', error: err.message });
     });
 };
 
 exports.create = async (req, res, next) => {
   const { name, email, password } = req.body;
   const hashedPassword = await bcrypt.hash(password, 12);
-  const slug = name.trim().replace(/\s+/g, "-").toLowerCase();
+  const slug = name.trim().replace(/\s+/g, '-').toLowerCase();
 
   if (!name || !email || !password) {
     return res.status(401).json({
-      message: "Please provide name, email and password.",
+      message: 'Please provide name, email and password.',
     });
   }
 
@@ -130,7 +136,7 @@ exports.create = async (req, res, next) => {
 
   if (user?.email === email) {
     return res.status(401).json({
-      message: "User already exists.",
+      message: 'User already exists.',
     });
   }
 
@@ -142,13 +148,13 @@ exports.create = async (req, res, next) => {
   })
     .then((user) => {
       res.status(201).json({
-        message: "success",
+        message: 'success',
         user,
       });
     })
     .catch((error) => {
       res.status(500).json({
-        message: "failed",
+        message: 'failed',
         error,
       });
     });
@@ -159,19 +165,20 @@ exports.update = async (req, res, next) => {
   const { name, email, address, phone_number, city_id } = req.body;
   const user = await User.findByPk(userId);
   // const hashedPassword = bcrypt.hash(password, 12);
-  const slug = name ? name.trim().replace(/\s+/g, "-").toLowerCase() : userSlug;
+  const slug = name ? name.trim().replace(/\s+/g, '-').toLowerCase() : userSlug;
   const data = {
     slug: slug,
     name: name ? name : user.name,
     address: address || null,
-    profile_picture: req.file ? req.file.filename : null,
+    profile_picture: req.file ? req.file.filename.replace('public/images/avatar/', '') : null,
+    profile_picture_path: req.file ? req.file.path : null,
     phone_number: phone_number || null,
     city_id: city_id || null,
   };
 
   if (!user) {
     return res.status(404).json({
-      message: "User not found",
+      message: 'User not found',
     });
   }
 
@@ -180,10 +187,8 @@ exports.update = async (req, res, next) => {
       id: userId,
     },
   })
-    .then((result) => res.status(202).json({ message: "success", result }))
-    .catch((error) =>
-      res.status(402).json({ message: "failed", error: error.message })
-    );
+    .then((result) => res.status(202).json({ message: 'success', result }))
+    .catch((error) => res.status(402).json({ message: 'failed', error: error.message }));
 };
 
 exports.delete = async (req, res, next) => {
@@ -192,7 +197,7 @@ exports.delete = async (req, res, next) => {
 
   if (!user) {
     return res.status(404).json({
-      message: "User not found",
+      message: 'User not found',
     });
   }
 
@@ -203,12 +208,12 @@ exports.delete = async (req, res, next) => {
   })
     .then((user) => {
       if (user) {
-        return res.status(202).json({ message: "success", user });
+        return res.status(202).json({ message: 'success', user });
       } else {
-        return res.status(404).json({ message: "User not found" });
+        return res.status(404).json({ message: 'User not found' });
       }
     })
-    .catch((error) => res.status(402).json({ message: "failed", error }));
+    .catch((error) => res.status(402).json({ message: 'failed', error }));
 };
 
 exports.uploadAvatar = async (req, res, next) => {
@@ -217,7 +222,7 @@ exports.uploadAvatar = async (req, res, next) => {
   const imageUrl = req.file.filename;
 
   if (!imageUrl) {
-    const error = new Error("No image provided.");
+    const error = new Error('No image provided.');
     error.statusCode = 422;
     throw error;
   }
@@ -229,7 +234,7 @@ exports.uploadAvatar = async (req, res, next) => {
   }
 
   if (!user) {
-    return res.status(404).json({ message: "User not found" });
+    return res.status(404).json({ message: 'User not found' });
   }
 
   return await User.update(
@@ -242,8 +247,8 @@ exports.uploadAvatar = async (req, res, next) => {
       },
     }
   )
-    .then((user) => res.status(201).json({ message: "success", user }))
-    .catch((error) => res.status(402).json({ message: "failed", error }));
+    .then((user) => res.status(201).json({ message: 'success', user }))
+    .catch((error) => res.status(402).json({ message: 'failed', error }));
 };
 
 exports.resetPassword = async (req, res, next) => {
@@ -254,7 +259,7 @@ exports.resetPassword = async (req, res, next) => {
   const user = await User.findByPk(id);
   if (!user) {
     return res.status(500).json({
-      message: "User not found",
+      message: 'User not found',
     });
   }
 
@@ -266,11 +271,11 @@ exports.resetPassword = async (req, res, next) => {
   )
     .then((user) =>
       res.status(201).json({
-        message: "Password changed successfully",
+        message: 'Password changed successfully',
         data: { userId: id },
       })
     )
-    .catch((error) => res.status(402).json({ message: "failed", error }));
+    .catch((error) => res.status(402).json({ message: 'failed', error }));
 };
 
 exports.forgotPassword = async (req, res, next) => {
@@ -278,7 +283,7 @@ exports.forgotPassword = async (req, res, next) => {
   const user = await User.findOne({ where: { email } });
   if (!user) {
     return res.status(404).json({
-      message: "User not found",
+      message: 'User not found',
     });
   }
 
@@ -286,14 +291,14 @@ exports.forgotPassword = async (req, res, next) => {
 
   return transporter
     .sendMail({
-      from: "SecondHand Official <secondhandoffc@gmail.com>",
+      from: 'SecondHand Official <secondhandoffc@gmail.com>',
       to: email,
-      subject: "Reset Password",
+      subject: 'Reset Password',
       html: htmlEmailTemplate,
     })
     .then((result) => {
       res.status(200).json({
-        message: "Reset password link has been sent to your email.",
+        message: 'Reset password link has been sent to your email.',
         data: {
           sendTo: email,
           messageId: result.messageId,
@@ -307,16 +312,19 @@ exports.forgotPassword = async (req, res, next) => {
 exports.verifyOtp = async (req, res, next) => {
   if (otp !== req.body.otp) {
     return res.status(404).json({
-      message: "Invalid OTP",
+      message: 'Invalid OTP',
     });
   }
 
   return res.status(200).json({
-    message: "OTP verified",
+    message: 'OTP verified',
   });
 };
 
 const clearImage = (image) => {
-  filePath = path.join(__dirname, "../public/images/avatar", image);
-  fs.unlink(filePath, (err) => console.log(err));
+  // filePath = path.join(__dirname, '../public/images/avatar', image);
+  // fs.unlink(filePath, (err) => console.log(err));
+  cloudinary.uploader.destroy(`public/images/avatar/${file.filename}`, function (result) {
+    console.log(result);
+  });
 };

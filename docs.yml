@@ -22,6 +22,10 @@ tags:
     description: 'Product API'
   - name: 'Wishlist'
     description: 'Wishlist API'
+  - name: 'Notification'
+    description: 'Notification API'
+  - name: 'Discount Product Offer'
+    description: 'Discount Product Offer API'
 paths:
   /auth/signup:
     post:
@@ -509,6 +513,164 @@ paths:
           description: Success Delete Wishlist By ID
         '500':
           description: Failed due to no wishlist exists
+  /notification:
+    get:
+      tags:
+        - Notification
+      summary: Get All Notification
+      description: ''
+      operationId: 'getAllNotification'
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: Success Get All Notification
+        '500':
+          description: Failed due to no notification exists
+  /disc-product-offer:
+    get:
+      tags:
+        - Discount Product Offer
+      summary: Get All DiscProductOffer
+      description: ''
+      operationId: 'getAllDiscProductOffer'
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: Success Get All DiscProductOffer
+        '500':
+          description: Failed due to no disc product offer exists
+    post:
+      tags:
+        - Discount Product Offer
+      summary: Post DiscProductOffer
+      description: ''
+      operationId: 'postDiscProductOffer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product_id:
+                  type: integer
+                  format: int32
+                  default: 1
+                bargain_price:
+                  type: integer
+                  format: int32
+                  default: 1
+                start_date:
+                  type: string
+                  default: '2020-01-01'
+                end_date:
+                  type: string
+                  default: '2020-01-01'
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: Success Post DiscProductOffer
+        '500':
+          description: Failed due to no disc product offer exists
+  /disc-product-offer/{id}:
+    get:
+      tags:
+        - Discount Product Offer
+      summary: Get DiscProductOffer By ID
+      description: ''
+      operationId: 'getDiscProductOfferById'
+      parameters:
+        - name: id
+          in: path
+          description: ID of disc product offer to return
+          required: true
+          schema:
+            type: string
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: Success Get DiscProductOffer By ID
+        '500':
+          description: Failed due to no disc product offer exists
+    delete:
+      tags:
+        - Discount Product Offer
+      summary: Delete DiscProductOffer By ID
+      description: ''
+      operationId: 'deleteDiscProductOfferById'
+      parameters:
+        - name: id
+          in: path
+          description: ID of disc product offer to return
+          required: true
+          schema:
+            type: string
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: Success Delete DiscProductOffer By ID
+        '500':
+          description: Failed due to no disc product offer exists
+  /disc-product-offer/seller:
+    get:
+      tags:
+        - Discount Product Offer
+      summary: Get All DiscProductOffer By Seller
+      description: ''
+      operationId: 'getAllDiscProductOfferBySeller'
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: Success Get All DiscProductOffer By Seller
+        '500':
+          description: Failed due to no disc product offer exists
+  /disc-product-offer/status/pending:
+    get:
+      tags:
+        - Discount Product Offer
+      summary: Get All DiscProductOffer By Pending Status
+      description: ''
+      operationId: 'getAllDiscProductOfferByPendingStatus'
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: Success Get All DiscProductOffer By Pending Status
+        '500':
+          description: Failed due to no disc product offer exists
+  /disc-product-offer/status/accepted:
+    get:
+      tags:
+        - Discount Product Offer
+      summary: Get All DiscProductOffer By Accepted Status
+      description: ''
+      operationId: 'getAllDiscProductOfferByAcceptedStatus'
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: Success Get All DiscProductOffer By Accepted Status
+        '500':
+          description: Failed due to no disc product offer exists
+  /disc-product-offer/status/rejected:
+    get:
+      tags:
+        - Discount Product Offer
+      summary: Get All DiscProductOffer By Rejected Status
+      description: ''
+      operationId: 'getAllDiscProductOfferByRejectedStatus'
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: Success Get All DiscProductOffer By Rejected Status
+        '500':
+          description: Failed due to no disc product offer exists
 components:
   securitySchemes:
     Bearer:

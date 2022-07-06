@@ -11,15 +11,17 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.user, { foreignKey: 'user_id', as: 'discount_product_offer_user' });
-      this.belongsTo(models.product, { foreignKey: 'product_id', as: 'discount_product_offer_producttable' });
+      this.belongsTo(models.product, { foreignKey: 'product_id', as: 'product_offered' });
+      this.belongsTo(models.user, { foreignKey: 'user_id', as: 'bidder' });
+      this.belongsTo(models.user, { foreignKey: 'seller_id', as: 'seller_product_offer' });
     }
   }
   discount_product_offer.init(
     {
       user_id: DataTypes.INTEGER,
       product_id: DataTypes.INTEGER,
-      cut_price: DataTypes.INTEGER,
+      seller_id: DataTypes.INTEGER,
+      bargain_price: DataTypes.INTEGER,
       status: DataTypes.STRING,
     },
     {
