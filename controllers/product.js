@@ -415,6 +415,7 @@ exports.updateProducts = async (req, res, next) => {
           req.files.map((file) => {
             Product_Images.create({
               product_images_name: file.filename,
+              product_images_path: file.path,
               product_id: getProduct.id,
             });
           });
