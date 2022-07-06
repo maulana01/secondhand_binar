@@ -19,8 +19,10 @@ jobs:
         run: npm install
       - name: Install Sequelize-Cli
         run: npm install sequelize-cli
-      - name: Run Sequelize-Cli Migrate Undo All
-        run: npx sequelize db:migrate:undo:all --env production
+      # - name: Run Sequelize-Cli Migrate Undo All
+      #   run: npx sequelize db:migrate:undo:all --env production
+      - name: Drop Database
+        run: npx sequelize db:drop --env production
       - name: Run Sequelize-Cli Migrate
         run: npx sequelize db:migrate --env production
       - name: Run Sequelize-Cli Seed
