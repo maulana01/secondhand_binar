@@ -110,6 +110,7 @@ exports.getMyProfile = (req, res, next) => {
           slug: user.slug,
           address: user.address,
           profile_picture: user.profile_picture,
+          profile_picture_path: user.profile_picture_path,
           phone_number: user.phone_number,
           city_id: user.city_id,
           createdAt: user.createdAt,
