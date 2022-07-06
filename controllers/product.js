@@ -373,11 +373,11 @@ exports.updateProducts = async (req, res, next) => {
       slug,
     },
   });
-  const total_product_images = await Product_Images.count({
-    where: {
-      product_id: getProduct.id,
-    },
-  });
+  // const total_product_images = await Product_Images.count({
+  //   where: {
+  //     product_id: getProduct.id,
+  //   },
+  // });
   await Product.update(
     {
       product_name,
@@ -398,33 +398,43 @@ exports.updateProducts = async (req, res, next) => {
           product,
         });
       } else {
-        if (total_product_images + req.files.length > 4) {
-          res.status(400).json({
-            message: 'You can only upload a maximum of 4 images',
+        // if (total_product_images + req.files.length > 4) {
+        //   res.status(400).json({
+        //     message: 'You can only upload a maximum of 4 images',
+        //   });
+        //   req.files.map((file) => {
+        //     // const _path = path.join(__dirname, '../public/images/products/', file.filename);
+        //     // fs.unlink(_path, (err) => {
+        //     //   if (err) console.log(err);
+        //     // });
+        //     cloudinary.uploader.destroy(`${file.filename}`, function (result) {
+        //       console.log(result);
+        //     });
+        //   });
+        // } else {
+        const getDataProductImage = Product_Images.findAll({
+          where: {
+            product_id: getProduct.id,
+          },
+        });
+        getDataProductImage.forEach((data, index) => {
+          cloudinary.uploader.destroy(`public/images/products/${data.product_images_name}`, function (result) {
+            console.log(result);
           });
-          req.files.map((file) => {
-            // const _path = path.join(__dirname, '../public/images/products/', file.filename);
-            // fs.unlink(_path, (err) => {
-            //   if (err) console.log(err);
-            // });
-            cloudinary.uploader.destroy(`${file.filename}`, function (result) {
-              console.log(result);
-            });
+        });
+        req.files.map((file) => {
+          Product_Images.create({
+            product_images_name: file.filename,
+            product_images_path: file.path,
+            product_id: getProduct.id,
           });
-        } else {
-          req.files.map((file) => {
-            Product_Images.create({
-              product_images_name: file.filename,
-              product_images_path: file.path,
-              product_id: getProduct.id,
-            });
-          });
-          res.status(200).json({
-            message: 'success',
-            product,
-            product_images: req.files,
-          });
-        }
+        });
+        res.status(200).json({
+          message: 'success',
+          product,
+          product_images: req.files,
+        });
+        // }
       }
     })
     .catch((err) => {
