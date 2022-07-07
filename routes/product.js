@@ -8,9 +8,9 @@ const IsProfileFilled = require('../middleware/is-profile-filled');
 const UploadUtil = require('../utils/uploadProducts');
 
 router.get(`${product_path}`, ProductCtl.getAllWithPaginationSortingFiltering);
-router.get(`${product_path}/:slug`, ProductCtl.getProductDetailBySlug);
 router.get(`${product_path}/category/:slug`, ProductCtl.getAllByCategory);
 router.get(`${product_path}/user/:slug`, ProductCtl.getAllBySeller);
+router.get(`${product_path}/:slug`, ProductCtl.getProductDetailBySlug);
 
 // ini create
 router.post(
@@ -24,6 +24,7 @@ router.post(
   }
 );
 
+// router.put(`${product_path}/status/sold/:id`, IsAuth, ProductCtl.updateSoldProduct);
 router.put(
   `${product_path}/:slug`,
   UploadUtil.uploadImage.array('product_images_name', 4),
@@ -31,8 +32,7 @@ router.put(
   IsProfileFilled,
   ProductCtl.updateProducts
 );
-// router.put(`${product_path}/status/sold/:id`, IsAuth, ProductCtl.updateStatus);
-router.delete(`${product_path}/:slug`, IsAuth, IsProfileFilled, ProductCtl.deleteProduct);
 router.delete(`${product_path}/image/:product_images_name`, IsAuth, IsProfileFilled, ProductCtl.deleteProductImages);
+router.delete(`${product_path}/:slug`, IsAuth, IsProfileFilled, ProductCtl.deleteProduct);
 
 module.exports = router;
