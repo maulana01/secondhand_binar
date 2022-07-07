@@ -26,6 +26,8 @@ tags:
     description: 'Notification API'
   - name: 'Discount Product Offer'
     description: 'Discount Product Offer API'
+  - name: 'Transaction'
+    description: 'Transaction API'
 paths:
   /auth/signup:
     post:
@@ -609,6 +611,82 @@ paths:
           description: Success Delete DiscProductOffer By ID
         '500':
           description: Failed due to no disc product offer exists
+  /disc-product-offer/accept/{id}:
+    put:
+      tags:
+        - Discount Product Offer
+      summary: Update DiscProductOffer Accept
+      description: ''
+      operationId: 'updateDiscProductOfferAccept'
+      parameters:
+        - name: id
+          in: path
+          description: ID of disc product offer to return
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product_id:
+                  type: integer
+                  format: int32
+                  default: 1
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: Success Update DiscProductOffer Accept
+        '500':
+          description: Failed due to no disc product offer exists
+  /disc-product-offer/reject/{id}:
+    put:
+      tags:
+        - Discount Product Offer
+      summary: Update DiscProductOffer Reject
+      description: ''
+      operationId: 'updateDiscProductOfferReject'
+      parameters:
+        - name: id
+          in: path
+          description: ID of disc product offer to return
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product_id:
+                  type: integer
+                  format: int32
+                  default: 1
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: Success Update DiscProductOffer Reject
+        '500':
+          description: Failed due to no disc product offer exists
+  /disc-product-offer/bidder:
+    get:
+      tags:
+        - Discount Product Offer
+      summary: Get All DiscProductOffer By Bidder
+      description: ''
+      operationId: 'getAllDiscProductOfferByBidder'
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: Success Get All DiscProductOffer By Bidder
+        '500':
+          description: Failed due to no disc product offer exists
   /disc-product-offer/seller:
     get:
       tags:
@@ -665,6 +743,117 @@ paths:
           description: Success Get All DiscProductOffer By Rejected Status
         '500':
           description: Failed due to no disc product offer exists
+  /transaction:
+    get:
+      tags:
+        - Transaction
+      summary: Get All Transaction
+      description: ''
+      operationId: 'getAllTransaction'
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: Success Get All Transaction
+        '500':
+          description: Failed due to no transaction exists
+  /transaction/user:
+    get:
+      tags:
+        - Transaction
+      summary: Get All Transaction By User
+      description: ''
+      operationId: 'getAllTransactionByUser'
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: Success Get All Transaction By User
+        '500':
+          description: Failed due to no transaction exists
+  /transaction/{id}:
+    get:
+      tags:
+        - Transaction
+      summary: Get Transaction By ID
+      description: ''
+      operationId: 'getTransactionById'
+      parameters:
+        - name: id
+          in: path
+          description: ID of transaction to return
+          required: true
+          schema:
+            type: string
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: Success Get Transaction By ID
+        '500':
+          description: Failed due to no transaction exists
+  /transaction/success/{id}:
+    put:
+      tags:
+        - Transaction
+      summary: Update Sold Product & Finish Transaction
+      description: ''
+      operationId: 'updateTransactionSuccess'
+      parameters:
+        - name: id
+          in: path
+          description: ID of transaction to return
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                accepted_bidder:
+                  type: integer
+                  format: int32
+                  default: 1
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: Success Update Transaction Success
+        '500':
+          description: Failed due to no transaction exists
+  /transaction/cancel/{id}:
+    put:
+      tags:
+        - Transaction
+      summary: Cancel Transaction & Reject Bidder
+      description: ''
+      operationId: 'updateTransactionCancel'
+      parameters:
+        - name: id
+          in: path
+          description: ID of transaction to return
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                accepted_bidder:
+                  type: integer
+                  format: int32
+                  default: 1
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: Success Update Transaction Cancel
+        '500':
+          description: Failed due to no transaction exists
 components:
   securitySchemes:
     Bearer:
