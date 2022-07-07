@@ -44,7 +44,7 @@ exports.getAllWithPaginationSortingFiltering = (req, res, next) => {
           {
             model: User,
             as: 'seller',
-            attributes: ['email', 'name', 'slug', 'address', 'profile_picture', 'phone_number'],
+            attributes: ['email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
           },
         ],
         distinct: true,
@@ -67,7 +67,7 @@ exports.getAllWithPaginationSortingFiltering = (req, res, next) => {
           {
             model: User,
             as: 'seller',
-            attributes: ['email', 'name', 'slug', 'address', 'profile_picture', 'phone_number'],
+            attributes: ['email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
           },
         ],
         distinct: true,
@@ -179,7 +179,7 @@ exports.getAllBySeller = async (req, res, next) => {
         {
           model: User,
           as: 'seller',
-          attributes: ['email', 'name', 'slug', 'address', 'profile_picture', 'phone_number'],
+          attributes: ['email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
         },
       ],
       distinct: true,
@@ -230,7 +230,7 @@ exports.getProductDetailBySlug = (req, res, next) => {
       {
         model: User,
         as: 'seller',
-        attributes: ['email', 'name', 'slug', 'address', 'profile_picture', 'phone_number'],
+        attributes: ['email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
       },
     ],
     distinct: true,
@@ -451,48 +451,6 @@ exports.updateProducts = async (req, res, next) => {
         });
       });
   }
-};
-
-exports.updateSoldProduct = async (req, res, next) => {
-  const { product_name, product_desc, product_price } = req.body;
-  const id = req.params.id;
-  const getDiscProduct = await DiscProduct.findOne({
-    where: {
-      product_id: id,
-    },
-  });
-  await Product.update(
-    {
-      status: 'sold',
-    },
-    {
-      where: {
-        id,
-      },
-    }
-  )
-    .then((product) => {
-      DiscProduct.update(
-        {
-          status: 'rejected',
-        },
-        {
-          where: {
-            product_id: id,
-          },
-        }
-      );
-      res.status(200).json({
-        message: 'success',
-        product,
-      });
-    })
-    .catch((err) => {
-      res.status(500).json({
-        message: 'error',
-        error: err.message,
-      });
-    });
 };
 
 exports.deleteProduct = async (req, res, next) => {

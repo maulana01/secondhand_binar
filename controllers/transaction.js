@@ -1,64 +1,176 @@
 /** @format */
 
 const {
-  order_transaction: Transaction,
   user: User,
   product: Product,
-  discount_product_offer: DiscProduct,
+  Sequelize,
+  product_images: Product_Images,
+  category: Category,
+  order_transaction: Transaction,
   notification: Notification,
+  discount_product_offer: DiscProduct,
 } = require('../models');
 
-exports.createRequest = async (req, res, next) => {
-  const user_id = req.userLoggedin.userId;
-  const { discount, total_payment, product_id } = req.body;
+// exports.createRequest = async (req, res, next) => {
+//   const user_id = req.userLoggedin.userId;
+//   const { discount, total_payment, product_id } = req.body;
 
-  console.log({ discount, total_payment, product_id });
+//   console.log({ discount, total_payment, product_id });
 
-  const user = await User.findByPk(user_id);
-  const product = await Product.findByPk(product_id);
+//   const user = await User.findByPk(user_id);
+//   const product = await Product.findByPk(product_id);
 
-  if (!user) {
-    return res.status(404).json({ message: 'User not found' });
-  }
+//   if (!user) {
+//     return res.status(404).json({ message: 'User not found' });
+//   }
 
-  if (!product) {
-    return res.status(404).json({ message: 'Product not found', id: product_id });
-  }
+//   if (!product) {
+//     return res.status(404).json({ message: 'Product not found', id: product_id });
+//   }
 
-  // const disc_product = await DiscProduct.findOne({
-  //   where: {
-  //     user_id,
-  //     status: 'accepted',
-  //   },
-  // })
+//   // const disc_product = await DiscProduct.findOne({
+//   //   where: {
+//   //     user_id,
+//   //     status: 'accepted',
+//   //   },
+//   // })
 
-  Notification.create({
-    product_id: product.id,
-    user_id: user_id,
-    bargain_price: total_payment,
-    action_message: 'Ada transaksi masuk!',
+//   Notification.create({
+//     product_id: product.id,
+//     user_id: user_id,
+//     bargain_price: total_payment,
+//     action_message: 'Ada transaksi masuk!',
+//   });
+
+//   return await Transaction.create({
+//     user_id,
+//     product_id,
+//     discount,
+//     total_payment,
+//     status: 'pending',
+//   })
+//     .then((transaction) => {
+//       res.status(201).json({
+//         message: 'Transaction created',
+//         data: transaction,
+//       });
+//     })
+//     .catch((error) => res.status(401).json({ message: 'Error creating transaction', error }));
+// };
+
+exports.finishTransaction = async (req, res, next) => {
+  const { accepted_bidder } = req.body;
+  const id = req.params.id;
+  const getDiscProductOffer = await DiscProduct.findOne({
+    where: {
+      product_id: id,
+      user_id: accepted_bidder,
+    },
   });
-
-  return await Transaction.create({
-    user_id,
-    product_id,
-    discount,
-    total_payment,
-    status: 'pending',
-  })
-    .then((transaction) => {
-      res.status(201).json({
-        message: 'Transaction created',
-        data: transaction,
+  await Product.update(
+    {
+      status: 'sold',
+    },
+    {
+      where: {
+        id,
+      },
+    }
+  )
+    .then((result) => {
+      DiscProduct.update(
+        {
+          status: 'rejected',
+        },
+        {
+          where: {
+            product_id: id,
+            user_id: {
+              [Op.ne]: accepted_bidder,
+            },
+          },
+        }
+      );
+      Transaction.create({
+        product_id: id,
+        user_id: accepted_bidder,
+        total_payment: getDiscProductOffer.bargain_price,
+        status: 'success',
+      });
+      res.status(200).json({
+        message: 'success',
+        result,
       });
     })
-    .catch((error) => res.status(401).json({ message: 'Error creating transaction', error }));
+    .catch((err) => {
+      res.status(500).json({
+        message: 'error',
+        error: err.message,
+      });
+    });
+};
+
+exports.cancelTransaction = async (req, res, next) => {
+  const { accepted_bidder } = req.body;
+  const id = req.params.id;
+  const getDiscProductOffer = await DiscProduct.findOne({
+    where: {
+      product_id: id,
+      user_id: accepted_bidder,
+    },
+  });
+  DiscProduct.update(
+    {
+      status: 'rejected',
+    },
+    {
+      where: {
+        product_id: id,
+        user_id: accepted_bidder,
+      },
+    }
+  )
+    .then((result) => {
+      // Transaction.create({
+      //   product_id: id,
+      //   user_id: accepted_bidder,
+      //   total_payment: getDiscProductOffer.bargain_price,
+      //   status: 'cancelled',
+      // });
+      res.status(200).json({
+        message: 'success',
+        result,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        message: 'error',
+        error: err.message,
+      });
+    });
 };
 
 exports.getById = (req, res, next) => {
   const { id } = req.params;
-
-  Transaction.findByPk(id)
+  Transaction.findByPk(id, {
+    include: [
+      {
+        model: Product,
+        as: 'order_transaction_product',
+        include: [
+          {
+            model: Product_Images,
+            as: 'product_images',
+          },
+        ],
+      },
+      {
+        model: User,
+        as: 'order_transaction_user',
+        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
+      },
+    ],
+  })
     .then((transaction) => {
       if (!transaction) {
         return res.status(404).json({ message: 'Transaction not found' });
@@ -77,11 +189,68 @@ exports.getById = (req, res, next) => {
 };
 
 exports.getAllRequest = (req, res, next) => {
-  Transaction.findAll()
+  Transaction.findAll({
+    include: [
+      {
+        model: Product,
+        as: 'order_transaction_product',
+        include: [
+          {
+            model: Product_Images,
+            as: 'product_images',
+          },
+        ],
+      },
+      {
+        model: User,
+        as: 'order_transaction_user',
+        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
+      },
+    ],
+    order: [['status', 'DESC']],
+  })
     .then((transactions) => {
-      if (!transactions) {
-        return res.status(404).json({ message: 'Transactions not found' });
-      }
+      // if (!transactions) {
+      //   return res.status(404).json({ message: 'Transactions not found' });
+      // }
+      return res.status(200).json({
+        message: 'Transactions found',
+        data: transactions,
+      });
+    })
+    .catch((err) => {
+      return res.status(500).json({
+        message: 'Error getting transactions',
+        error: err.message,
+      });
+    });
+};
+
+exports.getByUser = (req, res, next) => {
+  const user_id = req.userLoggedin.userId;
+  Transaction.findAll({
+    where: {
+      user_id,
+    },
+    include: [
+      {
+        model: Product,
+        as: 'order_transaction_product',
+        include: [
+          {
+            model: Product_Images,
+            as: 'product_images',
+          },
+        ],
+      },
+      {
+        model: User,
+        as: 'order_transaction_user',
+        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
+      },
+    ],
+  })
+    .then((transactions) => {
       return res.status(200).json({
         message: 'Transactions found',
         data: transactions,

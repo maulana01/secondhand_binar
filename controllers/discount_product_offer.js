@@ -120,6 +120,63 @@ exports.getBySeller = (req, res, next) => {
     });
 };
 
+exports.getByBidder = (req, res, next) => {
+  const status = ['pending', 'accepted', 'rejected'];
+  DiscProduct.findAll({
+    include: [
+      {
+        model: Product,
+        as: 'product_offered',
+        include: [
+          {
+            model: Product_Images,
+            as: 'product_images',
+          },
+        ],
+      },
+      {
+        model: User,
+        as: 'bidder',
+        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
+      },
+      {
+        model: User,
+        as: 'seller_product_offer',
+        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
+      },
+    ],
+    order: sequelize.literal(
+      '(' +
+        status
+          .map(function (stat) {
+            return '"discount_product_offer"."status" = \'' + stat + "'";
+          })
+          .join(', ') +
+        ') DESC'
+    ),
+    where: {
+      user_id: req.userLoggedin.userId,
+    },
+  })
+    .then((disc_products) => {
+      res.status(200).json({
+        message: 'success',
+        result: {
+          disc_products,
+          thumbnail: disc_products.map((disc_product) => {
+            return disc_product.product_offered.product_images[disc_product.product_offered.product_images.length - 1].product_images_path;
+          }),
+        },
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        message: 'error',
+        error: err.message,
+      });
+    });
+};
+
 exports.getAllStatusPending = (req, res, next) => {
   DiscProduct.findAll({
     include: [
@@ -397,13 +454,15 @@ exports.deleteDiscProduct = (req, res, next) => {
 
 exports.rejectDiscProduct = (req, res, next) => {
   const { id } = req.params;
+  const { product_id } = req.body;
   DiscProduct.update(
     {
       status: 'rejected',
     },
     {
       where: {
-        id,
+        user_id: id,
+        product_id,
       },
     }
   )
@@ -423,13 +482,15 @@ exports.rejectDiscProduct = (req, res, next) => {
 
 exports.acceptDiscProduct = (req, res, next) => {
   const { id } = req.params;
+  const { product_id } = req.body;
   DiscProduct.update(
     {
       status: 'accepted',
     },
     {
       where: {
-        id,
+        user_id: id,
+        product_id,
       },
     }
   )
