@@ -373,6 +373,11 @@ exports.updateProducts = async (req, res, next) => {
       slug,
     },
   });
+  const getDataProductImage = Product_Images.findAll({
+    where: {
+      product_id: getProduct.id,
+    },
+  });
   // const total_product_images = await Product_Images.count({
   //   where: {
   //     product_id: getProduct.id,
@@ -412,11 +417,6 @@ exports.updateProducts = async (req, res, next) => {
         //     });
         //   });
         // } else {
-        const getDataProductImage = Product_Images.findAll({
-          where: {
-            product_id: getProduct.id,
-          },
-        });
         getDataProductImage.forEach((data, index) => {
           cloudinary.uploader.destroy(`public/images/products/${data.product_images_name}`, function (result) {
             console.log(result);
