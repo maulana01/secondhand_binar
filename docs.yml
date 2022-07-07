@@ -560,13 +560,7 @@ paths:
                 bargain_price:
                   type: integer
                   format: int32
-                  default: 1
-                start_date:
-                  type: string
-                  default: '2020-01-01'
-                end_date:
-                  type: string
-                  default: '2020-01-01'
+                  default: 10000
       security:
         - Bearer: []
       responses:

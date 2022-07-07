@@ -26,12 +26,12 @@ exports.getAll = (req, res, next) => {
       {
         model: User,
         as: 'bidder',
-        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'phone_number'],
+        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
       },
       {
         model: User,
         as: 'seller_product_offer',
-        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'phone_number'],
+        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
       },
     ],
     order: sequelize.literal(
@@ -80,12 +80,12 @@ exports.getBySeller = (req, res, next) => {
       {
         model: User,
         as: 'bidder',
-        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'phone_number'],
+        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
       },
       {
         model: User,
         as: 'seller_product_offer',
-        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'phone_number'],
+        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
       },
     ],
     order: sequelize.literal(
@@ -136,12 +136,12 @@ exports.getAllStatusPending = (req, res, next) => {
       {
         model: User,
         as: 'bidder',
-        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'phone_number'],
+        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
       },
       {
         model: User,
         as: 'seller_product_offer',
-        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'phone_number'],
+        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
       },
     ],
     where: {
@@ -183,12 +183,12 @@ exports.getAllStatusAccepted = (req, res, next) => {
       {
         model: User,
         as: 'bidder',
-        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'phone_number'],
+        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
       },
       {
         model: User,
         as: 'seller_product_offer',
-        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'phone_number'],
+        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
       },
     ],
     where: {
@@ -230,12 +230,12 @@ exports.getAllStatusRejected = (req, res, next) => {
       {
         model: User,
         as: 'bidder',
-        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'phone_number'],
+        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
       },
       {
         model: User,
         as: 'seller_product_offer',
-        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'phone_number'],
+        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
       },
     ],
     where: {
@@ -342,7 +342,7 @@ exports.createDiscProduct = async (req, res, next) => {
       {
         model: User,
         as: 'seller',
-        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'phone_number'],
+        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
       },
     ],
   });
