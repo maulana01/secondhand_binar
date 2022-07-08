@@ -637,6 +637,14 @@ paths:
                   type: integer
                   format: int32
                   default: 1
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                product_id:
+                  type: integer
+                  format: int32
+                  default: 1
       security:
         - Bearer: []
       responses:
@@ -661,6 +669,14 @@ paths:
       requestBody:
         content:
           application/json:
+            schema:
+              type: object
+              properties:
+                product_id:
+                  type: integer
+                  format: int32
+                  default: 1
+          multipart/form-data:
             schema:
               type: object
               properties:
