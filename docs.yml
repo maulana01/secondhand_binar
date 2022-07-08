@@ -613,7 +613,7 @@ paths:
           description: Success Delete DiscProductOffer By ID
         '500':
           description: Failed due to no disc product offer exists
-  /disc-product-offer/accept/{bidder}:
+  /disc-product-offer/accept/{user_id}:
     put:
       tags:
         - Discount Product Offer
@@ -621,9 +621,9 @@ paths:
       description: ''
       operationId: 'updateDiscProductOfferAccept'
       parameters:
-        - name: bidder
+        - name: user_id
           in: path
-          description: bidder/user_id of disc product offer to return
+          description: user_id of disc product offer to return
           required: true
           schema:
             type: string
@@ -644,7 +644,7 @@ paths:
           description: Success Update DiscProductOffer Accept
         '500':
           description: Failed due to no disc product offer exists
-  /disc-product-offer/reject/{bidder}:
+  /disc-product-offer/reject/{user_id}:
     put:
       tags:
         - Discount Product Offer
@@ -652,9 +652,9 @@ paths:
       description: ''
       operationId: 'updateDiscProductOfferReject'
       parameters:
-        - name: bidder
+        - name: user_id
           in: path
-          description: bidder/user_id of disc product offer to return
+          description: user_id of disc product offer to return
           required: true
           schema:
             type: string

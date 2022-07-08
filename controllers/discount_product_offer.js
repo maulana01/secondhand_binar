@@ -456,7 +456,7 @@ exports.deleteDiscProduct = (req, res, next) => {
 };
 
 exports.acceptDiscProduct = async (req, res, next) => {
-  const { bidder } = req.params;
+  const { user_id } = req.params;
   const { product_id } = req.body;
   DiscProduct.update(
     {
@@ -464,7 +464,7 @@ exports.acceptDiscProduct = async (req, res, next) => {
     },
     {
       where: {
-        user_id: bidder,
+        user_id,
         product_id,
       },
     }
@@ -484,7 +484,7 @@ exports.acceptDiscProduct = async (req, res, next) => {
 };
 
 exports.rejectDiscProduct = async (req, res, next) => {
-  const { bidder } = req.params;
+  const { user_id } = req.params;
   const { product_id } = req.body;
   DiscProduct.update(
     {
@@ -492,7 +492,7 @@ exports.rejectDiscProduct = async (req, res, next) => {
     },
     {
       where: {
-        user_id: bidder,
+        user_id,
         product_id,
       },
     }
