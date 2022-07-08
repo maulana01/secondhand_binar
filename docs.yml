@@ -572,47 +572,6 @@ paths:
           description: Success Post DiscProductOffer
         '500':
           description: Failed due to no disc product offer exists
-  /disc-product-offer/{id}:
-    get:
-      tags:
-        - Discount Product Offer
-      summary: Get DiscProductOffer By ID
-      description: ''
-      operationId: 'getDiscProductOfferById'
-      parameters:
-        - name: id
-          in: path
-          description: ID of disc product offer to return
-          required: true
-          schema:
-            type: string
-      security:
-        - Bearer: []
-      responses:
-        '200':
-          description: Success Get DiscProductOffer By ID
-        '500':
-          description: Failed due to no disc product offer exists
-    delete:
-      tags:
-        - Discount Product Offer
-      summary: Delete DiscProductOffer By ID
-      description: ''
-      operationId: 'deleteDiscProductOfferById'
-      parameters:
-        - name: id
-          in: path
-          description: ID of disc product offer to return
-          required: true
-          schema:
-            type: string
-      security:
-        - Bearer: []
-      responses:
-        '200':
-          description: Success Delete DiscProductOffer By ID
-        '500':
-          description: Failed due to no disc product offer exists
   /disc-product-offer/accept/{id}:
     put:
       tags:
@@ -693,6 +652,47 @@ paths:
       responses:
         '200':
           description: Success Update DiscProductOffer Reject
+        '500':
+          description: Failed due to no disc product offer exists
+  /disc-product-offer/{id}:
+    get:
+      tags:
+        - Discount Product Offer
+      summary: Get DiscProductOffer By ID
+      description: ''
+      operationId: 'getDiscProductOfferById'
+      parameters:
+        - name: id
+          in: path
+          description: ID of disc product offer to return
+          required: true
+          schema:
+            type: string
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: Success Get DiscProductOffer By ID
+        '500':
+          description: Failed due to no disc product offer exists
+    delete:
+      tags:
+        - Discount Product Offer
+      summary: Delete DiscProductOffer By ID
+      description: ''
+      operationId: 'deleteDiscProductOfferById'
+      parameters:
+        - name: id
+          in: path
+          description: ID of disc product offer to return
+          required: true
+          schema:
+            type: string
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: Success Delete DiscProductOffer By ID
         '500':
           description: Failed due to no disc product offer exists
   /disc-product-offer/bidder:
