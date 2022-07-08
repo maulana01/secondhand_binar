@@ -470,17 +470,10 @@ exports.acceptDiscProduct = async (req, res, next) => {
     }
   )
     .then((disc_product) => {
-      if (disc_product[0] === 0) {
-        res.status(404).json({
-          message: 'error',
-          error: 'Not Found',
-        });
-      } else {
-        res.status(200).json({
-          message: 'success',
-          disc_product,
-        });
-      }
+      res.status(200).json({
+        message: 'success',
+        disc_product,
+      });
     })
     .catch((err) => {
       res.status(500).json({
@@ -505,17 +498,10 @@ exports.rejectDiscProduct = async (req, res, next) => {
     }
   )
     .then((disc_product) => {
-      if (disc_product[0] === 0) {
-        res.status(404).json({
-          message: 'error',
-          error: 'Not Found',
-        });
-      } else {
-        res.status(200).json({
-          message: 'success',
-          disc_product,
-        });
-      }
+      res.status(200).json({
+        message: 'success',
+        disc_product,
+      });
     })
     .catch((err) => {
       res.status(500).json({
