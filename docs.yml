@@ -572,7 +572,7 @@ paths:
           description: Success Post DiscProductOffer
         '500':
           description: Failed due to no disc product offer exists
-  /disc-product-offer/accept/{id}:
+  /disc-product-offer/tawaran/accept/{id}:
     put:
       tags:
         - Discount Product Offer
@@ -613,7 +613,7 @@ paths:
           description: Success Update DiscProductOffer Accept
         '500':
           description: Failed due to no disc product offer exists
-  /disc-product-offer/reject/{id}:
+  /disc-product-offer/tawaran/reject/{id}:
     put:
       tags:
         - Discount Product Offer

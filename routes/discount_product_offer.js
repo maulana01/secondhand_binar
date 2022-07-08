@@ -13,8 +13,8 @@ router.get(`${disc_product_offer_path}/status/pending`, IsAuth, IsProfileFilled,
 router.get(`${disc_product_offer_path}/status/accepted`, IsAuth, IsProfileFilled, DiscProductOfferCtl.getAllStatusAccepted);
 router.get(`${disc_product_offer_path}/status/rejected`, IsAuth, IsProfileFilled, DiscProductOfferCtl.getAllStatusRejected);
 router.get(`${disc_product_offer_path}/:id`, IsAuth, IsProfileFilled, DiscProductOfferCtl.getById);
-router.put(`${disc_product_offer_path}/accept/:id`, IsAuth, DiscProductOfferCtl.acceptDiscProduct);
-router.put(`${disc_product_offer_path}/reject/:id`, IsAuth, DiscProductOfferCtl.rejectDiscProduct);
+router.put(`${disc_product_offer_path}/tawaran/accept/:id`, IsAuth, DiscProductOfferCtl.acceptDiscProduct);
+router.put(`${disc_product_offer_path}/tawaran/reject/:id`, IsAuth, DiscProductOfferCtl.rejectDiscProduct);
 router.post(`${disc_product_offer_path}`, IsAuth, IsProfileFilled, DiscProductOfferCtl.createDiscProduct);
 router.delete(`${disc_product_offer_path}/:id`, IsAuth, IsProfileFilled, DiscProductOfferCtl.deleteDiscProduct);
 
