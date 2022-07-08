@@ -203,6 +203,7 @@ exports.getAllStatusPending = (req, res, next) => {
     ],
     where: {
       status: 'pending',
+      user_id: req.userLoggedin.userId,
     },
   })
     .then((disc_products) => {
@@ -250,6 +251,7 @@ exports.getAllStatusAccepted = (req, res, next) => {
     ],
     where: {
       status: 'accepted',
+      user_id: req.userLoggedin.userId,
     },
   })
     .then((disc_products) => {
@@ -297,6 +299,7 @@ exports.getAllStatusRejected = (req, res, next) => {
     ],
     where: {
       status: 'rejected',
+      user_id: req.userLoggedin.userId,
     },
   })
     .then((disc_products) => {

@@ -1,6 +1,6 @@
 /** @format */
 
-const { wishlist: Wishlist, product_images: Product_Images, product: Product, user: User } = require('../models');
+const { wishlist: Wishlist, product_images: Product_Images, product: Product, user: User, category: Category } = require('../models');
 
 module.exports = {
   getAll: (req, res, next) => {
@@ -13,6 +13,10 @@ module.exports = {
             {
               model: Product_Images,
               as: 'product_images',
+            },
+            {
+              model: Category,
+              as: 'category_product',
             },
           ],
         },
