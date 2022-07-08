@@ -392,10 +392,8 @@ paths:
                 category_id:
                   type: string
                 product_images_name:
-                  type: array
-                  items:
-                    type: string
-                    format: binary
+                  type: string
+                  format: binary
       security:
         - Bearer: []
       responses:
@@ -572,88 +570,6 @@ paths:
           description: Success Post DiscProductOffer
         '500':
           description: Failed due to no disc product offer exists
-  /disc-product-offer/tawaran/accept/{id}:
-    put:
-      tags:
-        - Discount Product Offer
-      summary: Update DiscProductOffer Accept
-      description: ''
-      operationId: 'updateDiscProductOfferAccept'
-      parameters:
-        - name: id
-          in: path
-          description: ID of disc product offer to return
-          required: true
-          schema:
-            type: integer
-            format: int32
-            default: 1
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                product_id:
-                  type: integer
-                  format: int32
-                  default: 1
-          # multipart/form-data:
-          #   schema:
-          #     type: object
-          #     properties:
-          #       product_id:
-          #         type: integer
-          #         format: int32
-          #         default: 1
-      security:
-        - Bearer: []
-      responses:
-        '200':
-          description: Success Update DiscProductOffer Accept
-        '500':
-          description: Failed due to no disc product offer exists
-  /disc-product-offer/tawaran/reject/{id}:
-    put:
-      tags:
-        - Discount Product Offer
-      summary: Update DiscProductOffer Reject
-      description: ''
-      operationId: 'updateDiscProductOfferReject'
-      parameters:
-        - name: id
-          in: path
-          description: ID of disc product offer to return
-          required: true
-          schema:
-            type: integer
-            format: int32
-            default: 1
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                product_id:
-                  type: integer
-                  format: int32
-                  default: 1
-          # multipart/form-data:
-          #   schema:
-          #     type: object
-          #     properties:
-          #       product_id:
-          #         type: integer
-          #         format: int32
-          #         default: 1
-      security:
-        - Bearer: []
-      responses:
-        '200':
-          description: Success Update DiscProductOffer Reject
-        '500':
-          description: Failed due to no disc product offer exists
   /disc-product-offer/{id}:
     get:
       tags:
@@ -693,6 +609,68 @@ paths:
       responses:
         '200':
           description: Success Delete DiscProductOffer By ID
+        '500':
+          description: Failed due to no disc product offer exists
+  /disc-product-offer/accept/{id}:
+    put:
+      tags:
+        - Discount Product Offer
+      summary: Update DiscProductOffer Accept
+      description: ''
+      operationId: 'updateDiscProductOfferAccept'
+      parameters:
+        - name: id
+          in: path
+          description: ID of disc product offer to return
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product_id:
+                  type: integer
+                  format: int32
+                  default: 1
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: Success Update DiscProductOffer Accept
+        '500':
+          description: Failed due to no disc product offer exists
+  /disc-product-offer/reject/{id}:
+    put:
+      tags:
+        - Discount Product Offer
+      summary: Update DiscProductOffer Reject
+      description: ''
+      operationId: 'updateDiscProductOfferReject'
+      parameters:
+        - name: id
+          in: path
+          description: ID of disc product offer to return
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product_id:
+                  type: integer
+                  format: int32
+                  default: 1
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: Success Update DiscProductOffer Reject
         '500':
           description: Failed due to no disc product offer exists
   /disc-product-offer/bidder:
