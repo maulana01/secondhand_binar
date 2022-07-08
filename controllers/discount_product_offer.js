@@ -455,10 +455,10 @@ exports.deleteDiscProduct = (req, res, next) => {
     });
 };
 
-exports.rejectDiscProduct = (req, res, next) => {
+exports.rejectDiscProduct = async (req, res, next) => {
   const { id } = req.params;
   const { product_id } = req.body;
-  DiscProduct.update(
+  await DiscProduct.update(
     {
       status: 'rejected',
     },
@@ -483,10 +483,10 @@ exports.rejectDiscProduct = (req, res, next) => {
     });
 };
 
-exports.acceptDiscProduct = (req, res, next) => {
+exports.acceptDiscProduct = async (req, res, next) => {
   const { id } = req.params;
   const { product_id } = req.body;
-  DiscProduct.update(
+  await DiscProduct.update(
     {
       status: 'accepted',
     },
