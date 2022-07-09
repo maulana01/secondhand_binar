@@ -689,6 +689,48 @@ paths:
           description: Success Get All DiscProductOffer By Bidder
         '500':
           description: Failed due to no disc product offer exists
+  /disc-product-offer/bidder/status/pending:
+    get:
+      tags:
+        - Discount Product Offer
+      summary: Get All DiscProductOffer By Bidder Pending Status
+      description: ''
+      operationId: 'getAllDiscProductOfferByBidderPendingStatus'
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: Success Get All DiscProductOffer By Bidder Pending Status
+        '500':
+          description: Failed due to no disc product offer exists
+  /disc-product-offer/bidder/status/accepted:
+    get:
+      tags:
+        - Discount Product Offer
+      summary: Get All DiscProductOffer By Bidder Accepted Status
+      description: ''
+      operationId: 'getAllDiscProductOfferByBidderAcceptedStatus'
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: Success Get All DiscProductOffer By Bidder Accepted Status
+        '500':
+          description: Failed due to no disc product offer exists
+  /disc-product-offer/bidder/status/rejected:
+    get:
+      tags:
+        - Discount Product Offer
+      summary: Get All DiscProductOffer By Bidder Rejected Status
+      description: ''
+      operationId: 'getAllDiscProductOfferByBidderRejectedStatus'
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: Success Get All DiscProductOffer By Bidder Rejected Status
+        '500':
+          description: Failed due to no disc product offer exists
   /disc-product-offer/seller:
     get:
       tags:
@@ -703,46 +745,46 @@ paths:
           description: Success Get All DiscProductOffer By Seller
         '500':
           description: Failed due to no disc product offer exists
-  /disc-product-offer/status/pending:
+  /disc-product-offer/seller/status/pending:
     get:
       tags:
         - Discount Product Offer
-      summary: Get All DiscProductOffer By Pending Status
+      summary: Get All DiscProductOffer By Seller Pending Status
       description: ''
-      operationId: 'getAllDiscProductOfferByPendingStatus'
+      operationId: 'getAllDiscProductOfferBySellerPendingStatus'
       security:
         - Bearer: []
       responses:
         '200':
-          description: Success Get All DiscProductOffer By Pending Status
+          description: Success Get All DiscProductOffer By Seller Pending Status
         '500':
           description: Failed due to no disc product offer exists
-  /disc-product-offer/status/accepted:
+  /disc-product-offer/seller/status/accepted:
     get:
       tags:
         - Discount Product Offer
-      summary: Get All DiscProductOffer By Accepted Status
+      summary: Get All DiscProductOffer By Seller Accepted Status
       description: ''
-      operationId: 'getAllDiscProductOfferByAcceptedStatus'
+      operationId: 'getAllDiscProductOfferBySellerAcceptedStatus'
       security:
         - Bearer: []
       responses:
         '200':
-          description: Success Get All DiscProductOffer By Accepted Status
+          description: Success Get All DiscProductOffer By Seller Accepted Status
         '500':
           description: Failed due to no disc product offer exists
-  /disc-product-offer/status/rejected:
+  /disc-product-offer/seller/status/rejected:
     get:
       tags:
         - Discount Product Offer
-      summary: Get All DiscProductOffer By Rejected Status
+      summary: Get All DiscProductOffer By Seller Rejected Status
       description: ''
-      operationId: 'getAllDiscProductOfferByRejectedStatus'
+      operationId: 'getAllDiscProductOfferBySellerRejectedStatus'
       security:
         - Bearer: []
       responses:
         '200':
-          description: Success Get All DiscProductOffer By Rejected Status
+          description: Success Get All DiscProductOffer By Seller Rejected Status
         '500':
           description: Failed due to no disc product offer exists
   /transaction:

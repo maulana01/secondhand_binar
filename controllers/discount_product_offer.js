@@ -177,7 +177,7 @@ exports.getByBidder = (req, res, next) => {
     });
 };
 
-exports.getAllStatusPending = (req, res, next) => {
+exports.getAllStatusPendingBidder = (req, res, next) => {
   DiscProduct.findAll({
     include: [
       {
@@ -225,7 +225,55 @@ exports.getAllStatusPending = (req, res, next) => {
     });
 };
 
-exports.getAllStatusAccepted = (req, res, next) => {
+exports.getAllStatusPendingSeller = (req, res, next) => {
+  DiscProduct.findAll({
+    include: [
+      {
+        model: Product,
+        as: 'product_offered',
+        include: [
+          {
+            model: Product_Images,
+            as: 'product_images',
+          },
+        ],
+      },
+      {
+        model: User,
+        as: 'bidder',
+        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
+      },
+      {
+        model: User,
+        as: 'seller_product_offer',
+        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
+      },
+    ],
+    where: {
+      status: 'pending',
+      seller_id: req.userLoggedin.userId,
+    },
+  })
+    .then((disc_products) => {
+      res.status(200).json({
+        message: 'success',
+        result: {
+          disc_products,
+          thumbnail: disc_products.map((disc_product) => {
+            return disc_product.product_offered.product_images[disc_product.product_offered.product_images.length - 1].product_images_path;
+          }),
+        },
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        message: 'error',
+        error: err.message,
+      });
+    });
+};
+
+exports.getAllStatusAcceptedBidder = (req, res, next) => {
   DiscProduct.findAll({
     include: [
       {
@@ -273,7 +321,55 @@ exports.getAllStatusAccepted = (req, res, next) => {
     });
 };
 
-exports.getAllStatusRejected = (req, res, next) => {
+exports.getAllStatusAcceptedSeller = (req, res, next) => {
+  DiscProduct.findAll({
+    include: [
+      {
+        model: Product,
+        as: 'product_offered',
+        include: [
+          {
+            model: Product_Images,
+            as: 'product_images',
+          },
+        ],
+      },
+      {
+        model: User,
+        as: 'bidder',
+        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
+      },
+      {
+        model: User,
+        as: 'seller_product_offer',
+        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
+      },
+    ],
+    where: {
+      status: 'accepted',
+      seller_id: req.userLoggedin.userId,
+    },
+  })
+    .then((disc_products) => {
+      res.status(200).json({
+        message: 'success',
+        result: {
+          disc_products,
+          thumbnail: disc_products.map((disc_product) => {
+            return disc_product.product_offered.product_images[disc_product.product_offered.product_images.length - 1].product_images_path;
+          }),
+        },
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        message: 'error',
+        error: err.message,
+      });
+    });
+};
+
+exports.getAllStatusRejectedBidder = (req, res, next) => {
   DiscProduct.findAll({
     include: [
       {
@@ -300,6 +396,54 @@ exports.getAllStatusRejected = (req, res, next) => {
     where: {
       status: 'rejected',
       user_id: req.userLoggedin.userId,
+    },
+  })
+    .then((disc_products) => {
+      res.status(200).json({
+        message: 'success',
+        result: {
+          disc_products,
+          thumbnail: disc_products.map((disc_product) => {
+            return disc_product.product_offered.product_images[disc_product.product_offered.product_images.length - 1].product_images_path;
+          }),
+        },
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        message: 'error',
+        error: err.message,
+      });
+    });
+};
+
+exports.getAllStatusRejectedSeller = (req, res, next) => {
+  DiscProduct.findAll({
+    include: [
+      {
+        model: Product,
+        as: 'product_offered',
+        include: [
+          {
+            model: Product_Images,
+            as: 'product_images',
+          },
+        ],
+      },
+      {
+        model: User,
+        as: 'bidder',
+        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
+      },
+      {
+        model: User,
+        as: 'seller_product_offer',
+        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
+      },
+    ],
+    where: {
+      status: 'rejected',
+      seller_id: req.userLoggedin.userId,
     },
   })
     .then((disc_products) => {
