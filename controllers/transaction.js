@@ -60,10 +60,10 @@ const {
 
 exports.finishTransaction = async (req, res, next) => {
   const { accepted_bidder } = req.body;
-  const id = req.params.id;
+  const { product_id } = req.params;
   const getDiscProductOffer = await DiscProduct.findOne({
     where: {
-      product_id: id,
+      product_id,
       user_id: accepted_bidder,
     },
   });
@@ -112,10 +112,10 @@ exports.finishTransaction = async (req, res, next) => {
 
 exports.cancelTransaction = async (req, res, next) => {
   const { accepted_bidder } = req.body;
-  const id = req.params.id;
+  const { product_id } = req.params;
   const getDiscProductOffer = await DiscProduct.findOne({
     where: {
-      product_id: id,
+      product_id,
       user_id: accepted_bidder,
     },
   });

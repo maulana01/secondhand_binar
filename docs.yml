@@ -836,7 +836,7 @@ paths:
           description: Success Get Transaction By ID
         '500':
           description: Failed due to no transaction exists
-  /transaction/success/{id}:
+  /transaction/success/{product_id}:
     put:
       tags:
         - Transaction
@@ -844,12 +844,12 @@ paths:
       description: ''
       operationId: 'updateTransactionSuccess'
       parameters:
-        - name: id
+        - name: product_id
           in: path
-          description: ID of transaction to return
+          description: product_id of transaction to return
           required: true
           schema:
-            type: string
+            type: integer
       requestBody:
         content:
           application/json:
@@ -867,7 +867,7 @@ paths:
           description: Success Update Transaction Success
         '500':
           description: Failed due to no transaction exists
-  /transaction/cancel/{id}:
+  /transaction/cancel/{product_id}:
     put:
       tags:
         - Transaction
@@ -875,12 +875,12 @@ paths:
       description: ''
       operationId: 'updateTransactionCancel'
       parameters:
-        - name: id
+        - name: product_id
           in: path
-          description: ID of transaction to return
+          description: product_id of transaction to return
           required: true
           schema:
-            type: string
+            type: integer
       requestBody:
         content:
           application/json:
