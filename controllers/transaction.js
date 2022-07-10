@@ -84,7 +84,7 @@ exports.finishTransaction = async (req, res, next) => {
         },
         {
           where: {
-            product_id: id,
+            product_id,
             user_id: {
               [Op.ne]: accepted_bidder,
             },
@@ -92,7 +92,7 @@ exports.finishTransaction = async (req, res, next) => {
         }
       );
       Transaction.create({
-        product_id: id,
+        product_id,
         user_id: accepted_bidder,
         total_payment: getDiscProductOffer.bargain_price,
         status: 'success',
@@ -125,14 +125,14 @@ exports.cancelTransaction = async (req, res, next) => {
     },
     {
       where: {
-        product_id: id,
+        product_id,
         user_id: accepted_bidder,
       },
     }
   )
     .then((result) => {
       // Transaction.create({
-      //   product_id: id,
+      //   product_id,
       //   user_id: accepted_bidder,
       //   total_payment: getDiscProductOffer.bargain_price,
       //   status: 'cancelled',
