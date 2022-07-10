@@ -73,7 +73,7 @@ exports.finishTransaction = async (req, res, next) => {
     },
     {
       where: {
-        id,
+        id: product_id,
       },
     }
   )
