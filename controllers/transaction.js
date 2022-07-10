@@ -10,7 +10,7 @@ const {
   notification: Notification,
   discount_product_offer: DiscProduct,
 } = require('../models');
-
+const { Op } = Sequelize;
 // exports.createRequest = async (req, res, next) => {
 //   const user_id = req.userLoggedin.userId;
 //   const { discount, total_payment, product_id } = req.body;
