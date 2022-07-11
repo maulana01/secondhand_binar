@@ -801,18 +801,18 @@ paths:
           description: Success Get All Transaction
         '500':
           description: Failed due to no transaction exists
-  /transaction/user:
+  /transaction/buyer:
     get:
       tags:
         - Transaction
-      summary: Get All Transaction By User
+      summary: Get All Transaction By Buyer
       description: ''
-      operationId: 'getAllTransactionByUser'
+      operationId: 'getAllTransactionByBuyer'
       security:
         - Bearer: []
       responses:
         '200':
-          description: Success Get All Transaction By User
+          description: Success Get All Transaction By Buyer
         '500':
           description: Failed due to no transaction exists
   /transaction/{id}:

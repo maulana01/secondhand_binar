@@ -226,7 +226,7 @@ exports.getAllRequest = (req, res, next) => {
     });
 };
 
-exports.getByUser = (req, res, next) => {
+exports.getByBuyer = (req, res, next) => {
   const user_id = req.userLoggedin.userId;
   Transaction.findAll({
     where: {

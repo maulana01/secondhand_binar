@@ -6,7 +6,7 @@ const transaction_path = '/api/v1/transaction';
 const IsAuth = require('../middleware/is-auth');
 
 router.get(`${transaction_path}`, IsAuth, TransactionCtl.getAllRequest);
-router.get(`${transaction_path}/user`, IsAuth, TransactionCtl.getByUser);
+router.get(`${transaction_path}/buyer`, IsAuth, TransactionCtl.getByBuyer);
 router.get(`${transaction_path}/:id`, IsAuth, TransactionCtl.getById);
 router.put(`${transaction_path}/success/:product_id`, IsAuth, TransactionCtl.finishTransaction);
 router.put(`${transaction_path}/cancel/:product_id`, IsAuth, TransactionCtl.cancelTransaction);
