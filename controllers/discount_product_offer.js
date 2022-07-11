@@ -481,12 +481,12 @@ exports.getById = (req, res, next) => {
       {
         model: User,
         as: 'bidder',
-        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'phone_number'],
+        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
       },
       {
         model: User,
         as: 'seller_product_offer',
-        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'phone_number'],
+        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
       },
     ],
     where: {
