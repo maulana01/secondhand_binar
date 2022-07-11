@@ -199,6 +199,10 @@ exports.getAllRequest = (req, res, next) => {
             model: Product_Images,
             as: 'product_images',
           },
+          {
+            model: Category,
+            as: 'category_product',
+          },
         ],
       },
       {
