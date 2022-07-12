@@ -19,12 +19,17 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'product_id',
         as: 'order_transaction_product',
       });
+      this.belongsTo(models.user, {
+        foreignKey: 'seller_id',
+        as: 'order_transaction_seller',
+      });
     }
   }
   order_transaction.init(
     {
       user_id: DataTypes.INTEGER,
       product_id: DataTypes.INTEGER,
+      seller_id: DataTypes.INTEGER,
       total_payment: DataTypes.INTEGER,
       status: DataTypes.STRING,
     },

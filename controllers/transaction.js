@@ -95,6 +95,7 @@ exports.finishTransaction = async (req, res, next) => {
         product_id,
         user_id: accepted_bidder,
         total_payment: getDiscProductOffer.bargain_price,
+        seller_id: req.userLoggedin.userId,
         status: 'success',
       });
       res.status(200).json({
@@ -169,6 +170,11 @@ exports.getById = (req, res, next) => {
         as: 'order_transaction_user',
         attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
       },
+      {
+        model: User,
+        as: 'order_transaction_seller',
+        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
+      },
     ],
   })
     .then((transaction) => {
@@ -208,6 +214,11 @@ exports.getAllRequest = (req, res, next) => {
       {
         model: User,
         as: 'order_transaction_user',
+        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
+      },
+      {
+        model: User,
+        as: 'order_transaction_seller',
         attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
       },
     ],
@@ -250,6 +261,54 @@ exports.getByBuyer = (req, res, next) => {
       {
         model: User,
         as: 'order_transaction_user',
+        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
+      },
+      {
+        model: User,
+        as: 'order_transaction_seller',
+        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
+      },
+    ],
+  })
+    .then((transactions) => {
+      return res.status(200).json({
+        message: 'Transactions found',
+        data: transactions,
+      });
+    })
+    .catch((err) => {
+      return res.status(500).json({
+        message: 'Error getting transactions',
+        error: err.message,
+      });
+    });
+};
+
+exports.getBySeller = (req, res, next) => {
+  const seller_id = req.userLoggedin.userId;
+  Transaction.findAll({
+    where: {
+      seller_id,
+    },
+    include: [
+      {
+        model: Product,
+        as: 'order_transaction_product',
+        include: [
+          {
+            model: Product_Images,
+            as: 'product_images',
+          },
+        ],
+      },
+      {
+        model: User,
+        as: 'order_transaction_user',
+        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
+      },
+      {
+        model: User,
+        as: 'order_transaction_seller',
         attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
       },
     ],

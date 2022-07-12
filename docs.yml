@@ -815,6 +815,20 @@ paths:
           description: Success Get All Transaction By Buyer
         '500':
           description: Failed due to no transaction exists
+  /transaction/seller:
+    get:
+      tags:
+        - Transaction
+      summary: Get All Transaction By Seller
+      description: ''
+      operationId: 'getAllTransactionBySeller'
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: Success Get All Transaction By Seller
+        '500':
+          description: Failed due to no transaction exists
   /transaction/{id}:
     get:
       tags:

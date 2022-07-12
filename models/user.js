@@ -36,6 +36,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'seller_id',
         as: 'seller_product_offer',
       });
+      this.hasMany(models.discount_product_offer, {
+        foreignKey: 'seller_id',
+        as: 'order_transaction_seller',
+      });
     }
   }
   user.init(
