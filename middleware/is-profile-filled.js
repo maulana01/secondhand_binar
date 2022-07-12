@@ -7,10 +7,9 @@ module.exports = async (req, res, next) => {
   const user = await User.findByPk(userId);
   // console.log('ini address', user.dataValues.address);
   if (user.address == null || user.phone_number == null || user.city_id == null || user.profile_picture == null) {
-    res.status(400).json({
+    return res.status(403).json({
       message: 'Please complete your profile first!',
     });
-  } else {
-    next();
   }
+  next();
 };
