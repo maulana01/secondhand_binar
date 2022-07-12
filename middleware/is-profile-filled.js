@@ -10,6 +10,7 @@ module.exports = async (req, res, next) => {
     res.status(400).json({
       message: 'Please complete your profile first!',
     });
+  } else {
+    next();
   }
-  next();
 };
