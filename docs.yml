@@ -531,6 +531,18 @@ paths:
           description: Success Get All Notification
         '500':
           description: Failed due to no notification exists
+  /notification/all:
+    get:
+      tags:
+        - Notification
+      summary: Get All Notification
+      description: ''
+      operationId: 'getAllNotification'
+      responses:
+        '200':
+          description: Success Get All Notification
+        '500':
+          description: Failed due to no notification exists
   /disc-product-offer:
     get:
       tags:
