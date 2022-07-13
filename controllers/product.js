@@ -273,7 +273,7 @@ exports.createProducts = async (req, res, next) => {
   // })
 
   if (!product_name || !product_desc || !product_price) {
-    res.status(400).json({
+    return res.status(400).json({
       message: 'Please fill all required fields',
     });
   } else {
@@ -289,14 +289,11 @@ exports.createProducts = async (req, res, next) => {
     //   });
     // } else {
     if (req.files.length === 0) {
-      res.status(400).json({
+      return res.status(400).json({
         message: 'Please upload at least one image',
       });
     } else {
       if (req.files.length > 4) {
-        res.status(400).json({
-          message: 'You can only upload up to 4 images',
-        });
         req.files.map((file) => {
           // const _path = path.join(__dirname, '../public/images/products/', file.filename);
           // fs.unlink(_path, (err) => {
@@ -306,12 +303,12 @@ exports.createProducts = async (req, res, next) => {
             console.log(result);
           });
         });
+        return res.status(400).json({
+          message: 'You can only upload up to 4 images',
+        });
       } else {
         console.log('ini total product', countUnsoldSellerProductPost);
         if (countUnsoldSellerProductPost >= 4) {
-          res.status(400).json({
-            message: 'You can only sell 4 products',
-          });
           req.files.map((file) => {
             // const _path = path.join(__dirname, '../public/images/products/', file.filename);
             // fs.unlink(_path, (err) => {
@@ -320,6 +317,9 @@ exports.createProducts = async (req, res, next) => {
             cloudinary.uploader.destroy(`${file.filename}`, function (result) {
               console.log(result);
             });
+          });
+          return res.status(400).json({
+            message: 'You can only sell 4 products',
           });
         } else {
           await Product.create({
@@ -345,16 +345,19 @@ exports.createProducts = async (req, res, next) => {
                 product_id: product.id,
                 bargain_price: null,
                 user_id: userId,
-                action_message: 'Produk berhasil ditambahkan',
+                action_message: 'Berhasil diterbitkan',
+                additional_info_1: null,
+                additional_info_2: null,
+                // is_read: false,
               });
-              res.status(201).json({
+              return res.status(201).json({
                 message: 'success',
                 product,
                 product_images: req.files,
               });
             })
             .catch((err) => {
-              res.status(500).json({
+              return res.status(500).json({
                 message: 'error',
                 error: err.message,
               });

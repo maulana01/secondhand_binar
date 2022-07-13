@@ -29,7 +29,7 @@ module.exports = {
           key: 'id',
         },
         onUpdate: 'CASCADE',
-        onDelete: 'SET NULL',
+        onDelete: 'CASCADE',
       },
       category_id: {
         type: Sequelize.INTEGER,
@@ -38,7 +38,7 @@ module.exports = {
           key: 'id',
         },
         onUpdate: 'CASCADE',
-        onDelete: 'SET NULL',
+        onDelete: 'CASCADE',
       },
       status: {
         type: Sequelize.STRING,

@@ -564,6 +564,18 @@ exports.createDiscProduct = async (req, res, next) => {
         bargain_price: disc_product.bargain_price,
         user_id: getSellerId.seller.id,
         action_message: 'Penawaran Produk',
+        additional_info_1: 'Ditawar ',
+        additional_info_2: null,
+        // is_read: false,
+      });
+      Notification.create({
+        product_id: disc_product.product_id,
+        bargain_price: disc_product.bargain_price,
+        user_id: req.userLoggedin.userId,
+        action_message: 'Penawaran Produk',
+        additional_info_1: 'Ditawar ',
+        additional_info_2: null,
+        // is_read: false,
       });
       res.status(200).json({
         message: 'success',
@@ -602,6 +614,12 @@ exports.deleteDiscProduct = (req, res, next) => {
 exports.acceptDiscProduct = async (req, res, next) => {
   const { user_id } = req.params;
   const { product_id } = req.body;
+  const getDiscProductOffer = await DiscProduct.findOne({
+    where: {
+      user_id,
+      product_id,
+    },
+  });
   DiscProduct.update(
     {
       status: 'accepted',
@@ -614,6 +632,15 @@ exports.acceptDiscProduct = async (req, res, next) => {
     }
   )
     .then((disc_product) => {
+      Notification.create({
+        product_id: product_id,
+        bargain_price: getDiscProductOffer.bargain_price,
+        user_id: user_id,
+        action_message: 'Penawaran Produk',
+        additional_info_1: 'Berhasil Ditawar ',
+        additional_info_2: 'Kamu akan segera dihubungi penjual via whatsapp',
+        // is_read: false,
+      });
       res.status(200).json({
         message: 'success',
         disc_product,
@@ -630,6 +657,12 @@ exports.acceptDiscProduct = async (req, res, next) => {
 exports.rejectDiscProduct = async (req, res, next) => {
   const { user_id } = req.params;
   const { product_id } = req.body;
+  const getDiscProductOffer = await DiscProduct.findOne({
+    where: {
+      user_id,
+      product_id,
+    },
+  });
   DiscProduct.update(
     {
       status: 'rejected',
@@ -642,6 +675,15 @@ exports.rejectDiscProduct = async (req, res, next) => {
     }
   )
     .then((disc_product) => {
+      Notification.create({
+        product_id: product_id,
+        bargain_price: getDiscProductOffer.bargain_price,
+        user_id: user_id,
+        action_message: 'Penawaran Produk',
+        additional_info_1: 'Tawaran Ditolak ',
+        additional_info_2: 'Harap tawar ulang atau pilih produk lain.',
+        // is_read: false,
+      });
       res.status(200).json({
         message: 'success',
         disc_product,

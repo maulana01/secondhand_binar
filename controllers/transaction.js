@@ -67,6 +67,12 @@ exports.finishTransaction = async (req, res, next) => {
       user_id: accepted_bidder,
     },
   });
+  const getAllDiscProductOffer = await DiscProduct.findAll({
+    where: {
+      product_id,
+      status: 'pending',
+    },
+  });
   await Product.update(
     {
       status: 'sold',
@@ -91,6 +97,26 @@ exports.finishTransaction = async (req, res, next) => {
           },
         }
       );
+      getAllDiscProductOffer.map((item) => {
+        Notification.create({
+          product_id: product_id,
+          user_id: item.user_id,
+          bargain_price: item.bargain_price,
+          action_message: 'Produk Terjual',
+          additional_info_1: 'Ditawar ',
+          additional_info_2: 'Maaf, sepertinya produk yang anda minati sudah terjual &#128546;',
+          is_read: false,
+        });
+      });
+      Notification.create({
+        product_id: product_id,
+        user_id: accepted_bidder,
+        bargain_price: getDiscProductOffer.bargain_price,
+        action_message: 'Transaksi Berhasil',
+        additional_info_1: 'Ditawar ',
+        additional_info_2: 'Transaksi Berhasil, harap tunggu sampai barangmu sampai ya &#128513;',
+        is_read: false,
+      });
       Transaction.create({
         product_id,
         user_id: accepted_bidder,
@@ -138,6 +164,15 @@ exports.cancelTransaction = async (req, res, next) => {
       //   total_payment: getDiscProductOffer.bargain_price,
       //   status: 'cancelled',
       // });
+      Notification.create({
+        product_id: product_id,
+        user_id: accepted_bidder,
+        bargain_price: getDiscProductOffer.bargain_price,
+        action_message: 'Transaksi Dibatalkan',
+        additional_info_1: 'Ditawar',
+        additional_info_2: 'Transaksi Gagal, harap tawar ulang atau pilih produk lain &#128546;',
+        is_read: false,
+      });
       res.status(200).json({
         message: 'success',
         result,

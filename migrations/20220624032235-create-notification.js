@@ -21,10 +21,24 @@ module.exports = {
       },
       bargain_price: {
         type: Sequelize.INTEGER,
+        allowNull: true,
       },
       action_message: {
         type: Sequelize.STRING,
       },
+      additional_info_1: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      additional_info_2: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      // is_read: {
+      //   type: Sequelize.BOOLEAN,
+      //   defaultValue: false,
+      //   allowNull: false,
+      // },
       user_id: {
         type: Sequelize.INTEGER,
         references: {
