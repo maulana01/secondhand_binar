@@ -523,7 +523,7 @@ paths:
         - Notification
       summary: Get All Notification
       description: ''
-      operationId: 'getAllNotification'
+      operationId: 'getAllNotificationByUserLoggedIn'
       security:
         - Bearer: []
       responses:
