@@ -34,9 +34,9 @@ exports.getNotification = (req, res, next) => {
         message: 'success',
         result: {
           notification,
-          thumbnail: notification.map((notif) => {
-            return notif.product_notification.product_images[notif.product_notification.product_images.length - 1].product_images_path;
-          }),
+          // thumbnail: notification.map((notif) => {
+          //   return notif.product_notification.product_images[notif.product_notification.product_images.length - 1].product_images_path;
+          // }),
         },
       });
     })
@@ -59,7 +59,7 @@ exports.getAllNotification = (req, res, next) => {
     .catch((err) => {
       return res.status(500).json({
         message: 'error',
-        data: err,
+        data: err.message,
       });
     });
 };
@@ -103,7 +103,7 @@ exports.getById = (req, res, next) => {
     .catch((err) => {
       return res.status(500).json({
         message: 'error',
-        data: err,
+        data: err.message,
       });
     });
 };
