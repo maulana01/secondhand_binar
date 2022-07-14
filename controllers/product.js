@@ -153,19 +153,19 @@ exports.getAllByCategory = async (req, res, next) => {
 };
 
 exports.getAllBySeller = async (req, res, next) => {
-  const { slug } = req.params;
+  const { id } = req.params;
   const { page, limit } = req.query;
-  const getUser = await User.findOne({
-    where: {
-      slug: slug,
-    },
-  });
-  if (getUser) {
+  // const getUser = await User.findOne({
+  //   where: {
+  //     slug: slug,
+  //   },
+  // });
+  if (id) {
     Product.findAndCountAll({
       offset: (page - 1) * limit || 0,
       limit: parseInt(limit, 10) || 10,
       where: {
-        user_id: getUser.id,
+        user_id: id,
       },
       include: [
         {
