@@ -34,9 +34,9 @@ exports.getNotification = (req, res, next) => {
         message: 'success',
         result: {
           notification,
-          // thumbnail: notification.map((notif) => {
-          //   return notif.product_notification.product_images[notif.product_notification.product_images.length - 1].product_images_path;
-          // }),
+          thumbnail: notification.map((notif) => {
+            return notif.product_notification.product_images[notif.product_notification.product_images.length - 1].product_images_path;
+          }),
         },
       });
     })
