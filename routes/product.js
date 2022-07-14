@@ -9,7 +9,7 @@ const UploadUtil = require('../utils/uploadProducts');
 
 router.get(`${product_path}`, ProductCtl.getAllWithPaginationSortingFiltering);
 router.get(`${product_path}/category/:slug`, ProductCtl.getAllByCategory);
-router.get(`${product_path}/user/:slug`, ProductCtl.getAllBySeller);
+router.get(`${product_path}/user/:id`, ProductCtl.getAllBySeller);
 router.get(`${product_path}/:slug`, ProductCtl.getProductDetailBySlug);
 
 // ini create
