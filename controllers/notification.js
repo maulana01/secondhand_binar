@@ -37,6 +37,10 @@ exports.getNotification = (req, res, next) => {
           thumbnail: notification.map((notif) => {
             return notif.product_notification.product_images[notif.product_notification.product_images.length - 1].product_images_path;
           }),
+          createdAt: notification.map((notif) => {
+            const date = moment(notif.createdAt, 'h:mm:ss A').locale('id').format('DD MMMM, h:mm');
+            return date;
+          }),
         },
       });
     })
@@ -49,11 +53,42 @@ exports.getNotification = (req, res, next) => {
 };
 
 exports.getAllNotification = (req, res, next) => {
-  Notification.findAll()
+  Notification.findAll({
+    include: [
+      {
+        model: User,
+        as: 'user_notification',
+        attributes: ['id', 'email', 'name', 'slug', 'address', 'profile_picture', 'phone_number'],
+      },
+      {
+        model: Product,
+        as: 'product_notification',
+        include: [
+          {
+            model: Product_Images,
+            as: 'product_images',
+          },
+          {
+            model: Category,
+            as: 'category_product',
+          },
+        ],
+      },
+    ],
+  })
     .then((notification) => {
       return res.status(200).json({
         message: 'success',
-        notification,
+        result: {
+          notification,
+          thumbnail: notification.map((notif) => {
+            return notif.product_notification.product_images[notif.product_notification.product_images.length - 1].product_images_path;
+          }),
+          createdAt: notification.map((notif) => {
+            const date = moment(notif.createdAt, 'h:mm:ss A').locale('id').format('DD MMMM, h:mm');
+            return date;
+          }),
+        },
       });
     })
     .catch((err) => {
