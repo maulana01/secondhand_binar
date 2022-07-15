@@ -237,6 +237,17 @@ exports.getProductDetailBySlug = (req, res, next) => {
   })
     .then((product) => {
       if (product) {
+        // Notification.update(
+        //   {
+        //     is_read: true,
+        //   },
+        //   {
+        //     where: {
+        //       product_id: product.id,
+        //       user_id: req.userLoggedin.userId,
+        //     },
+        //   }
+        // );
         res.status(200).json({
           message: 'success',
           product,
@@ -332,15 +343,6 @@ exports.createProducts = async (req, res, next) => {
             category_id,
           })
             .then((product) => {
-              req.files.map((file) => {
-                // console.log('ini cloudinary', file.filename.replace('public/images/products/', ''));
-                Product_Images.create({
-                  product_images_name: file.filename.replace('public/images/products/', ''),
-                  product_images_path: file.path,
-                  product_id: product.id,
-                });
-              });
-              // console.log({ product });
               Notification.create({
                 product_id: product.id,
                 bargain_price: null,
@@ -349,7 +351,17 @@ exports.createProducts = async (req, res, next) => {
                 additional_info_1: null,
                 additional_info_2: null,
                 // is_read: false,
+                // url: '/detail/' + product.slug,
               });
+              req.files.map((file) => {
+                // console.log('ini cloudinary', file.filename.replace('public/images/products/', ''));
+                Product_Images.create({
+                  product_images_name: file.filename.replace('public/images/products/', ''),
+                  product_images_path: file.path,
+                  product_id: product.id,
+                });
+              });
+              // console.log('ini produk id', product.id);
               return res.status(201).json({
                 message: 'success',
                 product,
