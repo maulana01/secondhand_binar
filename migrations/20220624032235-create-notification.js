@@ -17,7 +17,8 @@ module.exports = {
           key: 'id',
         },
         onUpdate: 'CASCADE',
-        onDelete: 'SET NULL',
+        onDelete: 'CASCADE',
+        allowNull: false,
       },
       bargain_price: {
         type: Sequelize.INTEGER,
@@ -34,11 +35,14 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
-      // is_read: {
-      //   type: Sequelize.BOOLEAN,
-      //   defaultValue: false,
-      //   allowNull: false,
-      // },
+      is_read: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+        allowNull: false,
+      },
+      url: {
+        type: Sequelize.STRING,
+      },
       user_id: {
         type: Sequelize.INTEGER,
         references: {
@@ -47,6 +51,7 @@ module.exports = {
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,

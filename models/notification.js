@@ -28,7 +28,8 @@ module.exports = (sequelize, DataTypes) => {
       action_message: DataTypes.STRING,
       additional_info_1: DataTypes.STRING,
       additional_info_2: DataTypes.STRING,
-      // is_read: DataTypes.BOOLEAN,
+      is_read: DataTypes.BOOLEAN,
+      url: DataTypes.STRING,
       user_id: DataTypes.INTEGER,
     },
     {

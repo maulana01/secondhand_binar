@@ -237,17 +237,17 @@ exports.getProductDetailBySlug = (req, res, next) => {
   })
     .then((product) => {
       if (product) {
-        // Notification.update(
-        //   {
-        //     is_read: true,
-        //   },
-        //   {
-        //     where: {
-        //       product_id: product.id,
-        //       user_id: req.userLoggedin.userId,
-        //     },
-        //   }
-        // );
+        Notification.update(
+          {
+            is_read: true,
+          },
+          {
+            where: {
+              product_id: product.id,
+              user_id: req.userLoggedin.userId,
+            },
+          }
+        );
         res.status(200).json({
           message: 'success',
           product,
@@ -275,10 +275,6 @@ exports.createProducts = async (req, res, next) => {
       user_id: req.userLoggedin.userId,
       status: 'unsold',
     },
-  });
-  const getLatestProductId = await Product.findOne({
-    order: [['id', 'DESC']],
-    attributes: ['id'],
   });
   // const unsoldSellerProduct = await Transaction.findAll({
   //   where: {
@@ -337,7 +333,7 @@ exports.createProducts = async (req, res, next) => {
             message: 'You can only sell 4 products',
           });
         } else {
-          Product.create({
+          await Product.create({
             product_name,
             product_desc,
             product_price,
@@ -357,14 +353,14 @@ exports.createProducts = async (req, res, next) => {
               });
               // console.log('ini produk id', product.id);
               Notification.create({
-                product_id: getLatestProductId.id + 1,
+                product_id: product.id,
                 bargain_price: null,
                 user_id: userId,
                 action_message: 'Berhasil diterbitkan',
                 additional_info_1: null,
                 additional_info_2: null,
-                // is_read: false,
-                // url: '/detail/' + product.slug,
+                is_read: false,
+                url: '/detail/' + product.slug,
               });
               return res.status(201).json({
                 message: 'success',

@@ -16,7 +16,7 @@ const productsRouter = require('./routes/product');
 const discProductsOfferRouter = require('./routes/discount_product_offer');
 const wishlistRouter = require('./routes/wishlist');
 const transactionRotuer = require('./routes/transaction');
-const notifUser = require('./routes/notif');
+const notifUser = require('./routes/notification');
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
