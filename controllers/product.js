@@ -333,7 +333,7 @@ exports.createProducts = async (req, res, next) => {
             message: 'You can only sell 4 products',
           });
         } else {
-          await Product.create({
+          Product.create({
             product_name,
             product_desc,
             product_price,
