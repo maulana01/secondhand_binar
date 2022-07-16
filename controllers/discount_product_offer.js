@@ -494,6 +494,17 @@ exports.getById = (req, res, next) => {
     },
   })
     .then((disc_product) => {
+      Notification.update(
+        {
+          is_read: true,
+        },
+        {
+          where: {
+            product_id: disc_product.product_offered.id,
+            user_id: req.userLoggedin.userId,
+          },
+        }
+      );
       res.status(200).json({
         message: 'success',
         result: {
@@ -551,7 +562,7 @@ exports.createDiscProduct = async (req, res, next) => {
     ],
   });
   // console.log('ini seller id', getSellerId.seller);
-  DiscProduct.create({
+  await DiscProduct.create({
     user_id: req.userLoggedin.userId,
     product_id,
     seller_id: getSellerId.seller.id,
@@ -560,23 +571,26 @@ exports.createDiscProduct = async (req, res, next) => {
   })
     .then((disc_product) => {
       Notification.create({
-        product_id: disc_product.product_id,
-        bargain_price: disc_product.bargain_price,
+        product_id,
+        bargain_price,
         user_id: getSellerId.seller.id,
         action_message: 'Penawaran Produk',
         additional_info_1: 'Ditawar ',
         additional_info_2: null,
         // is_read: false,
+        // url: `/tawaran/${disc_product.id}`,
       });
       Notification.create({
-        product_id: disc_product.product_id,
-        bargain_price: disc_product.bargain_price,
+        product_id,
+        bargain_price,
         user_id: req.userLoggedin.userId,
         action_message: 'Penawaran Produk',
         additional_info_1: 'Ditawar ',
         additional_info_2: null,
         // is_read: false,
+        // url: `/tawaran/${disc_product.id}`,
       });
+
       res.status(200).json({
         message: 'success',
         disc_product,
@@ -620,7 +634,7 @@ exports.acceptDiscProduct = async (req, res, next) => {
       product_id,
     },
   });
-  DiscProduct.update(
+  await DiscProduct.update(
     {
       status: 'accepted',
     },
@@ -633,13 +647,14 @@ exports.acceptDiscProduct = async (req, res, next) => {
   )
     .then((disc_product) => {
       Notification.create({
-        product_id: product_id,
+        product_id,
         bargain_price: getDiscProductOffer.bargain_price,
-        user_id: user_id,
+        user_id,
         action_message: 'Penawaran Produk',
         additional_info_1: 'Berhasil Ditawar ',
         additional_info_2: 'Kamu akan segera dihubungi penjual via whatsapp',
         // is_read: false,
+        // url: `/tawaran/${getDiscProductOffer.id}`,
       });
       res.status(200).json({
         message: 'success',
@@ -663,7 +678,7 @@ exports.rejectDiscProduct = async (req, res, next) => {
       product_id,
     },
   });
-  DiscProduct.update(
+  await DiscProduct.update(
     {
       status: 'rejected',
     },
@@ -676,13 +691,14 @@ exports.rejectDiscProduct = async (req, res, next) => {
   )
     .then((disc_product) => {
       Notification.create({
-        product_id: product_id,
+        product_id,
         bargain_price: getDiscProductOffer.bargain_price,
-        user_id: user_id,
+        user_id,
         action_message: 'Penawaran Produk',
         additional_info_1: 'Tawaran Ditolak ',
         additional_info_2: 'Harap tawar ulang atau pilih produk lain.',
         // is_read: false,
+        // url: `/tawaran/${getDiscProductOffer.id}`,
       });
       res.status(200).json({
         message: 'success',

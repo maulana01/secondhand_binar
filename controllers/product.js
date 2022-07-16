@@ -276,6 +276,10 @@ exports.createProducts = async (req, res, next) => {
       status: 'unsold',
     },
   });
+  const getLatestProductId = await Product.findOne({
+    order: [['id', 'DESC']],
+    attributes: ['id'],
+  });
   // const unsoldSellerProduct = await Transaction.findAll({
   //   where: {
   //     user_id: req.userLoggedIn.userId,
@@ -343,16 +347,6 @@ exports.createProducts = async (req, res, next) => {
             category_id,
           })
             .then((product) => {
-              Notification.create({
-                product_id: product.id,
-                bargain_price: null,
-                user_id: userId,
-                action_message: 'Berhasil diterbitkan',
-                additional_info_1: null,
-                additional_info_2: null,
-                // is_read: false,
-                // url: '/detail/' + product.slug,
-              });
               req.files.map((file) => {
                 // console.log('ini cloudinary', file.filename.replace('public/images/products/', ''));
                 Product_Images.create({
@@ -362,6 +356,16 @@ exports.createProducts = async (req, res, next) => {
                 });
               });
               // console.log('ini produk id', product.id);
+              Notification.create({
+                product_id: getLatestProductId.id + 1,
+                bargain_price: null,
+                user_id: userId,
+                action_message: 'Berhasil diterbitkan',
+                additional_info_1: null,
+                additional_info_2: null,
+                // is_read: false,
+                // url: '/detail/' + product.slug,
+              });
               return res.status(201).json({
                 message: 'success',
                 product,
