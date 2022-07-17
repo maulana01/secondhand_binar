@@ -214,6 +214,7 @@ exports.getAllBySeller = async (req, res, next) => {
 
 exports.getProductDetailBySlug = (req, res, next) => {
   const slug = req.params.slug;
+  const authHeader = req.get('Authorization');
   Product.findOne({
     where: {
       slug,
@@ -237,17 +238,19 @@ exports.getProductDetailBySlug = (req, res, next) => {
   })
     .then((product) => {
       if (product) {
-        Notification.update(
-          {
-            is_read: true,
-          },
-          {
-            where: {
-              product_id: product.id,
-              user_id: req.userLoggedin.userId,
+        if (authHeader) {
+          Notification.update(
+            {
+              is_read: true,
             },
-          }
-        );
+            {
+              where: {
+                product_id: product.id,
+                user_id: req.userLoggedin.userId,
+              },
+            }
+          );
+        }
         res.status(200).json({
           message: 'success',
           product,
