@@ -305,7 +305,24 @@ paths:
           style: form
           explode: true
           schema:
-            type: string
+            type: integer
+          required: false
+        - name: page
+          in: query
+          description: Page number
+          style: form
+          explode: true
+          schema:
+            type: integer
+          required: false
+        - name: limit
+          in: query
+          description: Limit number of product per page
+          style: form
+          explode: true
+          schema:
+            type: integer
+          required: false
       responses:
         '200':
           description: Success Get All Product
