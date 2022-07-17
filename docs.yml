@@ -305,7 +305,7 @@ paths:
           style: form
           explode: true
           schema:
-            type: integer
+            type: string
           required: false
         - name: page
           in: query
