@@ -447,7 +447,7 @@ exports.updateProducts = async (req, res, next) => {
               console.log(result);
             });
           });
-          Product_Images.delete({
+          Product_Images.destroy({
             where: {
               product_id: getProduct.id,
             },
