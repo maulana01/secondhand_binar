@@ -86,7 +86,7 @@ exports.getAllNotification = (req, res, next) => {
             return notif.product_notification.product_images[notif.product_notification.product_images.length - 1].product_images_path;
           }),
           createdAt: notification.map((notif) => {
-            const date = moment(notif.createdAt, 'h:mm:ss A').locale('id').format('DD MMMM, h:mm');
+            const date = moment(notif.createdAt, 'h:mm:ss A').locale('id').format('DD MMM, h:mm');
             return date;
           }),
         },
