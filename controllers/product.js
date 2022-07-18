@@ -391,16 +391,17 @@ exports.updateProducts = async (req, res, next) => {
       slug,
     },
   });
-  const getDataProductImage = await Product_Images.findAll({
-    where: {
-      product_id: getProduct.id,
-    },
-  });
+  console.log('ini get product update', getProduct);
   if (!getProduct) {
     res.status(404).json({
       message: 'Product not found',
     });
   } else {
+    const getDataProductImage = await Product_Images.findAll({
+      where: {
+        product_id: getProduct.id,
+      },
+    });
     // console.log('ini getproductid', getProduct);
     // const total_product_images = await Product_Images.count({
     //   where: {
