@@ -442,7 +442,7 @@ exports.updateProducts = async (req, res, next) => {
           //   });
           // } else {
           // console.log('ini get dataproductimage update', getDataProductImage);
-          getDataProductImage.map((data) => {
+          getDataProductImage.forEach((data, index) => {
             cloudinary.uploader.destroy(`public/images/products/${data.product_images_name}`, function (result) {
               console.log(result);
             });
