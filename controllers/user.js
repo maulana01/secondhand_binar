@@ -41,7 +41,7 @@ exports.getAll = (req, res, next) => {
     .catch((error) => {
       res.status(500).json({
         message: 'failed',
-        error,
+        error: error.message,
       });
     });
 };
@@ -92,6 +92,7 @@ exports.getBySlug = async (req, res, next) => {
         phone_number: user.phone_number,
         city_id: user.city_id,
         createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
       },
     });
   } else {
@@ -118,11 +119,12 @@ exports.getMyProfile = (req, res, next) => {
           phone_number: user.phone_number,
           city_id: user.city_id,
           createdAt: user.createdAt,
+          updatedAt: user.updatedAt,
         },
       });
     })
     .catch((err) => {
-      res.status(404).json({ message: 'failed', error: err.message });
+      res.status(500).json({ message: 'failed', error: err.message });
     });
 };
 
@@ -193,7 +195,7 @@ exports.update = async (req, res, next) => {
     },
   })
     .then((result) => res.status(202).json({ message: 'success', result }))
-    .catch((error) => res.status(402).json({ message: 'failed', error: error.message }));
+    .catch((error) => res.status(500).json({ message: 'failed', error: error.message }));
 };
 
 exports.delete = async (req, res, next) => {
@@ -218,7 +220,7 @@ exports.delete = async (req, res, next) => {
         return res.status(404).json({ message: 'User not found' });
       }
     })
-    .catch((error) => res.status(402).json({ message: 'failed', error }));
+    .catch((error) => res.status(500).json({ message: 'failed', error }));
 };
 
 exports.uploadAvatar = async (req, res, next) => {
@@ -253,7 +255,7 @@ exports.uploadAvatar = async (req, res, next) => {
     }
   )
     .then((user) => res.status(201).json({ message: 'success', user }))
-    .catch((error) => res.status(402).json({ message: 'failed', error }));
+    .catch((error) => res.status(500).json({ message: 'failed', error }));
 };
 
 exports.resetPassword = async (req, res, next) => {
@@ -280,7 +282,7 @@ exports.resetPassword = async (req, res, next) => {
         data: { userId: id },
       })
     )
-    .catch((error) => res.status(402).json({ message: 'failed', error }));
+    .catch((error) => res.status(500).json({ message: 'failed', error }));
 };
 
 exports.forgotPassword = async (req, res, next) => {
