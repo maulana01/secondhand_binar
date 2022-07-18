@@ -442,15 +442,15 @@ exports.updateProducts = async (req, res, next) => {
           //   });
           // } else {
           // console.log('ini get dataproductimage update', getDataProductImage);
-          Product_Images.delete({
-            where: {
-              product_id: getProduct.id,
-            },
-          });
           getDataProductImage.forEach((data, index) => {
             cloudinary.uploader.destroy(`public/images/products/${data.product_images_name}`, function (result) {
               console.log(result);
             });
+          });
+          Product_Images.delete({
+            where: {
+              product_id: getProduct.id,
+            },
           });
           req.files.map((file) => {
             Product_Images.create({
