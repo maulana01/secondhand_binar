@@ -578,7 +578,7 @@ exports.createDiscProduct = async (req, res, next) => {
         additional_info_1: 'Ditawar ',
         additional_info_2: null,
         is_read: false,
-        url: `/tawaran/${disc_product.id}`,
+        url: `/dashboard/tawaran/${disc_product.id}`,
       });
       Notification.create({
         product_id,
@@ -588,7 +588,7 @@ exports.createDiscProduct = async (req, res, next) => {
         additional_info_1: 'Ditawar ',
         additional_info_2: null,
         is_read: false,
-        url: `/tawaran/${disc_product.id}`,
+        url: `/dashboard/tawaran/${disc_product.id}`,
       });
 
       res.status(200).json({
@@ -654,7 +654,7 @@ exports.acceptDiscProduct = async (req, res, next) => {
         additional_info_1: 'Berhasil Ditawar ',
         additional_info_2: 'Kamu akan segera dihubungi penjual via whatsapp',
         is_read: false,
-        url: `/tawaran/${getDiscProductOffer.id}`,
+        url: `/dashboard/tawaran/${getDiscProductOffer.id}`,
       });
       res.status(200).json({
         message: 'success',
@@ -698,7 +698,7 @@ exports.rejectDiscProduct = async (req, res, next) => {
         additional_info_1: 'Tawaran Ditolak ',
         additional_info_2: 'Harap tawar ulang atau pilih produk lain.',
         is_read: false,
-        url: `/tawaran/${getDiscProductOffer.id}`,
+        url: `/dashboard/tawaran/${getDiscProductOffer.id}`,
       });
       res.status(200).json({
         message: 'success',
