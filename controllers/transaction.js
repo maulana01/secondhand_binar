@@ -201,6 +201,10 @@ exports.getById = (req, res, next) => {
             model: Product_Images,
             as: 'product_images',
           },
+          {
+            model: Category,
+            as: 'category_product',
+          },
         ],
       },
       {
@@ -294,6 +298,10 @@ exports.getByBuyer = (req, res, next) => {
             model: Product_Images,
             as: 'product_images',
           },
+          {
+            model: Category,
+            as: 'category_product',
+          },
         ],
       },
       {
@@ -336,6 +344,10 @@ exports.getBySeller = (req, res, next) => {
           {
             model: Product_Images,
             as: 'product_images',
+          },
+          {
+            model: Category,
+            as: 'category_product',
           },
         ],
       },

@@ -194,7 +194,7 @@ exports.update = async (req, res, next) => {
       id: userId,
     },
   })
-    .then((result) => res.status(202).json({ message: 'success', result }))
+    .then((result) => res.status(200).json({ message: 'success', result }))
     .catch((error) => res.status(500).json({ message: 'failed', error: error.message }));
 };
 
@@ -215,7 +215,7 @@ exports.delete = async (req, res, next) => {
   })
     .then((user) => {
       if (user) {
-        return res.status(202).json({ message: 'success', user });
+        return res.status(200).json({ message: 'success', user });
       } else {
         return res.status(404).json({ message: 'User not found' });
       }
@@ -254,7 +254,7 @@ exports.uploadAvatar = async (req, res, next) => {
       },
     }
   )
-    .then((user) => res.status(201).json({ message: 'success', user }))
+    .then((user) => res.status(200).json({ message: 'success', user }))
     .catch((error) => res.status(500).json({ message: 'failed', error }));
 };
 
@@ -265,7 +265,7 @@ exports.resetPassword = async (req, res, next) => {
 
   const user = await User.findByPk(id);
   if (!user) {
-    return res.status(500).json({
+    return res.status(404).json({
       message: 'User not found',
     });
   }
@@ -277,12 +277,12 @@ exports.resetPassword = async (req, res, next) => {
     }
   )
     .then((user) =>
-      res.status(201).json({
+      res.status(200).json({
         message: 'Password changed successfully',
         data: { userId: id },
       })
     )
-    .catch((error) => res.status(500).json({ message: 'failed', error }));
+    .catch((error) => res.status(500).json({ message: 'failed', error: error.message }));
 };
 
 exports.forgotPassword = async (req, res, next) => {

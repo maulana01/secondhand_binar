@@ -6,7 +6,7 @@ const disc_product_offer_path = '/api/v1/disc-product-offer';
 const IsAuth = require('../middleware/is-auth');
 const IsProfileFilled = require('../middleware/is-profile-filled');
 
-router.get(`${disc_product_offer_path}`, IsAuth, DiscProductOfferCtl.getAll);
+router.get(`${disc_product_offer_path}`, DiscProductOfferCtl.getAll);
 router.get(`${disc_product_offer_path}/seller`, IsAuth, DiscProductOfferCtl.getBySeller);
 router.get(`${disc_product_offer_path}/seller/status/pending`, IsAuth, DiscProductOfferCtl.getAllStatusPendingSeller);
 router.get(`${disc_product_offer_path}/seller/status/accepted`, IsAuth, DiscProductOfferCtl.getAllStatusAcceptedSeller);

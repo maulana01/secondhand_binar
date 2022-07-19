@@ -62,7 +62,6 @@ exports.getBySlug = (req, res, next) => {
       } else {
         res.status(404).json({
           message: 'not found',
-          category,
         });
       }
     })

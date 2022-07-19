@@ -11,19 +11,19 @@ exports.signup = async (req, res, next) => {
   // const username = name.trim().replace(/\s+/g, '-').toLowerCase();
 
   if (!name || !email || !password) {
-    return res.status(401).json({
+    return res.status(400).json({
       message: 'Please provide name, email and password.',
     });
   } else {
     const hashedPassword = await bcrypt.hash(password, 12);
     if (!MailChecker.isValid(email)) {
-      return res.status(401).json({
+      return res.status(400).json({
         message: 'Please provide a valid email.',
       });
     } else {
       await User.findOne({ where: { email } }).then((user) => {
         if (user) {
-          return res.status(401).json({
+          return res.status(400).json({
             message: 'Email already exists.',
           });
         } else {
@@ -54,7 +54,7 @@ exports.signup = async (req, res, next) => {
 exports.login = async (req, res, next) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    return res.status(401).json({
+    return res.status(400).json({
       message: 'Please provide email and password.',
     });
   } else {
@@ -63,7 +63,7 @@ exports.login = async (req, res, next) => {
     // console.log('ini hasil user', user);
 
     if (!user) {
-      return res.status(401).json({
+      return res.status(400).json({
         message: 'User not found.',
       });
     }
@@ -71,7 +71,7 @@ exports.login = async (req, res, next) => {
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      return res.status(401).json({
+      return res.status(400).json({
         message: 'Invalid password.',
       });
     }

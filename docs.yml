@@ -44,20 +44,27 @@ paths:
               $ref: '#/components/schemas/Signup'
         required: true
       responses:
-        '200':
-          description: When User successfully signup
+        '201':
+          description: Successfully signup
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseSuccessSignup'
-        '401':
-          description: When there's an error due to some condition
+        '400':
+          description: Failed due to some condition
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseFailed401Signup'
+              examples:
+                'Invalid Email':
+                  value:
+                    message: 'Please provide a valid email.'
+                'Null Payload / Request Body':
+                  value:
+                    message: Please provide name, email and password.
         '500':
-          description: When there's an error from the servers
+          description: Failed when there's an error from the servers
           content:
             application/json:
               schema:
@@ -78,17 +85,27 @@ paths:
         required: true
       responses:
         '200':
-          description: When User successfully Login
+          description: Successfully login
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseSuccessLogin'
-        '401':
-          description: When there's an error due to some condition
+        '400':
+          description: Failed due to some condition
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseFailed401Login'
+                $ref: '#/components/schemas/ResponseFailed400Login'
+              examples:
+                'Unknown User':
+                  value:
+                    message: 'User not found.'
+                'Invalid password.':
+                  value:
+                    message: 'Please provide a valid password.'
+                'Null Payload / Request Body':
+                  value:
+                    message: Please provide email and password.
   /user/all:
     get:
       tags:
@@ -98,9 +115,17 @@ paths:
       operationId: 'getAllUsers'
       responses:
         '200':
-          description: Success Get Your Own Profile
+          description: Successfully Get All Users
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200GetAllUser'
         '500':
-          description: Failed due to expired token
+          description: Failed when there's an error from the servers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500GetAllUser'
   /user/my-profile:
     get:
       tags:
@@ -113,8 +138,28 @@ paths:
       responses:
         '200':
           description: Success Get Your Own Profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200GetMyProfile'
+        '401':
+          description: Failed due to not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed401MiddlewareIsAuth'
+        '404':
+          description: Failed user not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500GetMyProfile'
         '500':
-          description: Failed due to expired token
+          description: Failed when there's an error from the servers or token expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500GetMyProfile'
   /user/{slug}:
     get:
       tags:
@@ -132,8 +177,16 @@ paths:
       responses:
         '200':
           description: Success Get Seller Profile
-        '500':
-          description: Failed due to expired token or not found seller
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200GetSellerProfile'
+        '404':
+          description: Failed user not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed404GetSellerProfile'
   /user/update:
     put:
       tags:
@@ -164,8 +217,36 @@ paths:
       responses:
         '200':
           description: Success Update User Profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200UpdateProfile'
+        '401':
+          description: Failed due to not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed401MiddlewareIsAuth'
+        '404':
+          description: Failed user not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed404UpdateProfile'
         '500':
-          description: Failed due to expired token or another Failed condition
+          description: Failed when there's an error from the servers or expired token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500UpdateProfile'
+              examples:
+                'Token Expired':
+                  value:
+                    message: 'jwt expired'
+                'Server Error':
+                  value:
+                    message: failed
+                    error: error message
   /user/password/forgot:
     post:
       tags:
@@ -185,8 +266,16 @@ paths:
       responses:
         '200':
           description: Success Send Email Forgot Password
-        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200ForgotPassword'
+        '404':
           description: Failed Send Email due to some failed condition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed404ForgotPassword'
   /user/otp/verify:
     post:
       tags:
@@ -206,8 +295,16 @@ paths:
       responses:
         '200':
           description: Success Verify OTP
-        '500':
-          description: Failed Verify OTP due to some failed condition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200VerifyOtp'
+        '404':
+          description: Failed due to Invalid OTP
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed404VerifyOtp'
   /user/password/reset/{id}:
     post:
       tags:
@@ -234,8 +331,22 @@ paths:
       responses:
         '200':
           description: Success Reset User Password
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200ResetPassword'
+        '404':
+          description: Failed due to user not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed404ResetPassword'
         '500':
-          description: Failed Reset Password due to some failed condition
+          description: Failed when there's an error from the servers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500ResetPassword'
   /category:
     get:
       tags:
@@ -246,8 +357,16 @@ paths:
       responses:
         '200':
           description: Success Get All Category
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200GetAllCategory'
         '500':
-          description: Failed due to no category exists
+          description: Failed when there's an error from the servers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500GetAllCategory'
   /category/{slug}:
     get:
       tags:
@@ -258,8 +377,22 @@ paths:
       responses:
         '200':
           description: Success Get Category By Slug
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200GetCategoryBySlug'
+        '404':
+          description: Failed due to category not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed404GetCategoryBySlug'
         '500':
-          description: Failed due to no category exists
+          description: Failed when there's an error from the servers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500GetCategoryBySlug'
   /city:
     get:
       tags:
@@ -270,8 +403,16 @@ paths:
       responses:
         '200':
           description: Success Get All City
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200GetAllCity'
         '500':
-          description: Failed due to no city exists
+          description: Failed when there's an error from the servers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500GetAllCity'
   /city/{id}:
     get:
       tags:
@@ -289,8 +430,22 @@ paths:
       responses:
         '200':
           description: Success Get City By ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200GetCityById'
+        '404':
+          description: Failed due to city not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed404GetCityById'
         '500':
-          description: Failed due to no city exists
+          description: Failed when there's an error from the servers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500GetCityById'
   /product:
     get:
       tags:
@@ -326,8 +481,22 @@ paths:
       responses:
         '200':
           description: Success Get All Product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200GetAllProduct'
+        '404':
+          description: Failed due to product page does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed404PageNotFoundGetAllProduct'
         '500':
-          description: Failed due to no product exists
+          description: Failed when there's an error from the servers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500GetAllProduct'
     post:
       tags:
         - Product
@@ -359,8 +528,55 @@ paths:
       responses:
         '200':
           description: Success Post Product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200PostProduct'
+        '400':
+          description: Failed due to bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed400PostProduct'
+              examples:
+                'Null Payload / Request Body':
+                  value:
+                    message: Please fill all required fields
+                'No Image Upload':
+                  value:
+                    message: Please upload at least one image
+                'Upload Image More than 4 Files':
+                  value:
+                    message: You can only upload up to 4 images
+                'Post More than 4 Unsold Product':
+                  value:
+                    message: You can only sell 4 products
+        '401':
+          description: Failed due to not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed401MiddlewareIsAuth'
+        '403':
+          description: Failed when user's profile is not filled.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed403MiddlewareIsProfileFilled'
         '500':
-          description: Failed post product due to some error condition
+          description: Failed when there's an error from the servers or token expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500PostProduct'
+              examples:
+                'Token Expired':
+                  value:
+                    message: 'jwt expired'
+                'Server Error':
+                  value:
+                    message: failed
+                    error: error message
   /product/{slug}:
     get:
       tags:
@@ -378,8 +594,22 @@ paths:
       responses:
         '200':
           description: Success Get Product By Slug
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200GetProductBySlug'
+        '404':
+          description: Failed due to product not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed404GetProductBySlug'
         '500':
-          description: Failed due to no product exists
+          description: Failed when there's an error from the servers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500GetProductBySlug'
     put:
       tags:
         - Product
@@ -418,8 +648,61 @@ paths:
       responses:
         '200':
           description: Success Put Product By Slug
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200PutProductBySlug'
+              examples:
+                'Update Product without new image':
+                  value:
+                    message: success
+                    product:
+                      - 1
+                'Update Product with new image':
+                  value:
+                    message: success
+                    product:
+                      - 1
+                    product_images:
+                      - fieldname: product_images_name
+                        originalname: images1.jpg
+                        encoding: 7bit
+                        mimetype: image/jpeg
+                        path: https://res.cloudinary.com/dcdu2v41u/image/upload/v1658135591/public/images/products/uxpakhku6zfcaisqqu5z.jpg
+                        size: 5242880
+                        filename: public/images/products/uxpakhku6zfcaisqqu5z
+        '401':
+          description: Failed due to not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed401MiddlewareIsAuth'
+        '403':
+          description: Failed when user's profile is not filled.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed403MiddlewareIsProfileFilled'
+        '404':
+          description: Failed due to product not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed404PutProductBySlug'
         '500':
-          description: Failed due to no product exists or error due to some error condition
+          description: Failed when there's an error from the servers or token expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500PutProductBySlug'
+              examples:
+                'Token Expired':
+                  value:
+                    message: 'jwt expired'
+                'Server Error':
+                  value:
+                    message: failed
+                    error: error message
     delete:
       tags:
         - Product
@@ -437,9 +720,43 @@ paths:
         - Bearer: []
       responses:
         '200':
-          description: Success Put Product By Slug
+          description: Success Delete Product By Slug
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200DeleteProductBySlug'
+        '401':
+          description: Failed due to not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed401MiddlewareIsAuth'
+        '403':
+          description: Failed when user's profile is not filled.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed403MiddlewareIsProfileFilled'
+        '404':
+          description: Failed due to product not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed404DeleteProductBySlug'
         '500':
-          description: Failed due to no product exists or error due to some error condition
+          description: Failed when there's an error from the servers or token expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500DeleteProductBySlug'
+              examples:
+                'Token Expired':
+                  value:
+                    message: 'jwt expired'
+                'Server Error':
+                  value:
+                    message: failed
+                    error: error message
   /product/category/{slug}:
     get:
       tags:
@@ -457,9 +774,23 @@ paths:
       responses:
         '200':
           description: Success Get Product By Slug Category
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200GetProductBySlugCategory'
+        '404':
+          description: Failed due to product not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed404GetProductBySlugCategory'
         '500':
-          description: Failed due to no product
-  /product/user/{slug}:
+          description: Failed when there's an error from the servers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500GetProductBySlugCategory'
+  /product/user/{id}:
     get:
       tags:
         - Product
@@ -467,17 +798,38 @@ paths:
       description: ''
       operationId: 'getAllProductBySeller'
       parameters:
-        - name: slug
+        - name: id
           in: path
           description: Slug Seller of product to return
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         '200':
           description: Success Get Product By Slug Seller
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200GetProductByUser'
+        '404':
+          description: Failed due to product not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed404GetProductByUser'
+              examples:
+                'Page Not Found':
+                  value:
+                    message: The page you are looking for does not exist
+                'Seller Not Exist':
+                  value:
+                    message: The seller you are looking for does not exist
         '500':
-          description: Failed due to no product
+          description: Failed when there's an error from the servers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500GetProductByUser'
   /wishlist:
     get:
       tags:
@@ -490,8 +842,30 @@ paths:
       responses:
         '200':
           description: Success Get All Wishlist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200GetAllWishlist'
+        '401':
+          description: Failed due to not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed401MiddlewareIsAuth'
         '500':
-          description: Failed due to no wishlist exists
+          description: Failed when there's an error from the servers or token expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500GetAllWishlist'
+              examples:
+                'Token Expired':
+                  value:
+                    message: 'jwt expired'
+                'Server Error':
+                  value:
+                    message: failed
+                    error: error message
     post:
       tags:
         - Wishlist
@@ -513,6 +887,30 @@ paths:
       responses:
         '200':
           description: Success Post wishlist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200PostWishlist'
+        '401':
+          description: Failed due to not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed401MiddlewareIsAuth'
+        '500':
+          description: Failed when there's an error from the servers or token expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500PostWishlist'
+              examples:
+                'Token Expired':
+                  value:
+                    message: 'jwt expired'
+                'Server Error':
+                  value:
+                    message: failed
+                    error: error message
   /wishlist/{id}:
     delete:
       tags:
@@ -532,8 +930,36 @@ paths:
       responses:
         '200':
           description: Success Delete Wishlist By ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200DeleteWishlistById'
+        '401':
+          description: Failed due to not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed401MiddlewareIsAuth'
+        '404':
+          description: Failed due to wishlist not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed404DeleteWishlistById'
         '500':
-          description: Failed due to no wishlist exists
+          description: Failed when there's an error from the servers or token expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500DeleteWishlistById'
+              examples:
+                'Token Expired':
+                  value:
+                    message: jwt expired
+                'Server Error':
+                  value:
+                    message: failed
+                    error: error message
   /notification:
     get:
       tags:
@@ -546,8 +972,30 @@ paths:
       responses:
         '200':
           description: Success Get All Notification
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200GetAllNotificationByUserLoggedIn'
+        '401':
+          description: Failed due to not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed401MiddlewareIsAuth'
         '500':
-          description: Failed due to no notification exists
+          description: Failed when there's an error from the servers or token expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500GetAllNotificationByUserLoggedIn'
+              examples:
+                'Token Expired':
+                  value:
+                    message: jwt expired
+                'Server Error':
+                  value:
+                    message: failed
+                    error: error message
   /notification/all:
     get:
       tags:
@@ -558,8 +1006,16 @@ paths:
       responses:
         '200':
           description: Success Get All Notification
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200GetAllNotification'
         '500':
-          description: Failed due to no notification exists
+          description: Failed when there's an error from the servers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500GetAllNotification'
   /disc-product-offer:
     get:
       tags:
@@ -567,13 +1023,19 @@ paths:
       summary: Get All DiscProductOffer
       description: ''
       operationId: 'getAllDiscProductOffer'
-      security:
-        - Bearer: []
       responses:
         '200':
           description: Success Get All DiscProductOffer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200GetAllDiscProductOffer'
         '500':
-          description: Failed due to no disc product offer exists
+          description: Failed when there's an error from the servers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500GetAllDiscProductOffer'
     post:
       tags:
         - Discount Product Offer
@@ -599,8 +1061,36 @@ paths:
       responses:
         '200':
           description: Success Post DiscProductOffer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200PostDiscProductOffer'
+        '401':
+          description: Failed due to not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed401MiddlewareIsAuth'
+        '403':
+          description: Failed when user's profile is not filled.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed403MiddlewareIsProfileFilled'
         '500':
-          description: Failed due to no disc product offer exists
+          description: Failed when there's an error from the servers or token expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500PostDiscProductOffer'
+              examples:
+                'Token Expired':
+                  value:
+                    message: jwt expired
+                'Server Error':
+                  value:
+                    message: failed
+                    error: error message
   /disc-product-offer/{id}:
     get:
       tags:
@@ -620,8 +1110,22 @@ paths:
       responses:
         '200':
           description: Success Get DiscProductOffer By ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200GetDiscProductOfferById'
+        '401':
+          description: Failed due to not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed401MiddlewareIsAuth'
         '500':
-          description: Failed due to no disc product offer exists
+          description: Failed when there's an error from the servers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500GetDiscProductOfferById'
     delete:
       tags:
         - Discount Product Offer
@@ -640,8 +1144,36 @@ paths:
       responses:
         '200':
           description: Success Delete DiscProductOffer By ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200DeleteDiscProductOfferById'
+        '401':
+          description: Failed due to not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed401MiddlewareIsAuth'
+        '403':
+          description: Failed when user's profile is not filled.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed403MiddlewareIsProfileFilled'
         '500':
-          description: Failed due to no disc product offer exists
+          description: Failed when there's an error from the servers or token expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500DeleteDiscProductOfferById'
+              examples:
+                'Token Expired':
+                  value:
+                    message: jwt expired
+                'Server Error':
+                  value:
+                    message: failed
+                    error: error message
   /disc-product-offer/accept/{user_id}:
     put:
       tags:
@@ -671,8 +1203,36 @@ paths:
       responses:
         '200':
           description: Success Update DiscProductOffer Accept
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200UpdateDiscProductOfferAccept'
+        '401':
+          description: Failed due to not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed401MiddlewareIsAuth'
+        '403':
+          description: Failed when user's profile is not filled.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed403MiddlewareIsProfileFilled'
         '500':
-          description: Failed due to no disc product offer exists
+          description: Failed when there's an error from the servers or token expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500UpdateDiscProductOfferAccept'
+              examples:
+                'Token Expired':
+                  value:
+                    message: jwt expired
+                'Server Error':
+                  value:
+                    message: failed
+                    error: error message
   /disc-product-offer/reject/{user_id}:
     put:
       tags:
@@ -702,8 +1262,36 @@ paths:
       responses:
         '200':
           description: Success Update DiscProductOffer Reject
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200UpdateDiscProductOfferReject'
+        '401':
+          description: Failed due to not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed401MiddlewareIsAuth'
+        '403':
+          description: Failed when user's profile is not filled.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed403MiddlewareIsProfileFilled'
         '500':
-          description: Failed due to no disc product offer exists
+          description: Failed when there's an error from the servers or token expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500UpdateDiscProductOfferReject'
+              examples:
+                'Token Expired':
+                  value:
+                    message: jwt expired
+                'Server Error':
+                  value:
+                    message: failed
+                    error: error message
   /disc-product-offer/bidder:
     get:
       tags:
@@ -716,8 +1304,30 @@ paths:
       responses:
         '200':
           description: Success Get All DiscProductOffer By Bidder
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200GetAllDiscProductOfferByBidder'
+        '401':
+          description: Failed due to not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed401MiddlewareIsAuth'
         '500':
-          description: Failed due to no disc product offer exists
+          description: Failed when there's an error from the servers or token expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500GetAllDiscProductOfferByBidder'
+              examples:
+                'Token Expired':
+                  value:
+                    message: jwt expired
+                'Server Error':
+                  value:
+                    message: failed
+                    error: error message
   /disc-product-offer/bidder/status/pending:
     get:
       tags:
@@ -730,8 +1340,30 @@ paths:
       responses:
         '200':
           description: Success Get All DiscProductOffer By Bidder Pending Status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200GetAllDiscProductOfferByBidderPendingStatus'
+        '401':
+          description: Failed due to not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed401MiddlewareIsAuth'
         '500':
-          description: Failed due to no disc product offer exists
+          description: Failed when there's an error from the servers or token expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500GetAllDiscProductOfferByBidderPendingStatus'
+              examples:
+                'Token Expired':
+                  value:
+                    message: jwt expired
+                'Server Error':
+                  value:
+                    message: failed
+                    error: error message
   /disc-product-offer/bidder/status/accepted:
     get:
       tags:
@@ -744,8 +1376,30 @@ paths:
       responses:
         '200':
           description: Success Get All DiscProductOffer By Bidder Accepted Status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200GetAllDiscProductOfferByBidderAcceptedStatus'
+        '401':
+          description: Failed due to not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed401MiddlewareIsAuth'
         '500':
-          description: Failed due to no disc product offer exists
+          description: Failed when there's an error from the servers or token expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500GetAllDiscProductOfferByBidderAcceptedStatus'
+              examples:
+                'Token Expired':
+                  value:
+                    message: jwt expired
+                'Server Error':
+                  value:
+                    message: failed
+                    error: error message
   /disc-product-offer/bidder/status/rejected:
     get:
       tags:
@@ -758,8 +1412,30 @@ paths:
       responses:
         '200':
           description: Success Get All DiscProductOffer By Bidder Rejected Status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200GetAllDiscProductOfferByBidderRejectedStatus'
+        '401':
+          description: Failed due to not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed401MiddlewareIsAuth'
         '500':
-          description: Failed due to no disc product offer exists
+          description: Failed when there's an error from the servers or token expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500GetAllDiscProductOfferByBidderRejectedStatus'
+              examples:
+                'Token Expired':
+                  value:
+                    message: jwt expired
+                'Server Error':
+                  value:
+                    message: failed
+                    error: error message
   /disc-product-offer/seller:
     get:
       tags:
@@ -772,8 +1448,30 @@ paths:
       responses:
         '200':
           description: Success Get All DiscProductOffer By Seller
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200GetAllDiscProductOfferBySeller'
+        '401':
+          description: Failed due to not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed401MiddlewareIsAuth'
         '500':
-          description: Failed due to no disc product offer exists
+          description: Failed when there's an error from the servers or token expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500GetAllDiscProductOfferBySeller'
+              examples:
+                'Token Expired':
+                  value:
+                    message: jwt expired
+                'Server Error':
+                  value:
+                    message: failed
+                    error: error message
   /disc-product-offer/seller/status/pending:
     get:
       tags:
@@ -786,8 +1484,30 @@ paths:
       responses:
         '200':
           description: Success Get All DiscProductOffer By Seller Pending Status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200GetAllDiscProductOfferBySellerPendingStatus'
+        '401':
+          description: Failed due to not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed401MiddlewareIsAuth'
         '500':
-          description: Failed due to no disc product offer exists
+          description: Failed when there's an error from the servers or token expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500GetAllDiscProductOfferBySellerPendingStatus'
+              examples:
+                'Token Expired':
+                  value:
+                    message: jwt expired
+                'Server Error':
+                  value:
+                    message: failed
+                    error: error message
   /disc-product-offer/seller/status/accepted:
     get:
       tags:
@@ -800,8 +1520,30 @@ paths:
       responses:
         '200':
           description: Success Get All DiscProductOffer By Seller Accepted Status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200GetAllDiscProductOfferBySellerAcceptedStatus'
+        '401':
+          description: Failed due to not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed401MiddlewareIsAuth'
         '500':
-          description: Failed due to no disc product offer exists
+          description: Failed when there's an error from the servers or token expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500GetAllDiscProductOfferBySellerAcceptedStatus'
+              examples:
+                'Token Expired':
+                  value:
+                    message: jwt expired
+                'Server Error':
+                  value:
+                    message: failed
+                    error: error message
   /disc-product-offer/seller/status/rejected:
     get:
       tags:
@@ -814,8 +1556,30 @@ paths:
       responses:
         '200':
           description: Success Get All DiscProductOffer By Seller Rejected Status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200GetAllDiscProductOfferBySellerRejectedStatus'
+        '401':
+          description: Failed due to not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed401MiddlewareIsAuth'
         '500':
-          description: Failed due to no disc product offer exists
+          description: Failed when there's an error from the servers or token expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500GetAllDiscProductOfferBySellerRejectedStatus'
+              examples:
+                'Token Expired':
+                  value:
+                    message: jwt expired
+                'Server Error':
+                  value:
+                    message: failed
+                    error: error message
   /transaction:
     get:
       tags:
@@ -828,8 +1592,30 @@ paths:
       responses:
         '200':
           description: Success Get All Transaction
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200GetAllTransaction'
+        '401':
+          description: Failed due to not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed401MiddlewareIsAuth'
         '500':
-          description: Failed due to no transaction exists
+          description: Failed when there's an error from the servers or token expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500GetAllTransaction'
+              examples:
+                'Token Expired':
+                  value:
+                    message: jwt expired
+                'Server Error':
+                  value:
+                    message: failed
+                    error: error message
   /transaction/buyer:
     get:
       tags:
@@ -842,8 +1628,30 @@ paths:
       responses:
         '200':
           description: Success Get All Transaction By Buyer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200GetAllTransactionByBuyer'
+        '401':
+          description: Failed due to not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed401MiddlewareIsAuth'
         '500':
-          description: Failed due to no transaction exists
+          description: Failed when there's an error from the servers or token expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500GetAllTransactionByBuyer'
+              examples:
+                'Token Expired':
+                  value:
+                    message: jwt expired
+                'Server Error':
+                  value:
+                    message: failed
+                    error: error message
   /transaction/seller:
     get:
       tags:
@@ -856,8 +1664,30 @@ paths:
       responses:
         '200':
           description: Success Get All Transaction By Seller
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200GetAllTransactionBySeller'
+        '401':
+          description: Failed due to not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed401MiddlewareIsAuth'
         '500':
-          description: Failed due to no transaction exists
+          description: Failed when there's an error from the servers or token expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500GetAllTransactionBySeller'
+              examples:
+                'Token Expired':
+                  value:
+                    message: jwt expired
+                'Server Error':
+                  value:
+                    message: failed
+                    error: error message
   /transaction/{id}:
     get:
       tags:
@@ -877,8 +1707,36 @@ paths:
       responses:
         '200':
           description: Success Get Transaction By ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200GetTransactionById'
+        '401':
+          description: Failed due to not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed401MiddlewareIsAuth'
+        '404':
+          description: Failed due to transaction not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed404GetTransactionById'
         '500':
-          description: Failed due to no transaction exists
+          description: Failed when there's an error from the servers or token expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500GetTransactionById'
+              examples:
+                'Token Expired':
+                  value:
+                    message: jwt expired
+                'Server Error':
+                  value:
+                    message: failed
+                    error: error message
   /transaction/success/{product_id}:
     put:
       tags:
@@ -908,8 +1766,30 @@ paths:
       responses:
         '200':
           description: Success Update Transaction Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200FinishTransaction'
+        '401':
+          description: Failed due to not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed401MiddlewareIsAuth'
         '500':
-          description: Failed due to no transaction exists
+          description: Failed when there's an error from the servers or token expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500FinishTransaction'
+              examples:
+                'Token Expired':
+                  value:
+                    message: jwt expired
+                'Server Error':
+                  value:
+                    message: failed
+                    error: error message
   /transaction/cancel/{product_id}:
     put:
       tags:
@@ -939,14 +1819,496 @@ paths:
       responses:
         '200':
           description: Success Update Transaction Cancel
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200FinishTransaction'
+        '401':
+          description: Failed due to not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed401MiddlewareIsAuth'
         '500':
-          description: Failed due to no transaction exists
+          description: Failed when there's an error from the servers or token expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500FinishTransaction'
+              examples:
+                'Token Expired':
+                  value:
+                    message: jwt expired
+                'Server Error':
+                  value:
+                    message: failed
+                    error: error message
 components:
   securitySchemes:
     Bearer:
       type: http
       scheme: bearer
   schemas:
+    RequestFile:
+      properties:
+        fieldname:
+          type: string
+          default: product_images_name
+        originalname:
+          type: string
+          default: images1.jpg
+        encoding:
+          type: string
+          default: 7bit
+        mimetype:
+          type: string
+          default: image/jpeg
+        path:
+          type: string
+          default: https://res.cloudinary.com/dcdu2v41u/image/upload/v1658135591/public/images/products/uxpakhku6zfcaisqqu5z.jpg
+        size:
+          type: integer
+          format: int32
+          default: 5242880
+        filename:
+          type: string
+          default: public/images/products/uxpakhku6zfcaisqqu5z
+    ResponseUserPayload:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          default: 1
+        name:
+          type: string
+          default: Maulana Imam Malik
+        email:
+          type: string
+          default: maulanaimammalik4@gmail.com
+        slug:
+          type: string
+          default: maulanaimammalik
+        address:
+          type: string
+          default: Jl. Raya Cimanggis No.1
+        profile_picture:
+          type: string
+          default: sdkymltvji5dzqygdtrl
+        profile_picture_path:
+          type: string
+          default: https://res.cloudinary.com/dcdu2v41u/image/upload/v1658042555/public/images/avatar/sdkymltvji5dzqygdtrl.jpg
+        phone_number:
+          type: string
+          default: 6281234567890
+        city_id:
+          type: integer
+          default: 12
+        createdAt:
+          type: string
+          default: 2020-06-22 12:59:35
+        updatedAt:
+          type: string
+          default: 2020-06-22 12:59:35
+    ResponseCategoryPayload:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          default: 5
+        category_name:
+          type: string
+          default: Kesehatan
+        category_desc:
+          type: string
+          default: Kategori Kesehatan
+        slug:
+          type: string
+          default: kesehatan
+        createdAt:
+          type: string
+          default: 2020-06-22 12:59:35
+        updatedAt:
+          type: string
+          default: 2020-06-22 12:59:35
+    ResponseCityPayload:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          default: 12
+        city:
+          type: string
+          default: Bandung
+        province:
+          type: string
+          default: Jawa Barat
+        createdAt:
+          type: string
+          default: 2020-06-22 12:59:35
+        updatedAt:
+          type: string
+          default: 2020-06-22 12:59:35
+    ResponseProductImagesPayload:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          default: 1
+        product_images_name:
+          type: string
+          default: sdkymltvji5dzqygdtrl
+        product_images_path:
+          type: string
+          default: https://res.cloudinary.com/dcdu2v41u/image/upload/v1658042555/public/images/product/sdkymltvji5dzqygdtrl.jpg
+        product_id:
+          type: integer
+          format: int32
+          default: 1
+        createdAt:
+          type: string
+          default: 2020-06-22 12:59:35
+        updatedAt:
+          type: string
+          default: 2020-06-22 12:59:35
+    ResponseProductWithImagesPayload:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          default: 1
+        product_name:
+          type: string
+          default: Product 1
+        product_desc:
+          type: string
+          default: Product 1 Description
+        product_price:
+          type: integer
+          format: int32
+          default: 100000
+        slug:
+          type: string
+          default: product-1
+        user_id:
+          type: integer
+          format: int32
+          default: 1
+        category_id:
+          type: integer
+          format: int32
+          default: 5
+        status:
+          type: string
+          default: Unsold
+        createdAt:
+          type: string
+          default: 2020-06-22 12:59:35
+        updatedAt:
+          type: string
+          default: 2020-06-22 12:59:35
+        product_images:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResponseProductImagesPayload'
+    ResponseProductWithImagesAndCategoryPayload:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          default: 1
+        product_name:
+          type: string
+          default: Product 1
+        product_desc:
+          type: string
+          default: Product 1 Description
+        product_price:
+          type: integer
+          format: int32
+          default: 100000
+        slug:
+          type: string
+          default: product-1
+        user_id:
+          type: integer
+          format: int32
+          default: 1
+        category_id:
+          type: integer
+          format: int32
+          default: 5
+        status:
+          type: string
+          default: Unsold
+        createdAt:
+          type: string
+          default: 2020-06-22 12:59:35
+        updatedAt:
+          type: string
+          default: 2020-06-22 12:59:35
+        product_images:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResponseProductImagesPayload'
+        category_product:
+          $ref: '#/components/schemas/ResponseCategoryPayload'
+    ResponseProductPayload:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          default: 1
+        product_name:
+          type: string
+          default: Product 1
+        product_desc:
+          type: string
+          default: Product 1 Description
+        product_price:
+          type: integer
+          format: int32
+          default: 100000
+        slug:
+          type: string
+          default: product-1
+        user_id:
+          type: integer
+          format: int32
+          default: 1
+        category_id:
+          type: integer
+          format: int32
+          default: 5
+        status:
+          type: string
+          default: Unsold
+        createdAt:
+          type: string
+          default: 2020-06-22 12:59:35
+        updatedAt:
+          type: string
+          default: 2020-06-22 12:59:35
+        category_product:
+          $ref: '#/components/schemas/ResponseCategoryPayload'
+        product_images:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResponseProductImagesPayload'
+        seller:
+          $ref: '#/components/schemas/ResponseUserPayload'
+    ResponseProductByCategoryPayload:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          default: 1
+        product_name:
+          type: string
+          default: Product 1
+        product_desc:
+          type: string
+          default: Product 1 Description
+        product_price:
+          type: integer
+          format: int32
+          default: 100000
+        slug:
+          type: string
+          default: product-1
+        user_id:
+          type: integer
+          format: int32
+          default: 1
+        category_id:
+          type: integer
+          format: int32
+          default: 5
+        status:
+          type: string
+          default: Unsold
+        createdAt:
+          type: string
+          default: 2020-06-22 12:59:35
+        updatedAt:
+          type: string
+          default: 2020-06-22 12:59:35
+        category_product:
+          $ref: '#/components/schemas/ResponseCategoryPayload'
+        product_images:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResponseProductImagesPayload'
+    ResponseWishlistPayload:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          default: 1
+        user_id:
+          type: integer
+          format: int32
+          default: 1
+        product_id:
+          type: integer
+          format: int32
+          default: 1
+        createdAt:
+          type: string
+          default: 2022-06-22 12:59:35
+        updatedAt:
+          type: string
+          default: 2022-06-22 12:59:35
+        wishlist_product:
+          $ref: '#/components/schemas/ResponseProductWithImagesAndCategoryPayload'
+        wishlist_user:
+          $ref: '#/components/schemas/ResponseUserPayload'
+    ResponseNotificationPayload:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          default: 1
+        product_:
+          type: integer
+          format: int32
+          default: 1
+        bargain_price:
+          type: integer
+          format: int32
+          default: 10000
+        action_message:
+          type: string
+          default: Penawaran Produk
+        additional_info_1:
+          type: string
+          default: Berhasil Ditawar
+        additional_info_2:
+          type: string
+          default: Kamu akan segera dihubungi penjual via whatsapp
+        is_read:
+          type: boolean
+          default: false
+        url:
+          type: string
+          default: /tawaran/1
+        user_id:
+          type: integer
+          format: int32
+          default: 1
+        createdAt:
+          type: string
+          default: 2022-06-22 12:59:35
+        updatedAt:
+          type: string
+          default: 2022-06-22 12:59:35
+        user_notification:
+          $ref: '#/components/schemas/ResponseUserPayload'
+        product_notification:
+          $ref: '#/components/schemas/ResponseProductWithImagesAndCategoryPayload'
+    ResponseDiscountProductPayload:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          default: 1
+        user_id:
+          type: integer
+          format: int32
+          default: 1
+        product_id:
+          type: integer
+          format: int32
+          default: 1
+        seller_id:
+          type: integer
+          format: int32
+          default: 1
+        bargain_status:
+          type: integer
+          format: int32
+          default: 10000
+        status:
+          type: string
+          default: Pending
+        createdAt:
+          type: string
+          default: 2020-06-22 12:59:35
+        updatedAt:
+          type: string
+          default: 2020-06-22 12:59:35
+        product_offered:
+          $ref: '#/components/schemas/ResponseProductWithImagesPayload'
+        bidder:
+          $ref: '#/components/schemas/ResponseUserPayload'
+        seller_product_offer:
+          $ref: '#/components/schemas/ResponseUserPayload'
+    ResponseTransactionPayload:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          default: 1
+        user_id:
+          type: integer
+          format: int32
+          default: 1
+        product_id:
+          type: integer
+          format: int32
+          default: 1
+        seller_id:
+          type: integer
+          format: int32
+          default: 1
+        total_payment:
+          type: integer
+          format: int32
+          default: 10000
+        status:
+          type: string
+          default: success
+        createdAt:
+          type: string
+          default: 2020-06-22 12:59:35
+        updatedAt:
+          type: string
+          default: 2020-06-22 12:59:35
+        order_transaction_product:
+          $ref: '#/components/schemas/ResponseProductWithImagesAndCategoryPayload'
+        order_transaction_user:
+          $ref: '#/components/schemas/ResponseUserPayload'
+        order_transaction_seller:
+          $ref: '#/components/schemas/ResponseUserPayload'
+    ResponseFailed401MiddlewareIsAuth:
+      type: object
+      properties:
+        error:
+          type: string
+          default: Not authenticated.
+    ResponseFailed403MiddlewareIsProfileFilled:
+      type: object
+      properties:
+        error:
+          type: string
+          default: Please complete your profile first!
+    ResponseFailed500MiddlewareIsAuth:
+      type: object
+      properties:
+        error:
+          type: string
+          default: jwt expired
     Signup:
       type: object
       properties:
@@ -959,21 +2321,37 @@ components:
         password:
           type: string
           default: malik12345
+    ResponseUserNotFound:
+      type: object
+      properties:
+        message:
+          type: string
+          default: User not found.
     ResponseSuccessSignup:
       type: object
       properties:
         message:
           type: string
-          default: User created successfully
+          default: User created successfully.
         userId:
           type: string
           default: 1
-    ResponseFailed401Signup:
+    ResponseFailed401SignupInvalidEmail:
       type: object
       properties:
         message:
           type: string
           default: Please provide a valid email.
+    ResponseFailed401SignupNullPayload:
+      type: object
+      properties:
+        message:
+          type: string
+          default: Please provide name, email and password.
+    ResponseFailed401Signup:
+      oneOf:
+        - $ref: '#/components/schemas/ResponseFailed401SignupInvalidEmail'
+        - $ref: '#/components/schemas/ResponseFailed401SignupNullPayload'
     ResponseFailed500Signup:
       type: object
       properties:
@@ -1011,9 +2389,1203 @@ components:
             expired_at:
               type: string
               default: 2022-06-22 12:59:35
-    ResponseFailed401Login:
+    ResponseFailed400LoginNullPayload:
+      type: object
+      properties:
+        message:
+          type: string
+          default: Please provide email and password.
+    ResponseFailed400LoginUnknownUser:
+      $ref: '#/components/schemas/ResponseUserNotFound'
+    ResponseFailed400LoginInvalidPassword:
       type: object
       properties:
         message:
           type: string
           default: Invalid Password
+    ResponseFailed400Login:
+      oneOf:
+        - $ref: '#/components/schemas/ResponseFailed400LoginNullPayload'
+        - $ref: '#/components/schemas/ResponseFailed400LoginUnknownUser'
+        - $ref: '#/components/schemas/ResponseFailed400LoginInvalidPassword'
+    ResponseSuccess200GetAllUser:
+      type: object
+      properties:
+        message:
+          type: string
+          default: success
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResponseUserPayload'
+    ResponseFailed500GetAllUser:
+      type: object
+      properties:
+        message:
+          type: string
+          default: failed
+        error:
+          type: string
+          default: error message
+    ResponseSuccess200GetMyProfile:
+      type: object
+      properties:
+        message:
+          type: string
+          default: success
+        data:
+          $ref: '#/components/schemas/ResponseUserPayload'
+    ResponseFailed500GetMyProfile:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/ResponseFailed500MiddlewareIsAuth'
+          properties:
+            message:
+              type: string
+              default: failed
+            error:
+              type: string
+              default: error message
+    ResponseSuccess200GetSellerProfile:
+      type: object
+      properties:
+        message:
+          type: string
+          default: success
+        data:
+          $ref: '#/components/schemas/ResponseUserPayload'
+    ResponseFailed404GetSellerProfile:
+      $ref: '#/components/schemas/ResponseUserNotFound'
+    ResponseSuccess200UpdateProfile:
+      type: object
+      properties:
+        message:
+          type: string
+          default: success
+        result:
+          type: array
+          items:
+            default: 1
+    ResponseFailed404UpdateProfile:
+      $ref: '#/components/schemas/ResponseUserNotFound'
+    ResponseFailed500UpdateProfile:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/ResponseFailed500MiddlewareIsAuth'
+        - properties:
+            message:
+              type: string
+              default: failed
+            error:
+              type: string
+              default: error message
+    ResponseSuccess200ForgotPassword:
+      type: object
+      properties:
+        message:
+          type: string
+          default: Reset password link has been sent to your email.
+        data:
+          type: object
+          properties:
+            sendTo:
+              type: string
+              default: maulanaimammalik4@gmail.com
+            messageId:
+              type: string
+              default: <9efa8726-6d8b-2161-36d5-023b49799871@gmail.com>
+            userId:
+              type: integer
+              format: int32
+              default: 1
+            otp:
+              type: string
+              default: 123456
+    ResponseFailed404ForgotPassword:
+      $ref: '#/components/schemas/ResponseUserNotFound'
+    ResponseSuccess200VerifyOtp:
+      type: object
+      properties:
+        message:
+          type: string
+          default: OTP verified
+    ResponseFailed404VerifyOtp:
+      type: object
+      properties:
+        message:
+          type: string
+          default: Invalid OTP
+    ResponseSuccess200ResetPassword:
+      type: object
+      properties:
+        message:
+          type: string
+          default: Password changed successfully
+        data:
+          type: object
+          properties:
+            userId:
+              type: integer
+              format: int32
+              default: 1
+    ResponseFailed404ResetPassword:
+      $ref: '#/components/schemas/ResponseUserNotFound'
+    ResponseFailed500ResetPassword:
+      type: object
+      properties:
+        message:
+          type: string
+          default: failed
+        error:
+          type: string
+          default: error message
+    ResponseSuccess200GetAllCategory:
+      type: object
+      properties:
+        message:
+          type: string
+          default: success
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResponseCategoryPayload'
+    ResponseFailed500GetAllCategory:
+      type: object
+      properties:
+        message:
+          type: string
+          default: error
+        error:
+          type: string
+          default: error message
+    ResponseSuccess200GetCategoryBySlug:
+      type: object
+      properties:
+        message:
+          type: string
+          default: success
+        category:
+          $ref: '#/components/schemas/ResponseCategoryPayload'
+    ResponseFailed404GetCategoryBySlug:
+      type: object
+      properties:
+        message:
+          type: string
+          default: not found
+    ResponseFailed500GetCategoryBySlug:
+      type: object
+      properties:
+        message:
+          type: string
+          default: error
+        error:
+          type: string
+          default: error message
+    ResponseSuccess200GetAllCity:
+      type: object
+      properties:
+        message:
+          type: string
+          default: success
+        cities:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResponseCityPayload'
+    ResponseFailed500GetAllCity:
+      type: object
+      properties:
+        message:
+          type: string
+          default: failed
+        error:
+          type: string
+          default: error message
+    ResponseSuccess200GetCityById:
+      type: object
+      properties:
+        message:
+          type: string
+          default: success
+        city:
+          $ref: '#/components/schemas/ResponseCityPayload'
+    ResponseFailed404GetCityById:
+      type: object
+      properties:
+        message:
+          type: string
+          default: not found
+        error:
+          type: string
+          default: city not found
+    ResponseFailed500GetCityById:
+      type: object
+      properties:
+        message:
+          type: string
+          default: failed
+        error:
+          type: string
+          default: error message
+    ResponseSuccess200GetAllProduct:
+      type: object
+      properties:
+        message:
+          type: string
+          default: success
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResponseProductPayload'
+        current_page:
+          type: integer
+          format: int32
+          default: 1
+        total_pages:
+          type: integer
+          format: int32
+          default: 1
+        total_items:
+          type: integer
+          format: int32
+          default: 1
+    ResponseFailed404PageNotFoundGetAllProduct:
+      type: object
+      properties:
+        message:
+          type: string
+          default: The page you are looking for does not exist
+    ResponseFailed500GetAllProduct:
+      type: object
+      properties:
+        message:
+          type: string
+          default: error
+        error:
+          type: string
+          default: error message
+    ResponseSuccess200PostProduct:
+      type: object
+      properties:
+        message:
+          type: string
+          default: success
+        product:
+          $ref: '#/components/schemas/ResponseProductPayload'
+        product_images:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestFile'
+    ResponseFailed400NullPayloadPostProduct:
+      type: object
+      properties:
+        message:
+          type: string
+          default: Please fill all required fields
+    ResponseFailed400NoImageUploadPostProduct:
+      type: object
+      properties:
+        message:
+          type: string
+          default: Please upload at least one image
+    ResponseFailed400ImageMaxUploadPostProduct:
+      type: object
+      properties:
+        message:
+          type: string
+          default: You can only upload up to 4 images
+    ResponseFailed400ProductMaxUploadPostProduct:
+      type: object
+      properties:
+        message:
+          type: string
+          default: You can only sell 4 products
+    ResponseFailed400PostProduct:
+      oneOf:
+        - $ref: '#/components/schemas/ResponseFailed400NullPayloadPostProduct'
+        - $ref: '#/components/schemas/ResponseFailed400NoImageUploadPostProduct'
+        - $ref: '#/components/schemas/ResponseFailed400ImageMaxUploadPostProduct'
+        - $ref: '#/components/schemas/ResponseFailed400ProductMaxUploadPostProduct'
+    ResponseFailed500PostProduct:
+      type: object
+      anyOf:
+        - $ref: '#/components/schemas/ResponseFailed500MiddlewareIsAuth'
+        - properties:
+            message:
+              type: string
+              default: error
+            error:
+              type: string
+              default: error message
+    ResponseSuccess200GetProductBySlug:
+      type: object
+      properties:
+        message:
+          type: string
+          default: success
+        product:
+          $ref: '#/components/schemas/ResponseProductPayload'
+    ResponseFailed404GetProductBySlug:
+      type: object
+      properties:
+        message:
+          type: string
+          default: No product found
+    ResponseFailed500GetProductBySlug:
+      type: object
+      properties:
+        message:
+          type: string
+          default: error
+        error:
+          type: string
+          default: error message
+    ResponseSuccess200NoUploadImagePutProduct:
+      type: object
+      properties:
+        message:
+          type: string
+          default: success
+        product:
+          type: array
+          default: 1
+    ResponseSuccess200WithUploadImagePutProduct:
+      type: object
+      properties:
+        message:
+          type: string
+          default: success
+        product:
+          type: array
+          default: 1
+        product_images:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestFile'
+    ResponseSuccess200PutProductBySlug:
+      oneOf:
+        - $ref: '#/components/schemas/ResponseSuccess200NoUploadImagePutProduct'
+        - $ref: '#/components/schemas/ResponseSuccess200WithUploadImagePutProduct'
+    ResponseFailed404PutProductBySlug:
+      type: object
+      properties:
+        message:
+          type: string
+          default: Product not found
+    ResponseFailed500PutProductBySlug:
+      type: object
+      anyOf:
+        - $ref: '#/components/schemas/ResponseFailed500MiddlewareIsAuth'
+        - properties:
+            message:
+              type: string
+              default: error
+            error:
+              type: string
+              default: error message
+    ResponseSuccess200DeleteProductBySlug:
+      type: object
+      properties:
+        message:
+          type: string
+          default: success
+        product:
+          type: string
+          default: 1
+    ResponseFailed404DeleteProductBySlug:
+      type: object
+      properties:
+        message:
+          type: string
+          default: Product not found
+    ResponseFailed500DeleteProductBySlug:
+      type: object
+      properties:
+        message:
+          type: string
+          default: error
+        error:
+          type: string
+          default: error message
+    ResponseSuccess200GetProductBySlugCategory:
+      type: object
+      properties:
+        message:
+          type: string
+          default: success
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResponseProductByCategoryPayload'
+        current_page:
+          type: integer
+          format: int32
+          default: 1
+        total_pages:
+          type: integer
+          format: int32
+          default: 1
+        total_items:
+          type: integer
+          format: int32
+          default: 1
+    ResponseFailed404GetProductBySlugCategory:
+      type: object
+      properties:
+        message:
+          type: string
+          default: The page you are looking for does not exist
+    ResponseFailed500GetProductBySlugCategory:
+      type: object
+      properties:
+        message:
+          type: string
+          default: error
+        error:
+          type: string
+          default: error message
+    ResponseSuccess200GetProductByUser:
+      type: object
+      properties:
+        message:
+          type: string
+          default: success
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResponseProductPayload'
+        current_page:
+          type: integer
+          format: int32
+          default: 1
+        total_pages:
+          type: integer
+          format: int32
+          default: 1
+        total_items:
+          type: integer
+          format: int32
+          default: 1
+    ResponseFailed404PageNotFoundGetProductByUser:
+      type: object
+      properties:
+        message:
+          type: string
+          default: The page you are looking for does not exist
+    ResponseFailed404SellerNotExistGetProductByUser:
+      type: object
+      properties:
+        message:
+          type: string
+          default: The seller you are looking for does not exist
+    ResponseFailed404GetProductByUser:
+      oneOf:
+        - $ref: '#/components/schemas/ResponseFailed404PageNotFoundGetProductByUser'
+        - $ref: '#/components/schemas/ResponseFailed404SellerNotExistGetProductByUser'
+    ResponseFailed500GetProductByUser:
+      type: object
+      properties:
+        message:
+          type: string
+          default: error
+        error:
+          type: string
+          default: error message
+    ResponseSuccess200GetAllWishlist:
+      type: object
+      properties:
+        message:
+          type: string
+          default: success
+        wishlists:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResponseWishlistPayload'
+    ResponseFailed500GetAllWishlist:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/ResponseFailed500MiddlewareIsAuth'
+        - properties:
+            message:
+              type: string
+              default: error
+            error:
+              type: string
+              default: error message
+    ResponseSuccess200PostWishlist:
+      type: object
+      properties:
+        message:
+          type: string
+          default: success
+        wishlist:
+          type: object
+          properties:
+            id:
+              type: integer
+              format: int32
+              default: 1
+            user_id:
+              type: integer
+              format: int32
+              default: 1
+            product_id:
+              type: integer
+              format: int32
+              default: 1
+            created_at:
+              type: string
+              format: date-time
+              default: 2022-01-01T00:00:00.000Z
+            updated_at:
+              type: string
+              format: date-time
+              default: 2022-01-01T00:00:00.000Z
+    ResponseFailed500PostWishlist:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/ResponseFailed500MiddlewareIsAuth'
+        - properties:
+            message:
+              type: string
+              default: error
+            error:
+              type: string
+              default: error message
+    ResponseSuccess200DeleteWishlistById:
+      type: object
+      properties:
+        message:
+          type: string
+          default: Success
+        result:
+          type: string
+          default: 1
+    ResponseFailed404DeleteWishlistById:
+      type: object
+      properties:
+        message:
+          type: string
+          default: Product dengan ID 1 Not Found
+        result:
+          type: string
+          default: 0
+    ResponseFailed500DeleteWishlistById:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/ResponseFailed500MiddlewareIsAuth'
+        - properties:
+            message:
+              type: string
+              default: error
+            error:
+              type: string
+              default: error message
+    ResponseSuccess200GetAllNotificationByUserLoggedIn:
+      type: object
+      properties:
+        message:
+          type: string
+          default: success
+        result:
+          type: array
+          items:
+            properties:
+              notifications:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ResponseNotificationPayload'
+              thumbnail:
+                type: array
+                items:
+                  type: string
+                  default: https://www.w3schools.com/w3css/img_avatar3.png
+              createdAt:
+                type: array
+                items:
+                  type: string
+                  format: date-time
+                  default: 13 Jul 2022
+    ResponseFailed500GetAllNotificationByUserLoggedIn:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/ResponseFailed500MiddlewareIsAuth'
+        - properties:
+            message:
+              type: string
+              default: error
+            error:
+              type: string
+              default: error message
+    ResponseSuccess200GetAllNotification:
+      type: object
+      properties:
+        message:
+          type: string
+          default: success
+        result:
+          type: array
+          items:
+            properties:
+              notifications:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ResponseNotificationPayload'
+              thumbnail:
+                type: array
+                items:
+                  type: string
+                  default: https://www.w3schools.com/w3css/img_avatar3.png
+              createdAt:
+                type: array
+                items:
+                  type: string
+                  format: date-time
+                  default: 13 Jul 2022
+    ResponseFailed500GetAllNotification:
+      type: object
+      properties:
+        message:
+          type: string
+          default: error
+        error:
+          type: string
+          default: error message
+    ResponseSuccess200GetAllDiscProductOffer:
+      type: object
+      properties:
+        message:
+          type: string
+          default: success
+        result:
+          type: array
+          items:
+            properties:
+              disc_product:
+                type: array
+                $ref: '#/components/schemas/ResponseDiscountProductPayload'
+              thumbnail:
+                type: array
+                items:
+                  type: string
+                  default: https://www.w3schools.com/w3css/img_avatar3.png
+    ResponseFailed500GetAllDiscProductOffer:
+      type: object
+      properties:
+        message:
+          type: string
+          default: error
+        error:
+          type: string
+          default: error message
+    ResponseSuccess200PostDiscProductOffer:
+      type: object
+      properties:
+        message:
+          type: string
+          default: success
+        disc_product:
+          type: object
+          properties:
+            id:
+              type: integer
+              format: int32
+              default: 1
+            user_id:
+              type: integer
+              format: int32
+              default: 1
+            product_id:
+              type: integer
+              format: int32
+              default: 1
+            seller_id:
+              type: integer
+              format: int32
+              default: 1
+            bargain_price:
+              type: integer
+              format: int32
+              default: 10000
+            status:
+              type: string
+              default: pending
+            created_at:
+              type: string
+              format: date-time
+              default: 2022-01-01T00:00:00.000Z
+            updated_at:
+              type: string
+              format: date-time
+              default: 2022-01-01T00:00:00.000Z
+    ResponseFailed500PostDiscProductOffer:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/ResponseFailed500MiddlewareIsAuth'
+        - properties:
+            message:
+              type: string
+              default: error
+            error:
+              type: string
+              default: error message
+    ResponseSuccess200GetDiscProductOfferById:
+      type: object
+      properties:
+        message:
+          type: string
+          default: success
+        result:
+          type: object
+          properties:
+            disc_product:
+              type: array
+              $ref: '#/components/schemas/ResponseDiscountProductPayload'
+            thumbnail:
+              type: array
+              items:
+                type: string
+                default: https://www.w3schools.com/w3css/img_avatar3.png
+            seller_phone_number:
+              type: integer
+              default: 628417482495
+    ResponseFailed500GetDiscProductOfferById:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/ResponseFailed500MiddlewareIsAuth'
+        - properties:
+            message:
+              type: string
+              default: error
+            error:
+              type: string
+              default: error message
+    ResponseSuccess200DeleteDiscProductOfferById:
+      type: object
+      properties:
+        message:
+          type: string
+          default: success
+        disc_product:
+          type: string
+          default: 1
+    ResponseFailed500DeleteDiscProductOfferById:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/ResponseFailed500MiddlewareIsAuth'
+        - properties:
+            message:
+              type: string
+              default: error
+            error:
+              type: string
+              default: error message
+    ResponseSuccess200UpdateDiscProductOfferAccept:
+      type: object
+      properties:
+        message:
+          type: string
+          default: success
+        disc_product:
+          type: array
+          default: 1
+    ResponseFailed500UpdateDiscProductOfferAccept:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/ResponseFailed500MiddlewareIsAuth'
+        - properties:
+            message:
+              type: string
+              default: error
+            error:
+              type: string
+              default: error message
+    ResponseSuccess200UpdateDiscProductOfferReject:
+      type: object
+      properties:
+        message:
+          type: string
+          default: success
+        disc_product:
+          type: array
+          default: 1
+    ResponseFailed500UpdateDiscProductOfferReject:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/ResponseFailed500MiddlewareIsAuth'
+        - properties:
+            message:
+              type: string
+              default: error
+            error:
+              type: string
+              default: error message
+    ResponseSuccess200GetAllDiscProductOfferByBidder:
+      type: object
+      properties:
+        message:
+          type: string
+          default: success
+        result:
+          type: array
+          items:
+            properties:
+              disc_product:
+                type: array
+                $ref: '#/components/schemas/ResponseDiscountProductPayload'
+              thumbnail:
+                type: array
+                items:
+                  type: string
+                  default: https://www.w3schools.com/w3css/img_avatar3.png
+    ResponseFailed500GetAllDiscProductOfferByBidder:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/ResponseFailed500MiddlewareIsAuth'
+        - properties:
+            message:
+              type: string
+              default: error
+            error:
+              type: string
+              default: error message
+    ResponseSuccess200GetAllDiscProductOfferByBidderPendingStatus:
+      type: object
+      properties:
+        message:
+          type: string
+          default: success
+        result:
+          type: array
+          items:
+            properties:
+              disc_product:
+                type: array
+                $ref: '#/components/schemas/ResponseDiscountProductPayload'
+              thumbnail:
+                type: array
+                items:
+                  type: string
+                  default: https://www.w3schools.com/w3css/img_avatar3.png
+    ResponseFailed500GetAllDiscProductOfferByBidderPendingStatus:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/ResponseFailed500MiddlewareIsAuth'
+        - properties:
+            message:
+              type: string
+              default: error
+            error:
+              type: string
+              default: error message
+    ResponseSuccess200GetAllDiscProductOfferByBidderAcceptedStatus:
+      type: object
+      properties:
+        message:
+          type: string
+          default: success
+        result:
+          type: array
+          items:
+            properties:
+              disc_product:
+                type: array
+                $ref: '#/components/schemas/ResponseDiscountProductPayload'
+              thumbnail:
+                type: array
+                items:
+                  type: string
+                  default: https://www.w3schools.com/w3css/img_avatar3.png
+    ResponseFailed500GetAllDiscProductOfferByBidderAcceptedStatus:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/ResponseFailed500MiddlewareIsAuth'
+        - properties:
+            message:
+              type: string
+              default: error
+            error:
+              type: string
+              default: error message
+    ResponseSuccess200GetAllDiscProductOfferByBidderRejectedStatus:
+      type: object
+      properties:
+        message:
+          type: string
+          default: success
+        result:
+          type: array
+          items:
+            properties:
+              disc_product:
+                type: array
+                $ref: '#/components/schemas/ResponseDiscountProductPayload'
+              thumbnail:
+                type: array
+                items:
+                  type: string
+                  default: https://www.w3schools.com/w3css/img_avatar3.png
+    ResponseFailed500GetAllDiscProductOfferByBidderRejectedStatus:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/ResponseFailed500MiddlewareIsAuth'
+        - properties:
+            message:
+              type: string
+              default: error
+            error:
+              type: string
+              default: error message
+    ResponseSuccess200GetAllDiscProductOfferBySeller:
+      type: object
+      properties:
+        message:
+          type: string
+          default: success
+        result:
+          type: array
+          items:
+            properties:
+              disc_product:
+                type: array
+                $ref: '#/components/schemas/ResponseDiscountProductPayload'
+              thumbnail:
+                type: array
+                items:
+                  type: string
+                  default: https://www.w3schools.com/w3css/img_avatar3.png
+    ResponseFailed500GetAllDiscProductOfferBySeller:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/ResponseFailed500MiddlewareIsAuth'
+        - properties:
+            message:
+              type: string
+              default: error
+            error:
+              type: string
+              default: error message
+    ResponseSuccess200GetAllDiscProductOfferBySellerPendingStatus:
+      type: object
+      properties:
+        message:
+          type: string
+          default: success
+        result:
+          type: array
+          items:
+            properties:
+              disc_product:
+                type: array
+                $ref: '#/components/schemas/ResponseDiscountProductPayload'
+              thumbnail:
+                type: array
+                items:
+                  type: string
+                  default: https://www.w3schools.com/w3css/img_avatar3.png
+    ResponseFailed500GetAllDiscProductOfferBySellerPendingStatus:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/ResponseFailed500MiddlewareIsAuth'
+        - properties:
+            message:
+              type: string
+              default: error
+            error:
+              type: string
+              default: error message
+    ResponseSuccess200GetAllDiscProductOfferBySellerAcceptedStatus:
+      type: object
+      properties:
+        message:
+          type: string
+          default: success
+        result:
+          type: array
+          items:
+            properties:
+              disc_product:
+                type: array
+                $ref: '#/components/schemas/ResponseDiscountProductPayload'
+              thumbnail:
+                type: array
+                items:
+                  type: string
+                  default: https://www.w3schools.com/w3css/img_avatar3.png
+    ResponseFailed500GetAllDiscProductOfferBySellerAcceptedStatus:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/ResponseFailed500MiddlewareIsAuth'
+        - properties:
+            message:
+              type: string
+              default: error
+            error:
+              type: string
+              default: error message
+    ResponseSuccess200GetAllDiscProductOfferBySellerRejectedStatus:
+      type: object
+      properties:
+        message:
+          type: string
+          default: success
+        result:
+          type: array
+          items:
+            properties:
+              disc_product:
+                type: array
+                $ref: '#/components/schemas/ResponseDiscountProductPayload'
+              thumbnail:
+                type: array
+                items:
+                  type: string
+                  default: https://www.w3schools.com/w3css/img_avatar3.png
+    ResponseFailed500GetAllDiscProductOfferBySellerRejectedStatus:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/ResponseFailed500MiddlewareIsAuth'
+        - properties:
+            message:
+              type: string
+              default: error
+            error:
+              type: string
+              default: error message
+    ResponseSuccess200GetAllTransaction:
+      type: object
+      properties:
+        message:
+          type: string
+          default: Transactions found
+        data:
+          type: object
+          properties:
+            transaction:
+              type: array
+              $ref: '#/components/schemas/ResponseTransactionPayload'
+    ResponseFailed500GetAllTransaction:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/ResponseFailed500MiddlewareIsAuth'
+        - properties:
+            message:
+              type: string
+              default: Error getting transactions
+            error:
+              type: string
+              default: error message
+    ResponseSuccess200GetAllTransactionByBuyer:
+      type: object
+      properties:
+        message:
+          type: string
+          default: Transactions found
+        data:
+          type: object
+          properties:
+            transaction:
+              type: array
+              $ref: '#/components/schemas/ResponseTransactionPayload'
+    ResponseFailed500GetAllTransactionByBuyer:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/ResponseFailed500MiddlewareIsAuth'
+        - properties:
+            message:
+              type: string
+              default: Error getting transactions
+            error:
+              type: string
+              default: error message
+    ResponseSuccess200GetAllTransactionBySeller:
+      type: object
+      properties:
+        message:
+          type: string
+          default: Transactions found
+        data:
+          type: object
+          properties:
+            transaction:
+              type: array
+              $ref: '#/components/schemas/ResponseTransactionPayload'
+    ResponseFailed500GetAllTransactionBySeller:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/ResponseFailed500MiddlewareIsAuth'
+        - properties:
+            message:
+              type: string
+              default: Error getting transactions
+            error:
+              type: string
+              default: error message
+    ResponseSuccess200GetTransactionById:
+      type: object
+      properties:
+        message:
+          type: string
+          default: Transactions found
+        data:
+          type: object
+          properties:
+            transaction:
+              type: array
+              $ref: '#/components/schemas/ResponseTransactionPayload'
+    ResponseFailed404GetTransactionById:
+      type: object
+      properties:
+        message:
+          type: string
+          default: Transaction not found
+    ResponseFailed500GetTransactionById:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/ResponseFailed500MiddlewareIsAuth'
+        - properties:
+            message:
+              type: string
+              default: Error getting transactions
+            error:
+              type: string
+              default: error message
+    ResponseSuccess200FinishTransaction:
+      type: object
+      properties:
+        message:
+          type: string
+          default: success
+        result:
+          type: array
+          default: 1
+    ResponseFailed500FinishTransaction:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/ResponseFailed500MiddlewareIsAuth'
+        - properties:
+            message:
+              type: string
+              default: error
+            error:
+              type: string
+              default: error message
+    ResponseSuccess200CancelTransaction:
+      type: object
+      properties:
+        message:
+          type: string
+          default: success
+        result:
+          type: array
+          default: 1
+    ResponseFailed500CancelTransaction:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/ResponseFailed500MiddlewareIsAuth'
+        - properties:
+            message:
+              type: string
+              default: error
+            error:
+              type: string
+              default: error message

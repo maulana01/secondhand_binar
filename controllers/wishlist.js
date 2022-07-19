@@ -23,7 +23,7 @@ module.exports = {
         {
           model: User,
           as: 'wishlist_user',
-          attributes: ['slug', 'name'],
+          attributes: ['email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
         },
       ],
       where: {
