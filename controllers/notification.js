@@ -40,7 +40,7 @@ exports.getNotification = (req, res, next) => {
             return notif.product_notification.product_images[notif.product_notification.product_images.length - 1].product_images_path;
           }),
           createdAt: notification.map((notif) => {
-            const date = moment(notif.createdAt, 'h:mm:ss A').locale('id').format('DD MMM, HH:mm:ss');
+            const date = moment(notif.createdAt, 'h:mm:ss A').locale('id').format('DD MMM, HH:mm');
             return date;
           }),
         },
@@ -88,7 +88,7 @@ exports.getAllNotification = (req, res, next) => {
             return notif.product_notification.product_images[notif.product_notification.product_images.length - 1].product_images_path;
           }),
           createdAt: notification.map((notif) => {
-            const date = moment(notif.createdAt, 'h:mm:ss A').locale('id').format('DD MMM, HH:mm:ss');
+            const date = moment(notif.createdAt, 'h:mm:ss A').locale('id').format('DD MMM, HH:mm');
             return date;
           }),
         },
