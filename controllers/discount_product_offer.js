@@ -552,7 +552,7 @@ exports.getById = (req, res, next) => {
           disc_product,
           thumbnail: disc_product.product_offered.product_images[disc_product.product_offered.product_images.length - 1].product_images_path,
           seller_phone_number: disc_product.seller_product_offer.phone_number,
-          createdAt: moment(disc_product.createdAt, 'h:mm:ss A').locale('id').format('DD MMM, HH:mm:ss'),
+          createdAt: moment(disc_product.createdAt, 'h:mm:ss A').locale('id').format('DD MMM, HH:mm'),
         },
       });
     })
