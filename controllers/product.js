@@ -82,7 +82,7 @@ exports.getAllWithPaginationSortingFiltering = (req, res, next) => {
         res.status(200).json({
           message: 'success',
           products,
-          current_page: page,
+          current_page: page ? page : 1,
           total_pages: limit ? Math.ceil(products.count / limit) : 1,
           total_items: products.rows.length,
         });
@@ -133,7 +133,7 @@ exports.getAllByCategory = async (req, res, next) => {
           res.status(200).json({
             message: 'success',
             products,
-            current_page: page,
+            current_page: page ? page : 1,
             total_pages: limit ? Math.ceil(products.count / limit) : 1,
             total_items: products.rows.length,
           });
@@ -193,7 +193,7 @@ exports.getAllBySeller = async (req, res, next) => {
           res.status(200).json({
             message: 'success',
             products,
-            current_page: page,
+            current_page: page ? page : 1,
             total_pages: limit ? Math.ceil(products.count / limit) : 1,
             total_items: products.rows.length,
           });
@@ -239,6 +239,7 @@ exports.getProductDetailBySlug = (req, res, next) => {
     .then((product) => {
       if (product) {
         if (authHeader) {
+          console.log('ini product id notif', product.id);
           Notification.update(
             {
               is_read: true,
@@ -322,7 +323,7 @@ exports.createProducts = async (req, res, next) => {
         });
       } else {
         console.log('ini total product', countUnsoldSellerProductPost);
-        if (countUnsoldSellerProductPost >= 4) {
+        if (countUnsoldSellerProductPost > 4) {
           req.files.map((file) => {
             // const _path = path.join(__dirname, '../public/images/products/', file.filename);
             // fs.unlink(_path, (err) => {

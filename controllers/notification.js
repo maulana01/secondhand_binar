@@ -29,6 +29,7 @@ exports.getNotification = (req, res, next) => {
         ],
       },
     ],
+    order: ['createdAt', 'DESC'],
   })
     .then((notification) => {
       return res.status(200).json({
@@ -39,7 +40,7 @@ exports.getNotification = (req, res, next) => {
             return notif.product_notification.product_images[notif.product_notification.product_images.length - 1].product_images_path;
           }),
           createdAt: notification.map((notif) => {
-            const date = moment(notif.createdAt, 'h:mm:ss A').locale('id').format('DD MMM, h:mm');
+            const date = moment(notif.createdAt, 'h:mm:ss A').locale('id').format('DD MMM, HH:mm:ss');
             return date;
           }),
         },
@@ -76,6 +77,7 @@ exports.getAllNotification = (req, res, next) => {
         ],
       },
     ],
+    order: ['createdAt', 'DESC'],
   })
     .then((notification) => {
       return res.status(200).json({
@@ -86,7 +88,7 @@ exports.getAllNotification = (req, res, next) => {
             return notif.product_notification.product_images[notif.product_notification.product_images.length - 1].product_images_path;
           }),
           createdAt: notification.map((notif) => {
-            const date = moment(notif.createdAt, 'h:mm:ss A').locale('id').format('DD MMM, h:mm');
+            const date = moment(notif.createdAt, 'h:mm:ss A').locale('id').format('DD MMM, HH:mm:ss');
             return date;
           }),
         },

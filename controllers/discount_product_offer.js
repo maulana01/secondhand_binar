@@ -8,6 +8,7 @@ const {
   notification: Notification,
 } = require('../models');
 const sequelize = require('sequelize');
+const moment = require('moment');
 
 exports.getAll = (req, res, next) => {
   const status = ['pending', 'accepted', 'rejected'];
@@ -20,6 +21,10 @@ exports.getAll = (req, res, next) => {
           {
             model: Product_Images,
             as: 'product_images',
+          },
+          {
+            model: Category,
+            as: 'category_product',
           },
         ],
       },
@@ -74,6 +79,10 @@ exports.getBySeller = (req, res, next) => {
           {
             model: Product_Images,
             as: 'product_images',
+          },
+          {
+            model: Category,
+            as: 'category_product',
           },
         ],
       },
@@ -132,6 +141,10 @@ exports.getByBidder = (req, res, next) => {
             model: Product_Images,
             as: 'product_images',
           },
+          {
+            model: Category,
+            as: 'category_product',
+          },
         ],
       },
       {
@@ -188,6 +201,10 @@ exports.getAllStatusPendingBidder = (req, res, next) => {
             model: Product_Images,
             as: 'product_images',
           },
+          {
+            model: Category,
+            as: 'category_product',
+          },
         ],
       },
       {
@@ -235,6 +252,10 @@ exports.getAllStatusPendingSeller = (req, res, next) => {
           {
             model: Product_Images,
             as: 'product_images',
+          },
+          {
+            model: Category,
+            as: 'category_product',
           },
         ],
       },
@@ -284,6 +305,10 @@ exports.getAllStatusAcceptedBidder = (req, res, next) => {
             model: Product_Images,
             as: 'product_images',
           },
+          {
+            model: Category,
+            as: 'category_product',
+          },
         ],
       },
       {
@@ -331,6 +356,10 @@ exports.getAllStatusAcceptedSeller = (req, res, next) => {
           {
             model: Product_Images,
             as: 'product_images',
+          },
+          {
+            model: Category,
+            as: 'category_product',
           },
         ],
       },
@@ -380,6 +409,10 @@ exports.getAllStatusRejectedBidder = (req, res, next) => {
             model: Product_Images,
             as: 'product_images',
           },
+          {
+            model: Category,
+            as: 'category_product',
+          },
         ],
       },
       {
@@ -427,6 +460,10 @@ exports.getAllStatusRejectedSeller = (req, res, next) => {
           {
             model: Product_Images,
             as: 'product_images',
+          },
+          {
+            model: Category,
+            as: 'category_product',
           },
         ],
       },
@@ -476,6 +513,10 @@ exports.getById = (req, res, next) => {
             model: Product_Images,
             as: 'product_images',
           },
+          {
+            model: Category,
+            as: 'category_product',
+          },
         ],
       },
       {
@@ -511,6 +552,7 @@ exports.getById = (req, res, next) => {
           disc_product,
           thumbnail: disc_product.product_offered.product_images[disc_product.product_offered.product_images.length - 1].product_images_path,
           seller_phone_number: disc_product.seller_product_offer.phone_number,
+          createdAt: moment(disc_product.createdAt, 'h:mm:ss A').locale('id').format('DD MMM, HH:mm:ss'),
         },
       });
     })
