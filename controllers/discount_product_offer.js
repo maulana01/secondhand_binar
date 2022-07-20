@@ -5,6 +5,7 @@ const {
   product: Product,
   user: User,
   product_images: Product_Images,
+  category: Category,
   notification: Notification,
 } = require('../models');
 const sequelize = require('sequelize');
