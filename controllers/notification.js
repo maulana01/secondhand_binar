@@ -29,7 +29,7 @@ exports.getNotification = (req, res, next) => {
         ],
       },
     ],
-    order: ['createdAt', 'DESC'],
+    order: [['createdAt', 'DESC']],
   })
     .then((notification) => {
       return res.status(200).json({
@@ -77,7 +77,7 @@ exports.getAllNotification = (req, res, next) => {
         ],
       },
     ],
-    order: ['createdAt', 'DESC'],
+    order: [['createdAt', 'DESC']],
   })
     .then((notification) => {
       return res.status(200).json({
