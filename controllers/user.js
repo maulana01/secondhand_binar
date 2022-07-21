@@ -33,13 +33,13 @@ exports.getAll = (req, res, next) => {
   console.log({ data: req.userLoggedin });
   User.findAll()
     .then((users) => {
-      res.status(200).json({
+      return res.status(200).json({
         message: 'success',
         users,
       });
     })
     .catch((error) => {
-      res.status(500).json({
+      return res.status(500).json({
         message: 'failed',
         error: error.message,
       });
@@ -69,7 +69,9 @@ exports.getById = (req, res, next) => {
         });
       }
     })
-    .catch((error) => res.status(404).json({ message: 'failed', error }));
+    .catch((error) => {
+      res.status(404).json({ message: 'failed', error });
+    });
 };
 
 exports.getBySlug = async (req, res, next) => {
@@ -124,7 +126,7 @@ exports.getMyProfile = (req, res, next) => {
       });
     })
     .catch((err) => {
-      res.status(500).json({ message: 'failed', error: err.message });
+      return res.status(500).json({ message: 'failed', error: err.message });
     });
 };
 
@@ -154,13 +156,13 @@ exports.create = async (req, res, next) => {
     password: hashedPassword,
   })
     .then((user) => {
-      res.status(201).json({
+      return res.status(201).json({
         message: 'success',
         user,
       });
     })
     .catch((error) => {
-      res.status(500).json({
+      return res.status(500).json({
         message: 'failed',
         error,
       });
@@ -194,8 +196,12 @@ exports.update = async (req, res, next) => {
       id: userId,
     },
   })
-    .then((result) => res.status(200).json({ message: 'success', result }))
-    .catch((error) => res.status(500).json({ message: 'failed', error: error.message }));
+    .then((result) => {
+      return res.status(200).json({ message: 'success', result });
+    })
+    .catch((error) => {
+      return res.status(500).json({ message: 'failed', error: error.message });
+    });
 };
 
 exports.delete = async (req, res, next) => {
@@ -220,7 +226,9 @@ exports.delete = async (req, res, next) => {
         return res.status(404).json({ message: 'User not found' });
       }
     })
-    .catch((error) => res.status(500).json({ message: 'failed', error }));
+    .catch((error) => {
+      return res.status(500).json({ message: 'failed', error });
+    });
 };
 
 exports.uploadAvatar = async (req, res, next) => {
@@ -254,8 +262,12 @@ exports.uploadAvatar = async (req, res, next) => {
       },
     }
   )
-    .then((user) => res.status(200).json({ message: 'success', user }))
-    .catch((error) => res.status(500).json({ message: 'failed', error }));
+    .then((user) => {
+      return res.status(200).json({ message: 'success', user });
+    })
+    .catch((error) => {
+      return res.status(500).json({ message: 'failed', error });
+    });
 };
 
 exports.resetPassword = async (req, res, next) => {
@@ -276,13 +288,15 @@ exports.resetPassword = async (req, res, next) => {
       where: { id },
     }
   )
-    .then((user) =>
-      res.status(200).json({
+    .then((user) => {
+      return res.status(200).json({
         message: 'Password changed successfully',
         data: { userId: id },
-      })
-    )
-    .catch((error) => res.status(500).json({ message: 'failed', error: error.message }));
+      });
+    })
+    .catch((error) => {
+      return res.status(500).json({ message: 'failed', error: error.message });
+    });
 };
 
 exports.forgotPassword = async (req, res, next) => {
@@ -304,7 +318,7 @@ exports.forgotPassword = async (req, res, next) => {
       html: htmlEmailTemplate,
     })
     .then((result) => {
-      res.status(200).json({
+      return res.status(200).json({
         message: 'Reset password link has been sent to your email.',
         data: {
           sendTo: email,

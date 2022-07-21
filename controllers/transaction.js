@@ -387,6 +387,10 @@ exports.deleteTransaction = async (req, res, next) => {
 
   return await transaction
     .destroy(id)
-    .then((result) => res.status(200).json({ message: 'Transaction deleted', result }))
-    .catch((error) => res.status(401).json({ message: 'Error deleting transaction', error }));
+    .then((result) => {
+      return res.status(200).json({ message: 'Transaction deleted', result });
+    })
+    .catch((error) => {
+      return res.status(401).json({ message: 'Error deleting transaction', error });
+    });
 };

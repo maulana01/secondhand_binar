@@ -22,64 +22,77 @@ cloudinary.config({
 
 exports.getAllWithPaginationSortingFiltering = (req, res, next) => {
   const { page, limit, filter } = req.query;
-  const query = filter
-    ? {
-        offset: (page - 1) * limit || 0,
-        limit: parseInt(limit, 10) || 10,
-        where: {
-          product_name: {
-            [Op.iLike]: `%${filter}%`,
+  if (filter == '') {
+    return res.status(200).json({
+      message: 'success',
+      products: {
+        count: 0,
+        rows: [],
+      },
+      current_page: 1,
+      total_pages: 1,
+      total_items: 0,
+    });
+  }
+  const query =
+    filter != ''
+      ? {
+          offset: (page - 1) * limit || 0,
+          limit: parseInt(limit, 10) || 10,
+          where: {
+            product_name: {
+              [Op.iLike]: `%${filter}%`,
+            },
+            status: 'unsold',
           },
-          status: 'unsold',
-        },
-        include: [
-          {
-            model: Category,
-            as: 'category_product',
+          include: [
+            {
+              model: Category,
+              as: 'category_product',
+            },
+            {
+              model: Product_Images,
+              as: 'product_images',
+            },
+            {
+              model: User,
+              as: 'seller',
+              attributes: ['email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
+            },
+          ],
+          distinct: true,
+        }
+      : {
+          offset: (page - 1) * limit || 0,
+          limit: parseInt(limit, 10) || 10,
+          where: {
+            status: 'unsold',
           },
-          {
-            model: Product_Images,
-            as: 'product_images',
-          },
-          {
-            model: User,
-            as: 'seller',
-            attributes: ['email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
-          },
-        ],
-        distinct: true,
-      }
-    : {
-        offset: (page - 1) * limit || 0,
-        limit: parseInt(limit, 10) || 10,
-        where: {
-          status: 'unsold',
-        },
-        include: [
-          {
-            model: Category,
-            as: 'category_product',
-          },
-          {
-            model: Product_Images,
-            as: 'product_images',
-          },
-          {
-            model: User,
-            as: 'seller',
-            attributes: ['email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
-          },
-        ],
-        distinct: true,
-      };
+          include: [
+            {
+              model: Category,
+              as: 'category_product',
+            },
+            {
+              model: Product_Images,
+              as: 'product_images',
+            },
+            {
+              model: User,
+              as: 'seller',
+              attributes: ['email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
+            },
+          ],
+          distinct: true,
+        };
   Product.findAndCountAll(query)
     .then((products) => {
       if (page > Math.ceil(products.count / limit)) {
-        res.status(404).json({
+        return res.status(404).json({
           message: 'The page you are looking for does not exist',
         });
       } else {
-        res.status(200).json({
+        return res.status(200).json({
           message: 'success',
           products,
           current_page: page ? page : 1,
@@ -89,7 +102,7 @@ exports.getAllWithPaginationSortingFiltering = (req, res, next) => {
       }
     })
     .catch((err) => {
-      res.status(500).json({
+      return res.status(500).json({
         message: 'error',
         error: err.message,
       });
@@ -126,11 +139,11 @@ exports.getAllByCategory = async (req, res, next) => {
     })
       .then((products) => {
         if (page > Math.ceil(products.count / limit)) {
-          res.status(404).json({
+          return res.status(404).json({
             message: 'The page you are looking for does not exist',
           });
         } else {
-          res.status(200).json({
+          return res.status(200).json({
             message: 'success',
             products,
             current_page: page ? page : 1,
@@ -140,13 +153,13 @@ exports.getAllByCategory = async (req, res, next) => {
         }
       })
       .catch((err) => {
-        res.status(500).json({
+        return res.status(500).json({
           message: 'error',
           error: err.message,
         });
       });
   } else {
-    res.status(404).json({
+    return res.status(404).json({
       message: 'The category you are looking for does not exist',
     });
   }
@@ -186,11 +199,11 @@ exports.getAllBySeller = async (req, res, next) => {
     })
       .then((products) => {
         if (page > Math.ceil(products.count / limit)) {
-          res.status(404).json({
+          return res.status(404).json({
             message: 'The page you are looking for does not exist',
           });
         } else {
-          res.status(200).json({
+          return res.status(200).json({
             message: 'success',
             products,
             current_page: page ? page : 1,
@@ -200,13 +213,13 @@ exports.getAllBySeller = async (req, res, next) => {
         }
       })
       .catch((err) => {
-        res.status(500).json({
+        return res.status(500).json({
           message: 'error',
           error: err.message,
         });
       });
   } else {
-    res.status(404).json({
+    return res.status(404).json({
       message: 'The seller you are looking for does not exist',
     });
   }
@@ -252,18 +265,18 @@ exports.getProductDetailBySlug = (req, res, next) => {
             }
           );
         }
-        res.status(200).json({
+        return res.status(200).json({
           message: 'success',
           product,
         });
       } else {
-        res.status(404).json({
+        return res.status(404).json({
           message: 'No product found',
         });
       }
     })
     .catch((err) => {
-      res.status(500).json({
+      return res.status(500).json({
         message: 'error',
         error: err.message,
       });
@@ -394,7 +407,7 @@ exports.updateProducts = async (req, res, next) => {
   });
   console.log('ini get product update', getProduct);
   if (!getProduct) {
-    res.status(404).json({
+    return res.status(404).json({
       message: 'Product not found',
     });
   } else {
@@ -424,7 +437,7 @@ exports.updateProducts = async (req, res, next) => {
     )
       .then((product) => {
         if (req.files.length === 0) {
-          res.status(200).json({
+          return res.status(200).json({
             message: 'success',
             product,
           });
@@ -461,7 +474,7 @@ exports.updateProducts = async (req, res, next) => {
               product_id: getProduct.id,
             });
           });
-          res.status(200).json({
+          return res.status(200).json({
             message: 'success',
             product,
             product_images: req.files,
@@ -470,7 +483,7 @@ exports.updateProducts = async (req, res, next) => {
         }
       })
       .catch((err) => {
-        res.status(500).json({
+        return res.status(500).json({
           message: 'error',
           error: err.message,
         });
@@ -504,18 +517,18 @@ exports.deleteProduct = async (req, res, next) => {
   })
     .then((product) => {
       if (product) {
-        res.status(200).json({
+        return res.status(200).json({
           message: 'success',
           product,
         });
       } else {
-        res.status(404).json({
+        return res.status(404).json({
           message: 'No product found',
         });
       }
     })
     .catch((err) => {
-      res.status(500).json({
+      return res.status(500).json({
         message: 'error',
         error: err.message,
       });
@@ -541,13 +554,13 @@ exports.deleteProductImages = async (req, res, next) => {
     },
   })
     .then((product_images) => {
-      res.status(200).json({
+      return res.status(200).json({
         message: 'success',
         product_images,
       });
     })
     .catch((err) => {
-      res.status(500).json({
+      return res.status(500).json({
         message: 'error',
         error: err.message,
       });

@@ -51,7 +51,7 @@ exports.getAll = (req, res, next) => {
     ),
   })
     .then((disc_products) => {
-      res.status(200).json({
+      return res.status(200).json({
         message: 'success',
         result: {
           disc_products,
@@ -62,7 +62,7 @@ exports.getAll = (req, res, next) => {
       });
     })
     .catch((err) => {
-      res.status(500).json({
+      return res.status(500).json({
         message: 'error',
         error: err.message,
       });
@@ -112,7 +112,7 @@ exports.getBySeller = (req, res, next) => {
     },
   })
     .then((disc_products) => {
-      res.status(200).json({
+      return res.status(200).json({
         message: 'success',
         result: {
           disc_products,
@@ -123,7 +123,7 @@ exports.getBySeller = (req, res, next) => {
       });
     })
     .catch((err) => {
-      res.status(500).json({
+      return res.status(500).json({
         message: 'error',
         error: err.message,
       });
@@ -173,7 +173,7 @@ exports.getByBidder = (req, res, next) => {
     },
   })
     .then((disc_products) => {
-      res.status(200).json({
+      return res.status(200).json({
         message: 'success',
         result: {
           disc_products,
@@ -184,7 +184,7 @@ exports.getByBidder = (req, res, next) => {
       });
     })
     .catch((err) => {
-      res.status(500).json({
+      return res.status(500).json({
         message: 'error',
         error: err.message,
       });
@@ -225,7 +225,7 @@ exports.getAllStatusPendingBidder = (req, res, next) => {
     },
   })
     .then((disc_products) => {
-      res.status(200).json({
+      return res.status(200).json({
         message: 'success',
         result: {
           disc_products,
@@ -236,7 +236,7 @@ exports.getAllStatusPendingBidder = (req, res, next) => {
       });
     })
     .catch((err) => {
-      res.status(500).json({
+      return res.status(500).json({
         message: 'error',
         error: err.message,
       });
@@ -277,7 +277,7 @@ exports.getAllStatusPendingSeller = (req, res, next) => {
     },
   })
     .then((disc_products) => {
-      res.status(200).json({
+      return res.status(200).json({
         message: 'success',
         result: {
           disc_products,
@@ -288,7 +288,7 @@ exports.getAllStatusPendingSeller = (req, res, next) => {
       });
     })
     .catch((err) => {
-      res.status(500).json({
+      return res.status(500).json({
         message: 'error',
         error: err.message,
       });
@@ -329,7 +329,7 @@ exports.getAllStatusAcceptedBidder = (req, res, next) => {
     },
   })
     .then((disc_products) => {
-      res.status(200).json({
+      return res.status(200).json({
         message: 'success',
         result: {
           disc_products,
@@ -340,7 +340,7 @@ exports.getAllStatusAcceptedBidder = (req, res, next) => {
       });
     })
     .catch((err) => {
-      res.status(500).json({
+      return res.status(500).json({
         message: 'error',
         error: err.message,
       });
@@ -381,7 +381,7 @@ exports.getAllStatusAcceptedSeller = (req, res, next) => {
     },
   })
     .then((disc_products) => {
-      res.status(200).json({
+      return res.status(200).json({
         message: 'success',
         result: {
           disc_products,
@@ -392,7 +392,7 @@ exports.getAllStatusAcceptedSeller = (req, res, next) => {
       });
     })
     .catch((err) => {
-      res.status(500).json({
+      return res.status(500).json({
         message: 'error',
         error: err.message,
       });
@@ -433,7 +433,7 @@ exports.getAllStatusRejectedBidder = (req, res, next) => {
     },
   })
     .then((disc_products) => {
-      res.status(200).json({
+      return res.status(200).json({
         message: 'success',
         result: {
           disc_products,
@@ -444,7 +444,7 @@ exports.getAllStatusRejectedBidder = (req, res, next) => {
       });
     })
     .catch((err) => {
-      res.status(500).json({
+      return res.status(500).json({
         message: 'error',
         error: err.message,
       });
@@ -485,7 +485,7 @@ exports.getAllStatusRejectedSeller = (req, res, next) => {
     },
   })
     .then((disc_products) => {
-      res.status(200).json({
+      return res.status(200).json({
         message: 'success',
         result: {
           disc_products,
@@ -496,7 +496,7 @@ exports.getAllStatusRejectedSeller = (req, res, next) => {
       });
     })
     .catch((err) => {
-      res.status(500).json({
+      return res.status(500).json({
         message: 'error',
         error: err.message,
       });
@@ -547,7 +547,7 @@ exports.getById = (req, res, next) => {
           },
         }
       );
-      res.status(200).json({
+      return res.status(200).json({
         message: 'success',
         result: {
           disc_product,
@@ -558,7 +558,7 @@ exports.getById = (req, res, next) => {
       });
     })
     .catch((err) => {
-      res.status(500).json({
+      return res.status(500).json({
         message: 'error',
         error: err.message,
       });
@@ -572,13 +572,13 @@ exports.getById = (req, res, next) => {
 //     },
 //   })
 //     .then((disc_products) => {
-//       res.status(200).json({
+//       return res.status(200).json({
 //         message: 'success',
 //         disc_products,
 //       });
 //     })
 //     .catch((err) => {
-//       res.status(500).json({
+//       return res.status(500).json({
 //         message: 'error',
 //         error: err.message,
 //       });
@@ -634,13 +634,13 @@ exports.createDiscProduct = async (req, res, next) => {
         url: `/dashboard/tawaran/${disc_product.id}`,
       });
 
-      res.status(200).json({
+      return res.status(200).json({
         message: 'success',
         disc_product,
       });
     })
     .catch((err) => {
-      res.status(500).json({
+      return res.status(500).json({
         message: 'error',
         error: err.message,
       });
@@ -655,13 +655,13 @@ exports.deleteDiscProduct = (req, res, next) => {
     },
   })
     .then((disc_product) => {
-      res.status(200).json({
+      return res.status(200).json({
         message: 'success',
         disc_product,
       });
     })
     .catch((err) => {
-      res.status(500).json({
+      return res.status(500).json({
         message: 'error',
         error: err.message,
       });
@@ -699,13 +699,13 @@ exports.acceptDiscProduct = async (req, res, next) => {
         is_read: false,
         url: `/dashboard/tawaran/${getDiscProductOffer.id}`,
       });
-      res.status(200).json({
+      return res.status(200).json({
         message: 'success',
         disc_product,
       });
     })
     .catch((err) => {
-      res.status(500).json({
+      return res.status(500).json({
         message: 'error',
         error: err.message,
       });
@@ -743,13 +743,13 @@ exports.rejectDiscProduct = async (req, res, next) => {
         is_read: false,
         url: `/dashboard/tawaran/${getDiscProductOffer.id}`,
       });
-      res.status(200).json({
+      return res.status(200).json({
         message: 'success',
         disc_product,
       });
     })
     .catch((err) => {
-      res.status(500).json({
+      return res.status(500).json({
         message: 'error',
         error: err.message,
       });

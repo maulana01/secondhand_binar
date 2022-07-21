@@ -33,18 +33,18 @@ exports.signup = async (req, res, next) => {
             slug: name.trim().replace(/\s+/g, '-').toLowerCase(),
             password: hashedPassword,
           })
-            .then((user) =>
-              res.status(201).json({
+            .then((user) => {
+              return res.status(201).json({
                 message: 'User created successfully.',
                 userId: user.id,
-              })
-            )
-            .catch((err) =>
-              res.status(500).json({
+              });
+            })
+            .catch((err) => {
+              return res.status(500).json({
                 message: 'Failed to create account.',
                 error: err.message,
-              })
-            );
+              });
+            });
         }
       });
     }

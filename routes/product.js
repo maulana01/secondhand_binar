@@ -20,7 +20,7 @@ router.post(
   IsProfileFilled,
   ProductCtl.createProducts,
   (error, req, res, next) => {
-    res.status(415).json({ message: 'Jumlah File Upload melewati batas' });
+    return res.status(415).json({ message: 'Jumlah File Upload melewati batas' });
   }
 );
 

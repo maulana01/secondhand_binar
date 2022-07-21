@@ -41,14 +41,14 @@ module.exports = {
         //   },
         // }).then((product_image) => {
         // });
-        res.status(200).json({
+        return res.status(200).json({
           message: 'success',
           wishlists,
           // product_image,
         });
       })
       .catch((err) => {
-        res.status(500).json({
+        return res.status(500).json({
           message: 'error',
           error: err.message,
         });
@@ -60,10 +60,10 @@ module.exports = {
       product_id: req.body.product_id,
     })
       .then((result) => {
-        res.status(200).json({ message: 'Success', result });
+        return res.status(200).json({ message: 'Success', result });
       })
       .catch((err) => {
-        res.status(500).json({ message: 'Failed', err: err.message });
+        return res.status(500).json({ message: 'Failed', err: err.message });
       });
   },
   delete: (req, res) => {
@@ -74,16 +74,16 @@ module.exports = {
     })
       .then((result) => {
         if (result === 0) {
-          res.status(404).json({
+          return res.status(404).json({
             message: 'Product dengan ID ' + req.params.id + ' Not Found',
             result,
           });
         } else {
-          res.status(200).json({ message: 'Success', result });
+          return res.status(200).json({ message: 'Success', result });
         }
       })
       .catch((err) => {
-        res.status(500).json({ message: 'Failed', err: err.message });
+        return res.status(500).json({ message: 'Failed', err: err.message });
       });
   },
 };
