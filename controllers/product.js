@@ -22,20 +22,20 @@ cloudinary.config({
 
 exports.getAllWithPaginationSortingFiltering = (req, res, next) => {
   const { page, limit, filter } = req.query;
-  if (filter == '') {
-    return res.status(200).json({
-      message: 'success',
-      products: {
-        count: 0,
-        rows: [],
-      },
-      current_page: 1,
-      total_pages: 1,
-      total_items: 0,
-    });
-  } else {
-    const query =
-      filter != ''
+  if (filter) {
+    if (filter == '') {
+      return res.status(200).json({
+        message: 'success',
+        products: {
+          count: 0,
+          rows: [],
+        },
+        current_page: 1,
+        total_pages: 1,
+        total_items: 0,
+      });
+    } else {
+      const query = filter
         ? {
             offset: (page - 1) * limit || 0,
             limit: parseInt(limit, 10) || 10,
@@ -85,28 +85,29 @@ exports.getAllWithPaginationSortingFiltering = (req, res, next) => {
             ],
             distinct: true,
           };
-    Product.findAndCountAll(query)
-      .then((products) => {
-        if (page > Math.ceil(products.count / limit)) {
-          return res.status(404).json({
-            message: 'The page you are looking for does not exist',
+      Product.findAndCountAll(query)
+        .then((products) => {
+          if (page > Math.ceil(products.count / limit)) {
+            return res.status(404).json({
+              message: 'The page you are looking for does not exist',
+            });
+          } else {
+            return res.status(200).json({
+              message: 'success',
+              products,
+              current_page: page ? page : 1,
+              total_pages: limit ? Math.ceil(products.count / limit) : 1,
+              total_items: products.rows.length,
+            });
+          }
+        })
+        .catch((err) => {
+          return res.status(500).json({
+            message: 'error',
+            error: err.message,
           });
-        } else {
-          return res.status(200).json({
-            message: 'success',
-            products,
-            current_page: page ? page : 1,
-            total_pages: limit ? Math.ceil(products.count / limit) : 1,
-            total_items: products.rows.length,
-          });
-        }
-      })
-      .catch((err) => {
-        return res.status(500).json({
-          message: 'error',
-          error: err.message,
         });
-      });
+    }
   }
 };
 
