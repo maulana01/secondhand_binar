@@ -35,56 +35,32 @@ exports.getAllWithPaginationSortingFiltering = (req, res, next) => {
         total_items: 0,
       });
     } else {
-      const query = filter
-        ? {
-            offset: (page - 1) * limit || 0,
-            limit: parseInt(limit, 10) || 10,
-            where: {
-              product_name: {
-                [Op.iLike]: `%${filter}%`,
-              },
-              status: 'unsold',
-            },
-            include: [
-              {
-                model: Category,
-                as: 'category_product',
-              },
-              {
-                model: Product_Images,
-                as: 'product_images',
-              },
-              {
-                model: User,
-                as: 'seller',
-                attributes: ['email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
-              },
-            ],
-            distinct: true,
-          }
-        : {
-            offset: (page - 1) * limit || 0,
-            limit: parseInt(limit, 10) || 10,
-            where: {
-              status: 'unsold',
-            },
-            include: [
-              {
-                model: Category,
-                as: 'category_product',
-              },
-              {
-                model: Product_Images,
-                as: 'product_images',
-              },
-              {
-                model: User,
-                as: 'seller',
-                attributes: ['email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
-              },
-            ],
-            distinct: true,
-          };
+      const query = {
+        offset: (page - 1) * limit || 0,
+        limit: parseInt(limit, 10) || 10,
+        where: {
+          product_name: {
+            [Op.iLike]: `%${filter}%`,
+          },
+          status: 'unsold',
+        },
+        include: [
+          {
+            model: Category,
+            as: 'category_product',
+          },
+          {
+            model: Product_Images,
+            as: 'product_images',
+          },
+          {
+            model: User,
+            as: 'seller',
+            attributes: ['email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
+          },
+        ],
+        distinct: true,
+      };
       Product.findAndCountAll(query)
         .then((products) => {
           if (page > Math.ceil(products.count / limit)) {
@@ -108,6 +84,52 @@ exports.getAllWithPaginationSortingFiltering = (req, res, next) => {
           });
         });
     }
+  } else {
+    const query = {
+      offset: (page - 1) * limit || 0,
+      limit: parseInt(limit, 10) || 10,
+      where: {
+        status: 'unsold',
+      },
+      include: [
+        {
+          model: Category,
+          as: 'category_product',
+        },
+        {
+          model: Product_Images,
+          as: 'product_images',
+        },
+        {
+          model: User,
+          as: 'seller',
+          attributes: ['email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
+        },
+      ],
+      distinct: true,
+    };
+    Product.findAndCountAll(query)
+      .then((products) => {
+        if (page > Math.ceil(products.count / limit)) {
+          return res.status(404).json({
+            message: 'The page you are looking for does not exist',
+          });
+        } else {
+          return res.status(200).json({
+            message: 'success',
+            products,
+            current_page: page ? page : 1,
+            total_pages: limit ? Math.ceil(products.count / limit) : 1,
+            total_items: products.rows.length,
+          });
+        }
+      })
+      .catch((err) => {
+        return res.status(500).json({
+          message: 'error',
+          error: err.message,
+        });
+      });
   }
 };
 
