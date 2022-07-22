@@ -591,6 +591,8 @@ paths:
           required: true
           schema:
             type: string
+      security:
+        - Bearer: []
       responses:
         '200':
           description: Success Get Product By Slug
