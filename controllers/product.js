@@ -294,6 +294,7 @@ exports.getProductDetailBySlug = (req, res, next) => {
               },
             }
           );
+          console.log('ini before update notif 2');
           Notification.update(
             {
               is_read: true,
@@ -302,13 +303,11 @@ exports.getProductDetailBySlug = (req, res, next) => {
               where: {
                 product_id: product.id,
                 user_id: req.userLoggedin.userId,
-                bargain_price: {
-                  [Op.ne]: null,
-                },
                 action_message: 'Penawaran Produk',
               },
             }
           );
+          console.log('ini after update notif 2');
         }
         return res.status(200).json({
           message: 'success',
