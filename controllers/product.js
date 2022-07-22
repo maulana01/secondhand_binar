@@ -251,7 +251,7 @@ exports.getAllBySeller = async (req, res, next) => {
 
 exports.getProductDetailBySlug = (req, res, next) => {
   const slug = req.params.slug;
-  const authHeader = req.get('Authorization');
+  const authHeader = req.userLoggedin;
   console.log('ini authheader', authHeader);
   Product.findOne({
     where: {
