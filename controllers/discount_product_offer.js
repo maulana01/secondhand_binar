@@ -632,7 +632,7 @@ exports.createDiscProduct = async (req, res, next) => {
         additional_info_1: 'Ditawar ',
         additional_info_2: null,
         is_read: false,
-        url: `/dashboard/tawaran/${disc_product.id}`,
+        url: `/detail/` + getSellerId.slug,
       });
 
       return res.status(200).json({
