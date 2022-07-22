@@ -7,7 +7,7 @@ info:
 servers:
   - url: http://localhost:3000/api/v1
     description: Local Server SecondHand
-  - url: https://secondhandbe.herokuapp.com/api/v1
+  - url: https://dev-secondhandbe.herokuapp.com/api/v1
     description: Test Server SecondHand
 tags:
   - name: 'Auth'

@@ -40,5 +40,5 @@ jobs:
       - uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: 'b6fe5b9e-7c30-4f83-9a09-277da36913ff'
-          heroku_app_name: 'secondhandbe'
+          heroku_app_name: 'dev-secondhandbe'
           heroku_email: 'maulanaimammalik4@gmail.com'
