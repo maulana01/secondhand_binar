@@ -279,7 +279,7 @@ exports.getProductDetailBySlug = (req, res, next) => {
         if (authHeader) {
           console.log('ini product id notif', product.id);
           const token = authHeader.split(' ')[1];
-          let decodedToken = await jwt.verify(token, 'supersecret');
+          let decodedToken = jwt.verify(token, 'supersecret');
           req.userLoggedin = decodedToken;
           Notification.update(
             {
