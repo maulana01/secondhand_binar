@@ -282,6 +282,7 @@ exports.getProductDetailBySlug = (req, res, next) => {
           const token = authHeader.split(' ')[1];
           let decodedToken = jwt.verify(token, 'supersecret');
           req.userLoggedin = decodedToken;
+          console.log('ini before update notif 1');
           Notification.update(
             {
               is_read: true,
