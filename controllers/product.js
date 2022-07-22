@@ -293,7 +293,13 @@ exports.getProductDetailBySlug = (req, res, next) => {
                 action_message: 'Penawaran Produk',
               },
             }
-          );
+          )
+            .then((notif) => {
+              console.log('ini notif', notif);
+            })
+            .catch((err) => {
+              console.log('ini err', err.message);
+            });
         }
         return res.status(200).json({
           message: 'success',
