@@ -293,6 +293,20 @@ exports.getProductDetailBySlug = (req, res, next) => {
               },
             }
           );
+          Notification.update(
+            {
+              is_read: true,
+            },
+            {
+              where: {
+                product_id: product.id,
+                user_id: req.userLoggedin.userId,
+                bargain_price: {
+                  [Op.ne]: null,
+                },
+              },
+            }
+          );
         }
         return res.status(200).json({
           message: 'success',
