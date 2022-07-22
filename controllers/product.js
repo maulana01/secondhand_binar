@@ -290,16 +290,25 @@ exports.getProductDetailBySlug = (req, res, next) => {
               where: {
                 product_id: product.id,
                 user_id: req.userLoggedin.userId,
+                action_message: 'Berhasil diterbitkan',
+              },
+            }
+          );
+          Notification.update(
+            {
+              is_read: true,
+            },
+            {
+              where: {
+                product_id: product.id,
+                user_id: req.userLoggedin.userId,
+                bargain_price: {
+                  [Op.ne]: null,
+                },
                 action_message: 'Penawaran Produk',
               },
             }
-          )
-            .then((notif) => {
-              console.log('ini notif', notif);
-            })
-            .catch((err) => {
-              console.log('ini err', err.message);
-            });
+          );
         }
         return res.status(200).json({
           message: 'success',
