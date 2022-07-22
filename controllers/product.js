@@ -290,6 +290,7 @@ exports.getProductDetailBySlug = (req, res, next) => {
               where: {
                 product_id: product.id,
                 user_id: req.userLoggedin.userId,
+                action_message: 'Berhasil diterbitkan',
               },
             }
           );
@@ -304,6 +305,7 @@ exports.getProductDetailBySlug = (req, res, next) => {
                 bargain_price: {
                   [Op.ne]: null,
                 },
+                action_message: 'Penawaran Produk',
               },
             }
           );
