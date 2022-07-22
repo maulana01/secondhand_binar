@@ -282,20 +282,6 @@ exports.getProductDetailBySlug = (req, res, next) => {
           const token = authHeader.split(' ')[1];
           let decodedToken = jwt.verify(token, 'supersecret');
           req.userLoggedin = decodedToken;
-          console.log('ini before update notif 1');
-          Notification.update(
-            {
-              is_read: true,
-            },
-            {
-              where: {
-                product_id: product.id,
-                user_id: req.userLoggedin.userId,
-                action_message: 'Berhasil diterbitkan',
-              },
-            }
-          );
-          console.log('ini before update notif 2');
           Notification.update(
             {
               is_read: true,
@@ -308,7 +294,6 @@ exports.getProductDetailBySlug = (req, res, next) => {
               },
             }
           );
-          console.log('ini after update notif 2');
         }
         return res.status(200).json({
           message: 'success',
