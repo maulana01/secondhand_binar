@@ -10,6 +10,7 @@ const {
   notification: Notification,
   discount_product_offer: DiscProduct,
 } = require('../models');
+const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const path = require('path');
 const { Op } = Sequelize;
