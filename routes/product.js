@@ -10,7 +10,8 @@ const UploadUtil = require('../utils/uploadProducts');
 router.get(`${product_path}`, ProductCtl.getAllWithPaginationSortingFiltering);
 router.get(`${product_path}/category/:slug`, ProductCtl.getAllByCategory);
 router.get(`${product_path}/user/:id`, ProductCtl.getAllBySeller);
-router.get(`${product_path}/:slug`, ProductCtl.getProductDetailBySlug);
+router.get(`${product_path}/detail-with-auth/:slug`, IsAuth, ProductCtl.getProductDetailBySlugWithAuth);
+router.get(`${product_path}/detail-no-auth/:slug`, ProductCtl.getProductDetailBySlugWithoutAuth);
 
 // ini create
 router.post(

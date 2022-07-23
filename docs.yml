@@ -577,7 +577,7 @@ paths:
                   value:
                     message: failed
                     error: error message
-  /product/{slug}:
+  /product/detail-with-auth/{slug}:
     get:
       tags:
         - Product
@@ -593,6 +593,39 @@ paths:
             type: string
       security:
         - Bearer: []
+      responses:
+        '200':
+          description: Success Get Product By Slug
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSuccess200GetProductBySlug'
+        '404':
+          description: Failed due to product not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed404GetProductBySlug'
+        '500':
+          description: Failed when there's an error from the servers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailed500GetProductBySlug'
+  /product/detail-no-auth/{slug}:
+    get:
+      tags:
+        - Product
+      summary: Get Product By Slug
+      description: ''
+      operationId: 'getProductBySlug'
+      parameters:
+        - name: slug
+          in: path
+          description: Slug of product to return
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: Success Get Product By Slug

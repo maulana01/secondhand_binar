@@ -250,10 +250,8 @@ exports.getAllBySeller = async (req, res, next) => {
   }
 };
 
-exports.getProductDetailBySlug = (req, res, next) => {
+exports.getProductDetailBySlugWithoutAuth = (req, res, next) => {
   const slug = req.params.slug;
-  const authHeader = req.get('Authorization');
-  console.log('ini authheader', authHeader);
   Product.findOne({
     where: {
       slug,
@@ -277,39 +275,76 @@ exports.getProductDetailBySlug = (req, res, next) => {
   })
     .then((product) => {
       if (product) {
-        if (authHeader) {
-          console.log('ini product id notif', product.id);
-          const token = authHeader.split(' ')[1];
-          let decodedToken = jwt.verify(token, 'supersecret');
-          req.userLoggedin = decodedToken;
-          Notification.update(
-            {
-              is_read: true,
+        return res.status(200).json({
+          message: 'success',
+          product,
+        });
+      } else {
+        return res.status(404).json({
+          message: 'No product found',
+        });
+      }
+    })
+    .catch((err) => {
+      return res.status(500).json({
+        message: 'error',
+        error: err.message,
+      });
+    });
+};
+
+exports.getProductDetailBySlugWithAuth = (req, res, next) => {
+  const slug = req.params.slug;
+  Product.findOne({
+    where: {
+      slug,
+    },
+    include: [
+      {
+        model: Product_Images,
+        as: 'product_images',
+      },
+      {
+        model: Category,
+        as: 'category_product',
+      },
+      {
+        model: User,
+        as: 'seller',
+        attributes: ['email', 'name', 'slug', 'address', 'profile_picture', 'profile_picture_path', 'phone_number'],
+      },
+    ],
+    distinct: true,
+  })
+    .then((product) => {
+      if (product) {
+        Notification.update(
+          {
+            is_read: true,
+          },
+          {
+            where: {
+              product_id: product.id,
+              user_id: req.userLoggedin.userId,
+              action_message: 'Berhasil diterbitkan',
             },
-            {
-              where: {
-                product_id: product.id,
-                user_id: req.userLoggedin.userId,
-                action_message: 'Berhasil diterbitkan',
+          }
+        );
+        Notification.update(
+          {
+            is_read: true,
+          },
+          {
+            where: {
+              product_id: product.id,
+              user_id: req.userLoggedin.userId,
+              bargain_price: {
+                [Op.ne]: null,
               },
-            }
-          );
-          Notification.update(
-            {
-              is_read: true,
+              action_message: 'Penawaran Produk',
             },
-            {
-              where: {
-                product_id: product.id,
-                user_id: req.userLoggedin.userId,
-                bargain_price: {
-                  [Op.ne]: null,
-                },
-                action_message: 'Penawaran Produk',
-              },
-            }
-          );
-        }
+          }
+        );
         return res.status(200).json({
           message: 'success',
           product,
