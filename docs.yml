@@ -583,7 +583,7 @@ paths:
         - Product
       summary: Get Product By Slug
       description: ''
-      operationId: 'getProductBySlug'
+      operationId: 'getProductBySlugWithAuth'
       parameters:
         - name: slug
           in: path
@@ -618,7 +618,7 @@ paths:
         - Product
       summary: Get Product By Slug
       description: ''
-      operationId: 'getProductBySlug'
+      operationId: 'getProductBySlugNoAuth'
       parameters:
         - name: slug
           in: path
@@ -645,6 +645,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseFailed500GetProductBySlug'
+  /product/{slug}:
     put:
       tags:
         - Product
