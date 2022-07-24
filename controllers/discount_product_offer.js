@@ -566,33 +566,8 @@ exports.getById = (req, res, next) => {
     });
 };
 
-// exports.getAllStatusCancelled = (req, res, next) => {
-//   DiscProduct.findAll({
-//     where: {
-//       status: 'cancelled',
-//     },
-//   })
-//     .then((disc_products) => {
-//       return res.status(200).json({
-//         message: 'success',
-//         disc_products,
-//       });
-//     })
-//     .catch((err) => {
-//       return res.status(500).json({
-//         message: 'error',
-//         error: err.message,
-//       });
-//     });
-// };
-
 exports.createDiscProduct = async (req, res, next) => {
   const { bargain_price, product_id } = req.body;
-  // const getProductId = await Product.findOne({
-  //   where: {
-  //     slug: req.params.slug,
-  //   },
-  // });
   const getSellerId = await Product.findOne({
     where: {
       id: product_id,
@@ -605,7 +580,6 @@ exports.createDiscProduct = async (req, res, next) => {
       },
     ],
   });
-  // console.log('ini seller id', getSellerId.seller);
   await DiscProduct.create({
     user_id: req.userLoggedin.userId,
     product_id,

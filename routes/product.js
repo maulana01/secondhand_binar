@@ -13,7 +13,6 @@ router.get(`${product_path}/user/:id`, ProductCtl.getAllBySeller);
 router.get(`${product_path}/detail-with-auth/:slug`, IsAuth, ProductCtl.getProductDetailBySlugWithAuth);
 router.get(`${product_path}/detail-no-auth/:slug`, ProductCtl.getProductDetailBySlugWithoutAuth);
 
-// ini create
 router.post(
   `${product_path}`,
   UploadUtil.uploadImage.array('product_images_name', 4),
@@ -25,7 +24,6 @@ router.post(
   }
 );
 
-// router.put(`${product_path}/status/sold/:id`, IsAuth, ProductCtl.updateSoldProduct);
 router.put(
   `${product_path}/:slug`,
   UploadUtil.uploadImage.array('product_images_name', 4),

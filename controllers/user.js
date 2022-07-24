@@ -173,7 +173,6 @@ exports.update = async (req, res, next) => {
   const { userId, userSlug } = req.userLoggedin;
   const { name, email, address, phone_number, city_id } = req.body;
   const user = await User.findByPk(userId);
-  // const hashedPassword = bcrypt.hash(password, 12);
   const slug = name ? name.trim().replace(/\s+/g, '-').toLowerCase() : userSlug;
   const data = {
     slug: slug,
@@ -343,8 +342,6 @@ exports.verifyOtp = async (req, res, next) => {
 };
 
 const clearImage = (image) => {
-  // filePath = path.join(__dirname, '../public/images/avatar', image);
-  // fs.unlink(filePath, (err) => console.log(err));
   cloudinary.uploader.destroy(`public/images/avatar/${file.filename}`, function (result) {
     console.log(result);
   });

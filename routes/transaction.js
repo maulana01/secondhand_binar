@@ -11,7 +11,5 @@ router.get(`${transaction_path}/seller`, IsAuth, TransactionCtl.getBySeller);
 router.get(`${transaction_path}/:id`, IsAuth, TransactionCtl.getById);
 router.put(`${transaction_path}/success/:product_id`, IsAuth, TransactionCtl.finishTransaction);
 router.put(`${transaction_path}/cancel/:product_id`, IsAuth, TransactionCtl.cancelTransaction);
-// router.post(`${transaction_path}/create`, IsAuth, TransactionCtl.createRequest);
-// router.delete(`${transaction_path}/delete/:id`, IsAuth, TransactionCtl.deleteTransaction);
 
 module.exports = router;

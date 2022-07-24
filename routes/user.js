@@ -10,7 +10,6 @@ router.get(`${user_path}/all`, UserCtl.getAll);
 router.get(`${user_path}/my-profile`, IsAuth, UserCtl.getMyProfile);
 router.get(`${user_path}/:slug`, UserCtl.getBySlug);
 router.post(`${user_path}/create`, IsAuth, UserCtl.create);
-// router.put(`${user_path}/update/:id`, IsAuth, UserCtl.update);
 router.put(`${user_path}/update`, upload().single('profile_picture'), IsAuth, UserCtl.update);
 router.delete(`${user_path}/delete/:id`, IsAuth, UserCtl.delete);
 router.put(`${user_path}/upload/avatar/:id`, upload().single('profile_picture'), IsAuth, UserCtl.uploadAvatar);

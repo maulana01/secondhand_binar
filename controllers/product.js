@@ -193,11 +193,6 @@ exports.getAllByCategory = async (req, res, next) => {
 exports.getAllBySeller = async (req, res, next) => {
   const { id } = req.params;
   const { page, limit } = req.query;
-  // const getUser = await User.findOne({
-  //   where: {
-  //     slug: slug,
-  //   },
-  // });
   if (id) {
     Product.findAndCountAll({
       offset: (page - 1) * limit || 0,
@@ -366,36 +361,17 @@ exports.getProductDetailBySlugWithAuth = (req, res, next) => {
 exports.createProducts = async (req, res, next) => {
   const { product_name, product_desc, product_price, category_id } = req.body;
   const userId = req.userLoggedin.userId;
-  // console.log('TEST CONSOLE.LOG NIH');
   const countUnsoldSellerProductPost = await Product.count({
     where: {
       user_id: req.userLoggedin.userId,
       status: 'unsold',
     },
   });
-  // const unsoldSellerProduct = await Transaction.findAll({
-  //   where: {
-  //     user_id: req.userLoggedIn.userId,
-  //     status: 'unsold',
-  //   }
-  // })
-
   if (!product_name || !product_desc || !product_price) {
     return res.status(400).json({
       message: 'Please fill all required fields',
     });
   } else {
-    // if (countUnsoldSellerProductPost > 4) {
-    //   res.status(400).json({
-    //     message: 'You can only sell 4 products',
-    //   });
-    //   req.files.map((file) => {
-    //     const _path = path.join(__dirname, '../public/images/products/', file.filename);
-    //     fs.unlink(_path, (err) => {
-    //       if (err) console.log(err);
-    //     });
-    //   });
-    // } else {
     if (req.files.length === 0) {
       return res.status(400).json({
         message: 'Please upload at least one image',
@@ -403,10 +379,6 @@ exports.createProducts = async (req, res, next) => {
     } else {
       if (req.files.length > 4) {
         req.files.map((file) => {
-          // const _path = path.join(__dirname, '../public/images/products/', file.filename);
-          // fs.unlink(_path, (err) => {
-          //   if (err) console.log(err);
-          // });
           cloudinary.uploader.destroy(`${file.filename}`, function (result) {
             console.log(result);
           });
@@ -415,13 +387,8 @@ exports.createProducts = async (req, res, next) => {
           message: 'You can only upload up to 4 images',
         });
       } else {
-        console.log('ini total product', countUnsoldSellerProductPost);
         if (countUnsoldSellerProductPost >= 3) {
           req.files.map((file) => {
-            // const _path = path.join(__dirname, '../public/images/products/', file.filename);
-            // fs.unlink(_path, (err) => {
-            //   if (err) console.log(err);
-            // });
             cloudinary.uploader.destroy(`${file.filename}`, function (result) {
               console.log(result);
             });
@@ -441,14 +408,12 @@ exports.createProducts = async (req, res, next) => {
           })
             .then((product) => {
               req.files.map((file) => {
-                // console.log('ini cloudinary', file.filename.replace('public/images/products/', ''));
                 Product_Images.create({
                   product_images_name: file.filename.replace('public/images/products/', ''),
                   product_images_path: file.path,
                   product_id: product.id,
                 });
               });
-              // console.log('ini produk id', product.id);
               Notification.create({
                 product_id: product.id,
                 bargain_price: null,
@@ -485,7 +450,6 @@ exports.updateProducts = async (req, res, next) => {
       slug,
     },
   });
-  console.log('ini get product update', getProduct);
   if (!getProduct) {
     return res.status(404).json({
       message: 'Product not found',
@@ -496,12 +460,6 @@ exports.updateProducts = async (req, res, next) => {
         product_id: getProduct.id,
       },
     });
-    // console.log('ini getproductid', getProduct);
-    // const total_product_images = await Product_Images.count({
-    //   where: {
-    //     product_id: getProduct.id,
-    //   },
-    // });
     await Product.update(
       {
         product_name,
@@ -522,21 +480,6 @@ exports.updateProducts = async (req, res, next) => {
             product,
           });
         } else {
-          // if (total_product_images + req.files.length > 4) {
-          //   res.status(400).json({
-          //     message: 'You can only upload a maximum of 4 images',
-          //   });
-          //   req.files.map((file) => {
-          //     // const _path = path.join(__dirname, '../public/images/products/', file.filename);
-          //     // fs.unlink(_path, (err) => {
-          //     //   if (err) console.log(err);
-          //     // });
-          //     cloudinary.uploader.destroy(`${file.filename}`, function (result) {
-          //       console.log(result);
-          //     });
-          //   });
-          // } else {
-          // console.log('ini get dataproductimage update', getDataProductImage);
           getDataProductImage.forEach((data, index) => {
             cloudinary.uploader.destroy(`public/images/products/${data.product_images_name}`, function (result) {
               console.log(result);
@@ -559,7 +502,6 @@ exports.updateProducts = async (req, res, next) => {
             product,
             product_images: req.files,
           });
-          // }
         }
       })
       .catch((err) => {
@@ -617,14 +559,6 @@ exports.deleteProduct = async (req, res, next) => {
 
 exports.deleteProductImages = async (req, res, next) => {
   const { product_images_name } = req.params;
-  // const _path = path.join(__dirname, '../public/images/products/', product_images_name);
-  // fs.unlink(_path, (err) => {
-  //   if (err) {
-  //     console.log(err);
-  //   } else {
-  //     console.log('File deleted');
-  //   }
-  // });
   cloudinary.uploader.destroy(`public/images/products/${product_images_name}`, function (result) {
     console.log(result);
   });

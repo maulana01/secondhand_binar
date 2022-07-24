@@ -8,7 +8,6 @@ const MailChecker = require('mailchecker');
 
 exports.signup = async (req, res, next) => {
   const { name, email, password } = req.body;
-  // const username = name.trim().replace(/\s+/g, '-').toLowerCase();
 
   if (!name || !email || !password) {
     return res.status(400).json({
@@ -59,9 +58,6 @@ exports.login = async (req, res, next) => {
     });
   } else {
     const user = await User.findOne({ where: { email } });
-
-    // console.log('ini hasil user', user);
-
     if (!user) {
       return res.status(400).json({
         message: 'User not found.',

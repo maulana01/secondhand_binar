@@ -1,9 +1,9 @@
 # @format
 
-name: Develop
+name: Master
 on:
   push:
-    branches: [develop]
+    branches: [master]
   workflow_dispatch:
 jobs:
   build:
@@ -23,12 +23,12 @@ jobs:
       #   run: npx sequelize db:migrate:undo:all --env production
       # - name: Drop Database
       #   run: npx sequelize db:drop --env production
-      # - name: Create Database
-      #   run: npx sequelize db:create --env production
-      # - name: Run Sequelize-Cli Migrate
-      #   run: npx sequelize db:migrate --env production
-      # - name: Run Sequelize-Cli Seed
-      #   run: npx sequelize db:seed:all --env production
+      - name: Create Database
+        run: npx sequelize db:create --env production
+      - name: Run Sequelize-Cli Migrate
+        run: npx sequelize db:migrate --env production
+      - name: Run Sequelize-Cli Seed
+        run: npx sequelize db:seed:all --env production
       # - name: Run tests
       #   run: npm test
 
@@ -40,5 +40,5 @@ jobs:
       - uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: 'b6fe5b9e-7c30-4f83-9a09-277da36913ff'
-          heroku_app_name: 'dev-secondhandbe'
+          heroku_app_name: 'secondhandbe'
           heroku_email: 'maulanaimammalik4@gmail.com'
