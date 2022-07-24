@@ -9,6 +9,8 @@ servers:
     description: Local Server SecondHand
   - url: https://dev-secondhandbe.herokuapp.com/api/v1
     description: Test Server SecondHand
+  - url: https://secondhandbe.herokuapp.com/api/v1
+    description: Production Server SecondHand
 tags:
   - name: 'Auth'
     description: 'User Authentication'
