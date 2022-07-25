@@ -401,7 +401,7 @@ exports.createProducts = async (req, res, next) => {
         message: 'Please upload at least one image',
       });
     } else {
-      if (req.files.length > 4) {
+      if (req.files.length >= 4) {
         req.files.map((file) => {
           // const _path = path.join(__dirname, '../public/images/products/', file.filename);
           // fs.unlink(_path, (err) => {
