@@ -15,18 +15,18 @@ router.get(`${product_path}/detail-no-auth/:slug`, ProductCtl.getProductDetailBy
 
 router.post(
   `${product_path}`,
-  UploadUtil.uploadImage.array('product_images_name', 5),
+  UploadUtil.uploadImage.array('product_images_name', 4),
   IsAuth,
   IsProfileFilled,
-  ProductCtl.createProducts,
-  (error, req, res, next) => {
-    return res.status(415).json({ message: 'Jumlah File Upload melewati batas' });
-  }
+  ProductCtl.createProducts
+  // (error, req, res, next) => {
+  //   return res.status(415).json({ message: 'Jumlah File Upload melewati batas' });
+  // }
 );
 
 router.put(
   `${product_path}/:slug`,
-  UploadUtil.uploadImage.array('product_images_name', 5),
+  UploadUtil.uploadImage.array('product_images_name', 4),
   IsAuth,
   IsProfileFilled,
   ProductCtl.updateProducts
