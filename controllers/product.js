@@ -377,7 +377,7 @@ exports.createProducts = async (req, res, next) => {
         message: 'Please upload at least one image',
       });
     } else {
-      if (req.files.length > 4) {
+      if (req.files.length >= 4) {
         req.files.map((file) => {
           cloudinary.uploader.destroy(`${file.filename}`, function (result) {
             console.log(result);
