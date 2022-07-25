@@ -10,7 +10,8 @@ const {
 } = require('../models');
 const sequelize = require('sequelize');
 const moment = require('moment');
-require('moment/locale/id');
+// require('moment/locale/id');
+require('moment/dist/locale/id');
 
 exports.getAll = (req, res, next) => {
   const status = ['pending', 'accepted', 'rejected'];

@@ -2,7 +2,8 @@
 
 const { notification: Notification, user: User, product: Product, product_images: Product_Images, category: Category } = require('../models');
 const moment = require('moment');
-require('moment/locale/id');
+// require('moment/locale/id');
+require('moment/dist/locale/id');
 
 exports.getNotification = (req, res, next) => {
   Notification.findAll({
