@@ -31,6 +31,22 @@ module.exports = (sequelize, DataTypes) => {
       is_read: DataTypes.BOOLEAN,
       url: DataTypes.STRING,
       user_id: DataTypes.INTEGER,
+      createdAt: {
+        type: DataTypes.DATE,
+        defaultValue: new Date(
+          new Date().toLocaleString('en-US', {
+            timeZone: 'Asia/Jakarta',
+          })
+        ),
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        defaultValue: new Date(
+          new Date().toLocaleString('en-US', {
+            timeZone: 'Asia/Jakarta',
+          })
+        ),
+      },
     },
     {
       sequelize,
