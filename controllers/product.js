@@ -387,7 +387,7 @@ exports.createProducts = async (req, res, next) => {
           message: 'You can only upload up to 4 images',
         });
       } else {
-        if (countUnsoldSellerProductPost > 4) {
+        if (countUnsoldSellerProductPost >= 4) {
           req.files.map((file) => {
             cloudinary.uploader.destroy(`${file.filename}`, function (result) {
               console.log(result);
