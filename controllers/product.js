@@ -416,7 +416,7 @@ exports.createProducts = async (req, res, next) => {
         });
       } else {
         console.log('ini total product', countUnsoldSellerProductPost);
-        if (countUnsoldSellerProductPost > 4) {
+        if (countUnsoldSellerProductPost >= 4) {
           req.files.map((file) => {
             // const _path = path.join(__dirname, '../public/images/products/', file.filename);
             // fs.unlink(_path, (err) => {
