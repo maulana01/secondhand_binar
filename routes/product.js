@@ -14,21 +14,12 @@ router.get(`${product_path}/detail-with-auth/:slug`, IsAuth, ProductCtl.getProdu
 router.get(`${product_path}/detail-no-auth/:slug`, ProductCtl.getProductDetailBySlugWithoutAuth);
 
 // ini create
-router.post(
-  `${product_path}`,
-  UploadUtil.uploadImage.array('product_images_name', 5),
-  IsAuth,
-  IsProfileFilled,
-  ProductCtl.createProducts,
-  (error, req, res, next) => {
-    return res.status(415).json({ message: 'Jumlah File Upload melewati batas' });
-  }
-);
+router.post(`${product_path}`, UploadUtil.uploadImage.array('product_images_name', 4), IsAuth, IsProfileFilled, ProductCtl.createProducts);
 
 // router.put(`${product_path}/status/sold/:id`, IsAuth, ProductCtl.updateSoldProduct);
 router.put(
   `${product_path}/:slug`,
-  UploadUtil.uploadImage.array('product_images_name', 5),
+  UploadUtil.uploadImage.array('product_images_name', 4),
   IsAuth,
   IsProfileFilled,
   ProductCtl.updateProducts
