@@ -16,7 +16,7 @@ router.get(`${product_path}/detail-no-auth/:slug`, ProductCtl.getProductDetailBy
 // ini create
 router.post(
   `${product_path}`,
-  UploadUtil.uploadImage.array('product_images_name', 4),
+  UploadUtil.uploadImage.array('product_images_name', 5),
   IsAuth,
   IsProfileFilled,
   ProductCtl.createProducts,
@@ -28,7 +28,7 @@ router.post(
 // router.put(`${product_path}/status/sold/:id`, IsAuth, ProductCtl.updateSoldProduct);
 router.put(
   `${product_path}/:slug`,
-  UploadUtil.uploadImage.array('product_images_name', 4),
+  UploadUtil.uploadImage.array('product_images_name', 5),
   IsAuth,
   IsProfileFilled,
   ProductCtl.updateProducts
