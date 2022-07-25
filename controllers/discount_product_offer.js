@@ -677,12 +677,6 @@ exports.acceptDiscProduct = async (req, res, next) => {
       user_id,
       product_id,
     },
-    include: [
-      {
-        model: Product,
-        as: 'product_offered',
-      },
-    ],
   });
   await DiscProduct.update(
     {
@@ -704,7 +698,7 @@ exports.acceptDiscProduct = async (req, res, next) => {
         additional_info_1: 'Berhasil Ditawar ',
         additional_info_2: 'Kamu akan segera dihubungi penjual via whatsapp',
         is_read: false,
-        url: `/detail/` + getDiscProductOffer.product_offered.slug,
+        url: `/dashboard/tawaran/${getDiscProductOffer.id}`,
       });
       return res.status(200).json({
         message: 'success',
@@ -726,12 +720,6 @@ exports.rejectDiscProduct = async (req, res, next) => {
     where: {
       user_id,
       product_id,
-      include: [
-        {
-          model: Product,
-          as: 'product_offered',
-        },
-      ],
     },
   });
   await DiscProduct.update(
@@ -754,7 +742,7 @@ exports.rejectDiscProduct = async (req, res, next) => {
         additional_info_1: 'Tawaran Ditolak ',
         additional_info_2: 'Harap tawar ulang atau pilih produk lain.',
         is_read: false,
-        url: `/detail/` + getDiscProductOffer.product_offered.slug,
+        url: `/dashboard/tawaran/${getDiscProductOffer.id}`,
       });
       return res.status(200).json({
         message: 'success',
